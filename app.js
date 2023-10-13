@@ -29,6 +29,4 @@ app.get("/", (req, res) => {
 app.use(routerNotFoundHandler);
 app.use(errorHandler);
 
-app.listen(8000, () => {
-  console.log(`server is running`);
-});
+module.exports = { app };
