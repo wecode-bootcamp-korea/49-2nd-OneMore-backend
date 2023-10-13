@@ -10,7 +10,7 @@ CREATE TABLE `addresses` (
   `id` integer PRIMARY KEY AUTO_INCREMENT,
   `address` varchar(300) NOT NULL,
   `detailedAddress` varchar(300) NOT NULL,
-  `zip_code` integer NOT NULL,
+  `zip_code` varchar(10) NOT NULL,
   `user_id` integer NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT NOW(),
   `updated_at` timestamp NULL ON UPDATE NOW()

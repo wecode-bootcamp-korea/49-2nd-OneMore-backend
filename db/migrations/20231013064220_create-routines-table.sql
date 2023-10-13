@@ -28,7 +28,7 @@ CREATE TABLE `exercises` (
   `exercise_category` integer NOT NULL,
   `duration_in_seconds_per_set` integer NOT NULL,
   `counts_per_set` integer DEFAULT 1,
-  `setCounts` integer NOT NULL DEFAULT 1,
+  `set_counts` integer NOT NULL DEFAULT 1,
   `created_at` timestamp NOT NULL DEFAULT NOW(),
   `updated_at` timestamp NULL ON UPDATE NOW()
 );
