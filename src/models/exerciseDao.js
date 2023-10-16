@@ -1,6 +1,6 @@
 const { AppDataSource } = require("./dataSource");
 
-const getRandomExercises = async (subscriptionState) => {
+const getRandomExercises = async (subscriptionState, limit = 5) => {
   const limitedContentsQuery = !subscriptionState
     ? `WHERE exercises.is_premium = false`
     : ``;
@@ -14,9 +14,9 @@ const getRandomExercises = async (subscriptionState) => {
       exercises
     ${limitedContentsQuery}
     ORDER BY RAND()
-    LIMIT 5
+    LIMIT ?
     ;
-  `);
+  `, [limit]);
   return exercises;
 };
 
