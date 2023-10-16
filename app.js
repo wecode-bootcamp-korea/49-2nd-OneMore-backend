@@ -10,6 +10,7 @@ const {
 } = require("./src/middleware/errorHandler");
 
 const app = express();
+const { router } = require("./src/routes")
 
 app.use(
   cors({

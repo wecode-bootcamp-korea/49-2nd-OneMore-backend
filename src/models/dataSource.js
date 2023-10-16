@@ -7,9 +7,6 @@ const AppDataSource = new DataSource({
   password: process.env.TYPEORM_PASSWORD,
   database: process.env.TYPEORM_DATABASE,
   port: process.env.TYPEORM_PORT,
-  logging: process.env.TYPEORM_LOGGING,
 });
 
-module.exports = {
-  AppDataSource,
-};
+module.exports = { AppDataSource };
