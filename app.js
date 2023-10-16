@@ -3,6 +3,7 @@ const morgan = require("morgan");
 const cors = require("cors");
 require("dotenv").config();
 
+const { router } = require("./src/routes");
 const {
   routerNotFoundHandler,
   errorHandler,
@@ -24,7 +25,7 @@ app.get("/", (req, res) => {
   res.status(200).send("OK");
 });
 
-// app.use(router);  // 작성 예정
+app.use(router);
 
 app.use(routerNotFoundHandler);
 app.use(errorHandler);
