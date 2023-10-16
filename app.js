@@ -9,6 +9,7 @@ const {
 } = require("./src/middleware/errorHandler");
 
 const app = express();
+const { router } = require("./src/routes");
 
 app.use(
   cors({
@@ -24,7 +25,7 @@ app.get("/", (req, res) => {
   res.status(200).send("OK");
 });
 
-// app.use(router);  // 작성 예정
+app.use(router);
 
 app.use(routerNotFoundHandler);
 app.use(errorHandler);
