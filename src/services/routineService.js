@@ -1,5 +1,9 @@
 const { exerciseDao, routineDao } = require("../models");
-const { throwError, getIsIntegers, getIsPremiumContent } = require("../utils");
+const {
+  throwError,
+  getIsIntegers,
+  getIsPremiumContent,
+} = require("../utils");
 
 const createRoutine = async (userId, body, subscriptionState) => {
   const exerciseIds = body.exercises;
@@ -19,7 +23,11 @@ const createRoutine = async (userId, body, subscriptionState) => {
   }
 
   // create new routine
-  const result = await routineDao.createRoutine(userId, isCustom, exerciseIds); 
+  const result = await routineDao.createRoutineInTransaction(
+    userId,
+    isCustom,
+    exerciseIds
+  );
   if (!result) throwError(400, "ERROR");
   return result.insertId;
 };
