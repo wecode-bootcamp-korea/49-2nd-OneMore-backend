@@ -37,6 +37,18 @@ const getExerciseByRoutineId = async (id) => {
   }
 };
 
+const findRoutineByRoutineId = async (id) => {
+  const result = await AppDataSource.query(
+    `SELECT * 
+    FROM routine_exercises
+    WHERE routine_id = ?`,
+    [id]
+  );
+
+  return result;
+};
+
 module.exports = {
   getExerciseByRoutineId,
+  findRoutineByRoutineId,
 };
