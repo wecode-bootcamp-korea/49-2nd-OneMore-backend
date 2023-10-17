@@ -8,19 +8,21 @@ const signUp = async (email, password, nickname, phoneNumber) => {
         nickname, 
         phone_number
         ) VALUES (?, ?, ?, ?)`,
-    [email, password, nickname, phoneNumber])
+    [email, password, nickname, phoneNumber]
+  );
 };
 
-const findByEmail = async (email) => {
-  const [existingEmail] = await AppDataSource.query(
-    `SELECT email 
+const existingUser = async (email) => {
+  const existingUser = await AppDataSource.query(
+    `SELECT * 
     FROM users 
     WHERE email = ?`,
-    [email])
-  return existingEmail;
+    [email]
+  );
+  return existingUser;
 };
 
 module.exports = {
   signUp,
-  findByEmail,
+  existingUser,
 };
