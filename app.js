@@ -12,6 +12,7 @@ const {
 require("./src/middlerware/passport");
 
 const app = express();
+const { router } = require("./src/routes")
 
 app.use(
   cors({
