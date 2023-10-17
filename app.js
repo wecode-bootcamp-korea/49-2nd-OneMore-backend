@@ -1,12 +1,15 @@
 const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
+const passport = require("passport");
 require("dotenv").config();
 
+const { router } = require("./src/routes");
 const {
   routerNotFoundHandler,
   errorHandler,
 } = require("./src/middleware/errorHandler");
+require("./src/middlerware/passport");
 
 const app = express();
 
@@ -17,6 +20,7 @@ app.use(
   })
 );
 app.use(morgan("dev"));
+app.use(passport.initialize());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -24,7 +28,8 @@ app.get("/", (req, res) => {
   res.status(200).send("OK");
 });
 
-// app.use(router);  // 작성 예정
+
+app.use(router);
 
 app.use(routerNotFoundHandler);
 app.use(errorHandler);
