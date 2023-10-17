@@ -1,5 +1,5 @@
-const { routineStartService } = require("./routineService");
+const routineService = require("./routineService");
 
 module.exports = {
-  routineStartService,
+  routineService,
 };

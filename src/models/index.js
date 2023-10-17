@@ -1,5 +1,5 @@
-const { routineStartDao } = require("./routineDao");
+const routineDao = require("./routineDao");
 
 module.exports = {
-  routineStartDao,
+  routineDao,
 };

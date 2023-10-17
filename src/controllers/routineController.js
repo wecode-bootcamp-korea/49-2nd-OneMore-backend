@@ -1,11 +1,10 @@
-const { routineStartService } = require("../services");
+const { routineService } = require("../services");
 
-const routineStartController = async (req, res) => {
+const getExerciseByRoutineId = async (req, res) => {
   try {
-    const { routineId } = req.params;
-    console.log("req.params:::::::::", req.params);
-    console.log("routineId::::::::::::", routineId);
-    const routineStart = await routineStartService(routineId);
+    const { id } = req.params;
+
+    const routineStart = await routineService.getExerciseByRoutineId(id);
 
     return res.status(200).json({
       message: "Routine Success",
@@ -16,4 +15,4 @@ const routineStartController = async (req, res) => {
   }
 };
 
-module.exports = { routineStartController };
+module.exports = { getExerciseByRoutineId };

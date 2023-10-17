@@ -1,5 +1,5 @@
-const { routineStartController } = require("./routineController");
+const routineController = require("./routineController");
 
 module.exports = {
-  routineStartController,
+  routineController,
 };

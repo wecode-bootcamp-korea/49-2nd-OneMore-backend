@@ -1,8 +1,8 @@
-const { routineStartDao } = require("../models");
+const { routineDao } = require("../models");
 
-const routineStartService = async (id) => {
+const getExerciseByRoutineId = async (id) => {
   try {
-    const result = await routineStartDao(id);
+    const result = await routineDao.getExerciseByRoutineId(id);
     return result;
   } catch (err) {
     console.log(err);
@@ -10,5 +10,5 @@ const routineStartService = async (id) => {
 };
 
 module.exports = {
-  routineStartService,
+  getExerciseByRoutineId,
 };

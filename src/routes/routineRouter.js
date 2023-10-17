@@ -1,17 +1,9 @@
-// const express = require("express");
-// const router = express.Router();
-
-// const { routineStartController } = require("../controllers");
-
-// router.get("/", routineStartController);
-
-// module.exports = { routineStartController };
-
 const express = require("express");
-const router = express.Router();
 
-const { routineStartController } = require("../controllers");
+const { routineController } = require("../controllers");
 
-router.get("/:routineId", routineStartController);
+const routineRouter = express.Router();
 
-module.exports = router;
+routineRouter.get("/:id", routineController.getExerciseByRoutineId);
+
+module.exports = { routineRouter };
