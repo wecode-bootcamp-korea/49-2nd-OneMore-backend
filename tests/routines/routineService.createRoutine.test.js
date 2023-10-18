@@ -71,7 +71,7 @@ describe("TEST routineService", () => {
       isCustom: false,
     };
 
-    const routineDaoCreateRoutineSpy = jest.spyOn(routineDao, "createRoutine");
+    const routineDaoCreateRoutineSpy = jest.spyOn(routineDao, "createRoutineInTransaction");
     routineDaoCreateRoutineSpy.mockReturnValue({ insertId: 3 });
     const getIsIntegersSpy = jest.spyOn(utils, "getIsIntegers");
     const getIsPremiumContentSpy = jest.spyOn(utils, "getIsPremiumContent");
@@ -96,7 +96,7 @@ describe("TEST routineService", () => {
       isCustom: false,
     };
 
-    const routineDaoCreateRoutineSpy = jest.spyOn(routineDao, "createRoutine");
+    const routineDaoCreateRoutineSpy = jest.spyOn(routineDao, "createRoutineInTransaction");
     routineDaoCreateRoutineSpy.mockReturnValue(false);
 
     const throwErrorSpy = jest.spyOn(utils, "throwError");
