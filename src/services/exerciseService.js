@@ -1,5 +1,4 @@
 const { exerciseDao } = require("../models");
-const { throwError, getIsInputEmpty } = require("../utils");
 
 const getRecommendedExercises = async (userId, subscriptionState) => {
   // TODO: apply customized recommendation logic
