@@ -60,37 +60,37 @@ describe("getExerciseByRoutineId", () => {
 
     await AppDataSource.query(`
     INSERT INTO routine_exercises(id, routine_id, exercise_id, completed)
-    VALUES(1, 1, 1, 1),
-    (2, 2, 3, 1), 
-    (3, 3, 5, 0), 
-    (4, 4, 4, 1), 
-    (5, 5, 7, 1),
-    (6, 6, 9, 0),
-    (7, 7, 2, 1),
-    (8, 8, 6, 0),
-    (9, 9, 10, 1),
-    (10, 10, 8, 0),
-    (11, 1, 1, 0),
-    (12, 1, 3, 1), 
-    (13, 3, 5, 1), 
-    (14, 4, 4, 1), 
-    (15, 4, 7, 0),
-    (16, 4, 9, 1),
-    (17, 6, 2, 0),
-    (18, 6, 4, 1),
-    (19, 6, 6, 1),
-    (20, 6, 9, 1),
-    (21, 5, 1, 0),
-    (22, 2, 8, 1),
-    (23, 7, 6, 1),
-    (24, 7, 7, 0),
-    (25, 8, 2, 1),
-    (26, 8, 6, 1),
-    (27, 9, 5, 1),
-    (28, 9, 1, 1),
-    (29, 10, 8, 0),
-    (30, 10, 6, 0),
-    (31, 10, 3, 1)
+    VALUES(1, 1,1,1),
+    (2, 2,3,1),
+    (3, 4,5,0),
+    (4, 4,4,1),
+    (5, 5,7,1),
+    (6, 6,9,0),
+    (7, 7,2,1),
+    (8, 8,6,0),
+    (9, 9,10,1),
+    (10, 10,8,0),
+    (11, 1,2,0),
+    (12, 1,3,1),
+    (13, 3,5,1),
+    (14, 4,8,1),
+    (15, 4,7,0),
+    (16, 4,9,1),
+    (17, 6,2,0),
+    (18, 6,4,1),
+    (19, 6,6,1),
+    (20, 6,10,1),
+    (21, 5,1,0),
+    (22, 2,8,1),
+    (23, 7,6,1),
+    (24, 7,7,0),
+    (25, 8,2,1),
+    (26, 8,7,1),
+    (27, 9,5,1),
+    (28, 9,1,1),
+    (29, 10,2,0),
+    (30, 10,6,0),
+    (31, 10,3,1)
     `);
   });
 
@@ -106,8 +106,6 @@ describe("getExerciseByRoutineId", () => {
 
   test("SUCCESS: get exercise by routine id", async () => {
     const response = await request(app).get("/routines/3");
-    // expect(response.body.data.routineId).toBe(3);
-    // expect(response.body.message).toBe("Routine Success");
     expect(response.body).toEqual({
       message: "Routine Success",
       data: [
@@ -135,11 +133,5 @@ describe("getExerciseByRoutineId", () => {
         },
       ],
     });
-
-    // test("FAILED: equal completed exercise in routine", async () => {
-    //   // 1. 동일운동 포함, 2. 불러오기 실패(옳지 않은 id를 받았을 때)
-    //   await request(app)
-    // .get("/routine")
-    // .send();
   });
 });

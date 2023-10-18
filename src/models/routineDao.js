@@ -25,7 +25,7 @@ const getExerciseByRoutineId = async (id) => {
       ) AS exercises
     FROM exercises 
     LEFT JOIN routine_exercises ON exercises.id = routine_exercises.exercise_id
-    WHERE (routine_exercises.routine_id = ? AND routine_exercises.completed = 1)
+    WHERE (routine_exercises.routine_id = ?)
     GROUP BY routine_exercises.routine_id`,
       [id]
     );
