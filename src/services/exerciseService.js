@@ -1,6 +1,7 @@
 const { exerciseDao, routineDao, userDao } = require("../models");
 const utils = require("../utils");
 
+
 const getRecommendedExercises = async (userId) => {
   const user = await userDao.findById(userId);
   const subscriptionState = user.subscriptionState;

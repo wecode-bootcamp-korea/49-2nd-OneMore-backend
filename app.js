@@ -7,9 +7,9 @@ const {
   routerNotFoundHandler,
   errorHandler,
 } = require("./src/middleware/errorHandler");
+const { router } = require("./src/routes")
 
 const app = express();
-const { router } = require("./src/routes")
 
 app.use(
   cors({
