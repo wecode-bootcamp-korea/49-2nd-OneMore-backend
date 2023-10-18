@@ -24,7 +24,22 @@ const socialLogin = async (req, res) => {
   })
 }
 
-module.exports = {
-  signUp,
-  socialLogin,
+
+
+const signIn = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+
+    const userInfo = await userService.signIn(email, password);
+
+    res.status(200).json({
+      message: "LOGIN_SUCCESS",
+      token: userInfo.token,
+      nickname: userInfo.nickname,
+    });
+  } catch (error) {
+    next(error);
+  }
 };
+
+module.exports = { signUp, signIn, socialLogin };

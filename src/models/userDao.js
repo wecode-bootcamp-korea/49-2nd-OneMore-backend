@@ -8,16 +8,29 @@ const signUp = async (email, password, nickname, phoneNumber) => {
         nickname, 
         phone_number
         ) VALUES (?, ?, ?, ?)`,
-    [email, password, nickname, phoneNumber])
+    [email, password, nickname, phoneNumber]
+  );
 };
 
-const findByEmail = async (email) => {
-  const [existingEmail] = await AppDataSource.query(
-    `SELECT email 
+const existingUser = async (email) => {
+  const existingUser = await AppDataSource.query(
+    `SELECT * 
     FROM users 
     WHERE email = ?`,
-    [email])
-  return existingEmail;
+    [email]
+  );
+  return existingUser;
+};
+
+const findById = async (userId) => {
+  const [user] = await AppDataSource.query(
+    `SELECT 
+      id, 
+      subscription_state AS subscriptionState
+    FROM users 
+    WHERE id = ?`,
+    [userId])
+  return user;
 };
 
 //기존 소셜으로 가입한 회원이 있는 지 확인
@@ -61,4 +74,6 @@ module.exports = {
   findUserBySocial,
   createUserBySocial,
   updateUserBySocial,
+  findById,
+  existingUser,
 };

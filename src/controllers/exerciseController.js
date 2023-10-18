@@ -5,7 +5,7 @@ const getRecommendedExercises = async (req, res, next) => {
     const { userId, subscriptionState } = req;
     const data = await exerciseService.getRecommendedExercises(userId, subscriptionState);
     res.status(200).json({
-      message: "success",
+      message: "SUCCESS",
       data: data,
     });
   } catch (error) {

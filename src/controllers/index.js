@@ -1,6 +1,9 @@
 const exerciseController = require("./exerciseController");
-const authController = require("./authController");
+const userController = require("./userController");
+const routineController = require("./routineController");
+
 module.exports = {
   exerciseController,
-  authController,
+  userController,
+  routineController,
 };

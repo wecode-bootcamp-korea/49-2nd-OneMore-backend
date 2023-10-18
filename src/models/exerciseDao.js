@@ -23,9 +23,24 @@ const getRandomExercises = async (subscriptionState, limit = 5) => {
 const getRecommended = () => {
   // TODO: implement recommendation logic later
   return [];
+};
+
+const getExercisesListByIds = async (exerciseIds) => {
+  const values = exerciseIds.join(",");
+  const exercises = await AppDataSource.query(`
+    SELECT 
+      id,
+      is_premium AS isPremium
+    FROM
+      exercises
+    WHERE id IN (?)
+    ;
+  `, [values]);
+  return exercises;
 }
 
 module.exports = {
   getRecommended,
   getRandomExercises,
+  getExercisesListByIds,
 };

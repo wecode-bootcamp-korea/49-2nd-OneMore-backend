@@ -1,5 +1,6 @@
 const userDao = require("../models/userDao");
-const bcrypt = require("bcrypt")
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 const signUp = async (email, password, nickname, phoneNumber) => {
   if (!email || !password || !nickname) {
@@ -25,18 +26,47 @@ const signUp = async (email, password, nickname, phoneNumber) => {
     throw err;
   }
 
-  const existingEmail = await userDao.findByEmail(email)
-  if (existingEmail) {
+  const [userByEmail] = await userDao.existingUser(email);
+  if (userByEmail) {
     const err = new Error("ALREADY_REGISTERED");
     err.status = 400;
     throw err;
   }
 
-  const encodedPassword = await bcrypt.hash(password, 10)
+  const encodedPassword = await bcrypt.hash(password, 10);
   await userDao.signUp(email, encodedPassword, nickname, phoneNumber);
+};
 
+const signIn = async (email, password) => {
+  if (!email || !password) {
+    const err = new Error("KEY_ERROR");
+    err.status = 400;
+    throw err;
+  }
+
+  const [existingUser] = await userDao.existingUser(email);
+  if (!existingUser) {
+    const err = new Error("NOT_REGISTERED");
+    err.status = 400;
+    throw err;
+  }
+
+  const isPasswordRight = await bcrypt.compare(password, existingUser.password);
+  if (!isPasswordRight) {
+    const err = new Error("WRONG_PASSWORD");
+    err.status = 400;
+    throw err;
+  }
+
+  const token = jwt.sign(
+    { userId: existingUser.id },
+    process.env.JWT_SECRET_KEY
+  );
+
+  return { token: token, nickname: existingUser.nickname };
 };
 
 module.exports = {
   signUp,
+  signIn,
 };

@@ -4,15 +4,14 @@ const cors = require("cors");
 const passport = require("passport");
 require("dotenv").config();
 
-const { router } = require("./src/routes");
 const {
   routerNotFoundHandler,
   errorHandler,
 } = require("./src/middleware/errorHandler");
+const { router } = require("./src/routes")
 
 
 const app = express();
-
 
 app.use(
   cors({
