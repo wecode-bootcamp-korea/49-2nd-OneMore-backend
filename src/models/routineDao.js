@@ -20,8 +20,7 @@ const getExerciseByRoutineId = async (id) => {
           'exerciseCategory', exercise_category,
           'durationInSecondsPerSet', duration_in_seconds_per_set,
           'countsPerSet', counts_per_set,
-          'setCounts', set_counts,
-          'createdAt', exercises.created_at
+          'setCounts', set_counts
         )
       ) AS exercises
     FROM exercises 
