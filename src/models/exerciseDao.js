@@ -9,7 +9,9 @@ const getRandomExercises = async (subscriptionState, limit = 5) => {
       id AS exerciseId,
       thumbnail_url AS thumbnailURL,
       name,
-      is_premium AS isPremium
+      is_premium AS isPremium,
+      calories_used AS calories,
+      duration_in_seconds_per_set AS durationInSecondsPerSet
     From
       exercises
     ${limitedContentsQuery}
