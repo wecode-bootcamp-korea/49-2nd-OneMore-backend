@@ -22,7 +22,19 @@ const existingUser = async (email) => {
   return existingUser;
 };
 
+const findById = async (userId) => {
+  const [user] = await AppDataSource.query(
+    `SELECT 
+      id, 
+      subscription_state AS subscriptionState
+    FROM users 
+    WHERE id = ?`,
+    [userId])
+  return user;
+};
+
 module.exports = {
   signUp,
+  findById,
   existingUser,
 };

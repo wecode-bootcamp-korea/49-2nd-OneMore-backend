@@ -6,14 +6,17 @@ const getRandomExercises = async (subscriptionState, limit = 5) => {
     : ``;
   const exercises = await AppDataSource.query(`
     SELECT
-      id AS exerciseId,
-      thumbnail_url AS thumbnailURL,
-      name,
-      is_premium AS isPremium,
-      calories_used AS calories,
-      duration_in_seconds_per_set AS durationInSecondsPerSet
+      exercises.id AS exerciseId,
+      exercises.thumbnail_url AS thumbnailURL,
+      exercises.name,
+      exercises.is_premium AS isPremium,
+      exercises.calories_used AS calories,
+      exercises.duration_in_seconds_per_set AS durationInSecondsPerSet,
+      exercises.exercise_category AS categoryId,
+      exercise_categories.name AS categoryName
     From
       exercises
+    LEFT JOIN exercise_categories ON exercise_categories.id = exercises.exercise_category
     ${limitedContentsQuery}
     ORDER BY RAND()
     LIMIT ?
