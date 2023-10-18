@@ -24,7 +24,9 @@ const existingUser = async (email) => {
 
 const findById = async (userId) => {
   const [user] = await AppDataSource.query(
-    `SELECT id, subscription_state 
+    `SELECT 
+      id, 
+      subscription_state AS subscriptionState
     FROM users 
     WHERE id = ?`,
     [userId])
