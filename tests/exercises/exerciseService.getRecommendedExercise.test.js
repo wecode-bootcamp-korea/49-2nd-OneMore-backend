@@ -57,19 +57,18 @@ describe("TEST routineController", () => {
   });
 
   test("SUCCESS: getRandomExercises without subscription", async () => {
-    const data = await AppDataSource.query(`SELECT * FROM users`);
-    log(data);
     const result = await exerciseService.getRecommendedExercises(1);
-    // log(result);
     expect(result.exercises.length).toBe(5);
-    
+    result.exercises.map((item) => {
+      expect(item.isPremium).toBe(0);
+    });
   });
 
-  // test("SUCCESS: getRandomExercises with subscription", async () => {
-  //   const result = await exerciseDao.getRandomExercises(1, 5);
-  //   expect(result.length).toBe(5);
-  //   result.map((item) => {
-  //     expect([0, 1]).toContain(item.isPremium);
-  //   });
-  // });
+  test("SUCCESS: getRandomExercises with subscription", async () => {
+    const result = await exerciseService.getRecommendedExercises(2);
+    expect(result.exercises.length).toBe(5);
+    result.exercises.map((item) => {
+      expect([0, 1]).toContain(item.isPremium);
+    });
+  });
 });
