@@ -9,10 +9,10 @@ const {
   routerNotFoundHandler,
   errorHandler,
 } = require("./src/middleware/errorHandler");
-require("./src/middlerware/passport");
+
 
 const app = express();
-const { router } = require("./src/routes")
+
 
 app.use(
   cors({
@@ -28,7 +28,10 @@ app.use(express.urlencoded({ extended: true }));
 app.get("/", (req, res) => {
   res.status(200).send("OK");
 });
-
+// (
+// app.post("/user/oauth", passport.authenticate('kakao', {
+//   failureRedirect: '...',
+// }))
 
 app.use(router);
 

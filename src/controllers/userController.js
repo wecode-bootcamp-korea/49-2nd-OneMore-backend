@@ -1,3 +1,4 @@
+const { MongoNetworkError } = require("typeorm");
 const userService = require("../services/userService");
 
 const signUp = async (req, res, next) => {
@@ -14,4 +15,16 @@ const signUp = async (req, res, next) => {
   }
 };
 
-module.exports = { signUp };
+const socialLogin = async (req, res) => {
+  const token = req.user
+  res.status(201).json({
+    message: "SOCIAL_LOGIN_SUCCESS",
+    accessToken: token.accessToken,
+    refreshToken: token.refreshToken
+  })
+}
+
+module.exports = {
+  signUp,
+  socialLogin,
+};
