@@ -8,7 +8,7 @@ const getRecommendedExercises = async (req, res, next) => {
       subscriptionState
     );
     res.status(200).json({
-      message: "success",
+      message: "SUCCESS",
       data: data,
     });
   } catch (error) {
