@@ -1,4 +1,4 @@
-const userDao = require("../models/userDao");
+const { userDao } = require("../models");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
@@ -59,7 +59,9 @@ const signIn = async (email, password) => {
   }
 
   const token = jwt.sign(
-    { userId: existingUser.id },
+    {
+      userId: existingUser.id,
+    },
     process.env.JWT_SECRET_KEY
   );
 

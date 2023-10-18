@@ -22,7 +22,18 @@ const existingUser = async (email) => {
   return existingUser;
 };
 
+const findById = async (id) => {
+  const existingUserId = await AppDataSource.query(
+    `SELECT id
+    FROM users 
+    WHERE id = ?`,
+    [id]
+  );
+  return existingUserId;
+};
+
 module.exports = {
   signUp,
   existingUser,
+  findById,
 };
