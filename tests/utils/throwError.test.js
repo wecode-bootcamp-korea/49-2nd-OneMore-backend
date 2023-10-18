@@ -3,7 +3,7 @@ const {log} = require("console");
 const { throwError } = require("../../src/utils");
 
 
-describe("TEST throeError", () => {
+describe("TEST throwError", () => {
   test("SUCCESS: 400 KEY_ERROR", () => {
     try {
       throwError(400, "KEY_ERROR");
