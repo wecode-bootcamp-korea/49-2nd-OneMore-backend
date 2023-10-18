@@ -19,7 +19,9 @@ describe("userSignUp", () => {
     );
   });
   afterAll(async () => {
-    await AppDataSource.query(`DELETE FROM users`);
+    await AppDataSource.query(`SET foreign_key_checks = 0`);
+    await AppDataSource.query(`TRUNCATE users`);
+    await AppDataSource.query(`SET foreign_key_checks = 1`);
     await AppDataSource.destroy();
   });
 
