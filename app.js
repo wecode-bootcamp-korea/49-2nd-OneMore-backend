@@ -3,11 +3,11 @@ const morgan = require("morgan");
 const cors = require("cors");
 require("dotenv").config();
 
-const { router } = require("./src/routes");
 const {
   routerNotFoundHandler,
   errorHandler,
 } = require("./src/middleware/errorHandler");
+const { router } = require("./src/routes")
 
 const app = express();
 
