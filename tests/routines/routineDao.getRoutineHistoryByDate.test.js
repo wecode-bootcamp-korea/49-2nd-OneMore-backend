@@ -46,8 +46,7 @@ describe("TEST: routineDao getRoutineHistoryByDate", () => {
       VALUES
         (1, 1, 0, '2023-09-18 09:00:00'),
         (2, 1, 0, '2023-09-19 23:00:00'),
-        (3, 1, 0, '2023-09-20 09:00:00'),
-        (4, 1, 0, NOW())
+        (3, 1, 0, '2023-09-20 09:00:00')
       ;
     `);
     await AppDataSource.query(`
@@ -62,10 +61,7 @@ describe("TEST: routineDao getRoutineHistoryByDate", () => {
         (6, 2, 6, 1, '2023-09-19 23:00:00'),
         (7, 3, 1, 1, '2023-09-20 09:00:00'),
         (8, 3, 2, 1, '2023-09-20 09:00:00'),
-        (9, 3, 3, 1, '2023-09-20 09:00:00'),
-        (10, 4, 3, 1, NOW()),
-        (11, 4, 4, 1, NOW()),
-        (12, 4, 5, 1, NOW())
+        (9, 3, 3, 1, '2023-09-20 09:00:00')
     `)
     log("database initialized for test");
   });
@@ -82,24 +78,18 @@ describe("TEST: routineDao getRoutineHistoryByDate", () => {
   });
 
   test("SUCCESS: today's routine exists", async () => {
-    const todayDatetime = new Date();
-    const tomorrowDatetime = new Date();
-    tomorrowDatetime.setDate(todayDatetime.getDate() +1);
-    const today = utils.formatDate(todayDatetime);
-    const tomorrow = utils.formatDate(tomorrowDatetime);
+    const today = utils.formatDate(new Date('2023-09-20'));
+    const tomorrow = utils.formatDate(new Date('2023-09-21'));
 
     const result = await routineDao.getRoutineHistoryByDate(1, today, tomorrow);
     
-    expect(result.routineId).toBe(4);
-    expect(result.exercises.length).toEqual(3);
+    expect(result.routineId).toBe(3);
+    expect(result.exercises).toEqual([1,2,3]);
   });
 
   test("SUCCESS: today's routine not exists", async () => {
-    const todayDatetime = new Date();
-    const tomorrowDatetime = new Date();
-    tomorrowDatetime.setDate(todayDatetime.getDate() +1);
-    const today = utils.formatDate(todayDatetime);
-    const tomorrow = utils.formatDate(tomorrowDatetime);
+    const today = utils.formatDate(new Date('2023-09-20'));
+    const tomorrow = utils.formatDate(new Date('2023-09-21'));
 
     const result = await routineDao.getRoutineHistoryByDate(2, today, tomorrow);
     
