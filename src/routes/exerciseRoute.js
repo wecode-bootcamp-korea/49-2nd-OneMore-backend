@@ -5,7 +5,7 @@ const { exerciseController } = require("../controllers");
 
 const exerciseRouter = express.Router();
 
-exerciseRouter.use("/recommended", tokenValidation, exerciseController.getRecommendedExercises);
+exerciseRouter.get("/recommended", tokenValidation, exerciseController.getRecommendedExercises);
 
 module.exports = {
   exerciseRouter,
