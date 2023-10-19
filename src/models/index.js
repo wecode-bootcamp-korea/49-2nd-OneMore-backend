@@ -1,9 +1,9 @@
-const exerciseDao = require("./exerciseDao");
 const userDao = require("./userDao");
+const exerciseDao = require("./exerciseDao");
 const routineDao = require("./routineDao");
 
 module.exports = {
-  exerciseDao,
   userDao,
+  exerciseDao,
   routineDao,
 };
