@@ -27,10 +27,6 @@ app.use(express.urlencoded({ extended: true }));
 app.get("/", (req, res) => {
   res.status(200).send("OK");
 });
-// (
-// app.post("/user/oauth", passport.authenticate('kakao', {
-//   failureRedirect: '...',
-// }))
 
 app.use(router);
 

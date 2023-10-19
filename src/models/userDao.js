@@ -13,7 +13,7 @@ const signUp = async (email, password, nickname, phoneNumber) => {
 };
 
 const existingUser = async (email) => {
-  const {existingUser} = await AppDataSource.query(
+  const { existingUser } = await AppDataSource.query(
     `SELECT * 
     FROM users 
     WHERE email = ?`,
@@ -33,7 +33,6 @@ const findById = async (userId) => {
   return user;
 };
 
-//기존 소셜으로 가입한 회원이 있는 지 확인
 const findUserBySocial = async (socialUid, socialProvider) => {
   const foundUserBySocial = await AppDataSource.query(
     `SELECT id
@@ -43,7 +42,6 @@ const findUserBySocial = async (socialUid, socialProvider) => {
   return foundUserBySocial[0];
 };
 
-//소셜계정으로 회원가입하기
 const createUserBySocial = async (email, nickname, socialUid, socialProvider) => {
   return await AppDataSource.query(
     `INSERT INTO users (
@@ -53,10 +51,8 @@ const createUserBySocial = async (email, nickname, socialUid, socialProvider) =>
         social_account_provider
         ) VALUES (?, ?, ?, ?)`,
     [email, nickname, socialUid, socialProvider])
-  // return createdUserBySocial[0];
 };
 
-//소셜계정으로 업데이트
 const updateUserBySocial = async (socialUid, socialProvider, email) => {
   return await AppDataSource.query(
     ` UPDATE users
@@ -64,7 +60,6 @@ const updateUserBySocial = async (socialUid, socialProvider, email) => {
           socialProvider = ?
       WHERE email = ?`,
     [socialUid, socialProvider, email])
-  // return updatedUserBySocial[0]
 };
 
 
