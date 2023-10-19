@@ -1,14 +1,25 @@
 const { exerciseDao, routineDao, userDao } = require("../models");
 const utils = require("../utils");
 
-
 const getRecommendedExercises = async (userId) => {
   const user = await userDao.findById(userId);
   const subscriptionState = user.subscriptionState;
 
   let exercises;
   let routineCompleted = false;
-  const todayRoutineHistory = await routineDao.getTodayRoutineHistory(userId);
+
+  const todayDatetime = new Date();
+  const tomorrowDatetime = new Date();
+  tomorrowDatetime.setDate(todayDatetime.getDate() +1);
+  const today = utils.formatDate(todayDatetime);
+  const tomorrow = utils.formatDate(tomorrowDatetime);
+  
+  const todayRoutineHistory = await routineDao.getRoutineHistoryByDate(
+    userId,
+    today,
+    tomorrow
+  );
+
   if (todayRoutineHistory) {
     // in case user finished today's routine
     exercises = todayRoutineHistory.exercises;
@@ -18,7 +29,8 @@ const getRecommendedExercises = async (userId) => {
     // TODO: change to getRecommended after implementing recommendation logic
     exercises = await exerciseDao.getRandomExercises(subscriptionState);
     const isPremiumContent = utils.getIsPremiumContent(exercises);
-    if (subscriptionState === 0 && isPremiumContent) utils.throwError(403, "UNAUTHORIZED");
+    if (subscriptionState === 0 && isPremiumContent)
+      utils.throwError(403, "UNAUTHORIZED");
   }
   let totalDurationInSeconds = 0;
   let totalCalories = 0;

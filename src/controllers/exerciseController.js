@@ -2,7 +2,8 @@ const { exerciseService } = require("../services");
 
 const getRecommendedExercises = async (req, res, next) => {
   try {
-    const { userId } = req;
+    // const { userId } = req;
+    const userId = 1;
     const data = await exerciseService.getRecommendedExercises(userId);
     res.status(200).json({
       message: "SUCCESS",

@@ -30,7 +30,7 @@ const createRoutineInTransaction = async (userId, isCustom, exerciseIds) => {
   return result;
 };
 
-const getTodayRoutineHistory = async (userId) => {
+const getRoutineHistoryByDate = async (userId, startDate, endDate) => {
   const [routine] = await AppDataSource.query(`
     SELECT
       routines.id AS routineId,
@@ -39,21 +39,21 @@ const getTodayRoutineHistory = async (userId) => {
       ) AS exercises
     FROM
       routines
-    LEFT JOIN routine_exercises ON routine_exercises.exercise_id = routines.id
+    LEFT JOIN routine_exercises ON routine_exercises.routine_id = routines.id
     WHERE
       routines.user_id = ?
       AND
-      routines.created_at >= CURDATE()
-      AND 
-      routines.created_at < CURDATE() + INTERVAL 1 DAY
+      routines.created_at >= ?
+      AND
+      routines.created_at < ?
     GROUP BY routines.id
-  ;
-  `, [userId]);
+    ;
+  `, [userId, startDate, endDate]);
   return routine;
 }
 
 module.exports = {
   createRoutineInTransaction,
-  getTodayRoutineHistory,
+  getRoutineHistoryByDate,
 };
 
