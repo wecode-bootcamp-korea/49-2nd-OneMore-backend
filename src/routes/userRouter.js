@@ -1,6 +1,7 @@
 const express = require("express");
 const passport = require("passport");
 const userController = require("../controllers/userController");
+const { userController } = require("../controllers");
 
 const userRouter = express.Router();
 const {kakaoStrategy} = require("../middleware/passport");

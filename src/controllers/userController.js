@@ -1,5 +1,7 @@
 const { MongoNetworkError } = require("typeorm");
 const userService = require("../services/userService");
+const { userService } = require("../services");
+
 
 const signUp = async (req, res, next) => {
   try {
