@@ -51,9 +51,11 @@ const createRoutine = async (userId, body) => {
   return result.insertId;
 };
 
-const updateCompletedExercise = async (routineId, exercisesId) => {
+const updateCompletedExerciseStatus = async (routineId, exercisesId) => {
   try {
-    const result = await updateCompletedExercisebyRoutineId(
+    if (utils.getIsInputEmpty(exercisesId)) utils.throwError(400, "KEY_ERROR");
+
+    const result = await updateCompletedExerciseStatusbyRoutineId(
       routineId,
       exercisesId
     );
@@ -67,5 +69,5 @@ const updateCompletedExercise = async (routineId, exercisesId) => {
 module.exports = {
   getExerciseByRoutineId,
   createRoutine,
-  updateCompletedExercise,
+  updateCompletedExerciseStatus,
 };
