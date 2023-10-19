@@ -1,5 +1,4 @@
 const { app } = require("./app");
-
 const { AppDataSource } = require("./src/models/dataSource");
 
 const start = async () => {
