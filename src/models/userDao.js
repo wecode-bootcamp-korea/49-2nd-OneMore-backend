@@ -13,7 +13,7 @@ const signUp = async (email, password, nickname, phoneNumber) => {
 };
 
 const existingUser = async (email) => {
-  const existingUser = await AppDataSource.query(
+  const {existingUser} = await AppDataSource.query(
     `SELECT * 
     FROM users 
     WHERE email = ?`,
@@ -70,7 +70,7 @@ const updateUserBySocial = async (socialUid, socialProvider, email) => {
 
 module.exports = {
   signUp,
-  findByEmail,
+  // findByEmail,
   findUserBySocial,
   createUserBySocial,
   updateUserBySocial,
