@@ -1,5 +1,4 @@
 const { userDao, exerciseDao, routineDao } = require("../models");
-// const { throwError } = require("../utils");
 const utils = require("../utils");
 
 const getExerciseByRoutineId = async (id) => {
@@ -52,7 +51,21 @@ const createRoutine = async (userId, body) => {
   return result.insertId;
 };
 
+const updateCompletedExercise = async (routineId, exercisesId) => {
+  try {
+    const result = await updateCompletedExercisebyRoutineId(
+      routineId,
+      exercisesId
+    );
+
+    return result;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 module.exports = {
   getExerciseByRoutineId,
   createRoutine,
+  updateCompletedExercise,
 };

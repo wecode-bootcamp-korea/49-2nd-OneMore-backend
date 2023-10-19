@@ -80,8 +80,18 @@ const createRoutineInTransaction = async (userId, isCustom, exerciseIds) => {
   return result;
 };
 
+const updateCompletedExercisebyRoutineId = async (routineId, exercisesId) => {
+  await AppDataSource.query(
+    `UPDATE routine_exercise
+    SET completed = 1
+    WHERE routine_id = ? AND exercise_id IN (?)`,
+    [routineId, exercisesId.join()]
+  );
+};
+
 module.exports = {
   getExerciseByRoutineId,
   findRoutineByRoutineId,
   createRoutineInTransaction,
+  updateCompletedExercisebyRoutineId,
 };
