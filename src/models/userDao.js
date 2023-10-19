@@ -33,6 +33,17 @@ const findById = async (userId) => {
   return user;
 };
 
+const findByEmail = async (email) => {
+  const foundEmailBySocial = await AppDataSource.query(
+    `SELECT * 
+      FROM users 
+      WHERE email = ?`,
+    [email]
+  );
+  return foundEmailBySocial[0];
+};
+
+
 const findUserBySocial = async (socialUid, socialProvider) => {
   const foundUserBySocial = await AppDataSource.query(
     `SELECT id
@@ -56,8 +67,8 @@ const createUserBySocial = async (email, nickname, socialUid, socialProvider) =>
 const updateUserBySocial = async (socialUid, socialProvider, email) => {
   return await AppDataSource.query(
     ` UPDATE users
-      SET socialUid = ?,
-          socialProvider = ?
+      SET social_account_uid = ?,
+      social_account_provider= ?
       WHERE email = ?`,
     [socialUid, socialProvider, email])
 };
@@ -65,7 +76,7 @@ const updateUserBySocial = async (socialUid, socialProvider, email) => {
 
 module.exports = {
   signUp,
-  // findByEmail,
+  findByEmail,
   findUserBySocial,
   createUserBySocial,
   updateUserBySocial,
