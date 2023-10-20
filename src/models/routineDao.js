@@ -1,9 +1,8 @@
 const { AppDataSource } = require("./dataSource");
 
 const getExerciseByRoutineId = async (id) => {
-  try {
-    const result = await AppDataSource.query(
-      `SELECT 
+  const result = await AppDataSource.query(
+    `SELECT 
       routine_exercises.routine_id AS routineId, 
       SUM(duration_in_seconds_per_set * set_counts) AS totalDuration, 
       SUM(calories_used * set_counts) AS totalCaloriesUsed, 
@@ -28,13 +27,10 @@ const getExerciseByRoutineId = async (id) => {
     LEFT JOIN routine_exercises ON exercises.id = routine_exercises.exercise_id
     WHERE (routine_exercises.routine_id = ?)
     GROUP BY routine_exercises.routine_id`,
-      [id]
-    );
+    [id]
+  );
 
-    return result;
-  } catch (err) {
-    console.log(err);
-  }
+  return result;
 };
 
 const findRoutineByRoutineId = async (id) => {
@@ -106,28 +102,28 @@ const getRoutineHistoryByDate = async (userId, startDate, endDate) => {
   return routine;
 };
 
-const checkExercisesIdInRoutine = async (routineId, exercisesId) => {
+const checkExerciseIdsInRoutine = async (id, exercisesId) => {
   const result = await AppDataSource.query(
-    `SELECT * 
+    `SELECT id, routine_id, exercise_id
     FROM routine_exercises
     WHERE routine_id = ? AND exercise_id IN (?)`,
-    [routineId, exercisesId]
+    [id, exercisesId]
   );
 
   return result;
 };
 
-// 아래 내용  -  회의 후 변경 예정 : 무조건 상태완료로 변경하는 게 아닌, 완료 체크 후 보내준 것에 대해서만 상태완료로 변경하는 쪽으로
-//  →  기존에 완료한 운동도 체크 해제하면 미완료로 변경 가능하게
-const updateCompletedExerciseStatusbyRoutineId = async (
-  routineId,
-  exercisesId
-) => {
+const updateCompletedExerciseStatusbyRoutineId = async (id, exercisesId) => {
+  const exerciseStatus = {
+    COMPLETED: 1,
+    NOT_COMPLETED: 0,
+  };
+
   await AppDataSource.query(
     `UPDATE routine_exercises
-    SET completed = 1
-    WHERE routine_id = ? AND exercise_id IN (?)`,
-    [routineId, exercisesId]
+      SET completed = IF(exercise_id IN (?), ${exerciseStatus.COMPLETED}, ${exerciseStatus.NOT_COMPLETED})
+    WHERE routine_id = ?`,
+    [exercisesId, id]
   );
 };
 
@@ -136,6 +132,6 @@ module.exports = {
   findRoutineByRoutineId,
   createRoutineInTransaction,
   getRoutineHistoryByDate,
-  checkExercisesIdInRoutine,
+  checkExerciseIdsInRoutine,
   updateCompletedExerciseStatusbyRoutineId,
 };
