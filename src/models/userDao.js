@@ -33,7 +33,7 @@ const findById = async (userId) => {
   return user;
 };
 
- const findUserBySocial = async (socialUid, socialProvider) => {
+const findUserBySocial = async (socialUid, socialProvider) => {
   const foundUserBySocial = await AppDataSource.query(
     `SELECT id
      FROM users

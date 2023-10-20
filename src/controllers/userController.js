@@ -15,11 +15,12 @@ const signUp = async (req, res, next) => {
 };
 
 const socialLogin = async (req, res) => {
-  const token = req.user
+  const user = req.user
   res.status(201).json({
     message: "SOCIAL_LOGIN_SUCCESS",
-    accessToken: token.accessToken,
-    refreshToken: token.refreshToken
+    accessToken: user.accessToken,
+    refreshToken: user.refreshToken,
+    nickname: user.nickname
   })
 }
 
