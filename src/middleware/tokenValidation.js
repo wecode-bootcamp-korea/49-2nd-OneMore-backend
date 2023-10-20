@@ -3,13 +3,12 @@ const { userDao } = require("../models");
 
 const tokenValidation = async (req, res, next) => {
   try {
-    const token = req.headers.authorization.slice(7);
+    const token = req.headers.authorization;
     if (!token) {
       const err = new Error("NO_TOKEN");
       err.status = 401;
       throw err;
     }
-
     const tokenInfo = jwt.verify(token, process.env.JWT_SECRET_KEY);
     const userIdToken = tokenInfo.userId;
     const foundUser = await userDao.findById(userIdToken);

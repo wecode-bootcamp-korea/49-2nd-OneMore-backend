@@ -1,5 +1,4 @@
 const { userDao, exerciseDao, routineDao } = require("../models");
-// const { throwError } = require("../utils");
 const utils = require("../utils");
 
 const getExerciseByRoutineId = async (id) => {
