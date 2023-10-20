@@ -32,7 +32,7 @@ const kakaoStrategy = new KakaoStrategy(
         return done(null, { accessToken, refreshToken });  // => 소셜 계정이 있는 경우 토큰 발행
       }
       // 기존 email 유/무 확인
-      const exisitingUserByEmail = await userDao.findByEmail(email);
+      const [ exisitingUserByEmail ] = await userDao.existingUser(email);
       console.log("exisitingUserByEmail: ", exisitingUserByEmail)
       if (exisitingUserByEmail) {
         await userDao.updateUserBySocial(socialUid, socialProvider, email)
