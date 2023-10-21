@@ -1,4 +1,9 @@
-const { exerciseDao, routineDao, userDao } = require("../models");
+const {
+  exerciseDao,
+  routineDao,
+  userDao,
+  exerciseCategoryDao,
+} = require("../models");
 const utils = require("../utils");
 const ExerciseQueryBuilder = require("../models/ExerciseQueryBuilder");
 
@@ -58,8 +63,13 @@ const getExercises = async (queryParams) => {
     limit = 20,
     routineId,
   } = queryParams;
+
+  const categoryId = category
+    ? await exerciseCategoryDao.getCategoryId(category)
+    : {id: null};
+
   const exerciseQueryString = new ExerciseQueryBuilder(
-    category,
+    categoryId.id,
     equipRequired,
     sort,
     offset,
@@ -77,7 +87,7 @@ const getExercises = async (queryParams) => {
 
   return {
     exercises: exercises,
-    selected: exercisesInRoutine,
+    selected: exercisesInRoutine.map(item => item.exerciseId),
   };
 };
 

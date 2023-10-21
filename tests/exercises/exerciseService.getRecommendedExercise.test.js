@@ -3,7 +3,7 @@ const { log } = require("console");
 const { AppDataSource } = require("../../src/models/dataSource");
 const { exerciseService } = require("../../src/services");
 
-describe("TEST routineController", () => {
+describe("TEST exerciseService", () => {
   beforeAll(async () => {
     await AppDataSource.initialize();
     await AppDataSource.query(`

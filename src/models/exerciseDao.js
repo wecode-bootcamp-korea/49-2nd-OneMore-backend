@@ -54,7 +54,7 @@ const getExercisesListByRoutineId = async (routineId) => {
   const exercises = await AppDataSource.query(
     `
     SELECT DISTINCT
-      exercise_id
+      exercise_id AS exerciseId
     FROM
       routine_exercises
     WHERE routine_id = ?
@@ -71,6 +71,8 @@ const getExercises = async (exerciseQueryString = ``) => {
       id AS exerciseId,
       name,
       description,
+      exercise_category AS category,
+      equip_required AS equipRequired,
       thumbnail_url AS thumbnailURL,
       duration_in_seconds_per_set AS durationInSecondsPerSet,
       is_premium AS isPremium,
