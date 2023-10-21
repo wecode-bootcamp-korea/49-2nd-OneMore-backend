@@ -17,7 +17,6 @@ const kakaoStrategy = new KakaoStrategy(
     callbackURL: process.env.KAKAO_CALLBACK_URL,
   },
   async (accessToken, refreshToken, profile, done) => {
-    console.log("kakaoprofile: ", profile)
     const email = profile._json.kakao_account.email;
     const nickname = profile._json.kakao_account.profile.nickname;
     const socialUid = profile.id;
@@ -28,19 +27,17 @@ const kakaoStrategy = new KakaoStrategy(
       console.log("exisitingUserBySocial: ", exisitingUserBySocial)
       if (exisitingUserBySocial) {
         const { accessToken, refreshToken } = await generateTokens(exisitingUserBySocial.id);
-        console.log("generateTokens: ", accessToken, refreshToken)
         return done(null, { accessToken, refreshToken, nickname });  // => 소셜 계정이 있는 경우 토큰 발행
       }
       // 기존 email 유/무 확인
       const [exisitingUserByEmail] = await userDao.existingUser(email);
       console.log("exisitingUserByEmail: ", exisitingUserByEmail)
       if (exisitingUserByEmail) {
-        await userDao.updateUserBySocial(socialUid, socialProvider, email)
+        await userDao.updateUserBySocial(userId, socialUid, socialProvider)
         const { accessToken, refreshToken } = await generateTokens(exisitingUserByEmail.id);
         return done(null, { accessToken, refreshToken, nickname }); // => 소셜계정 업데이트 후, 토큰 발행
       } else {
         const createdUserBySocial = await userDao.createUserBySocial(email, nickname, socialUid, socialProvider)
-        console.log("createdUserBySocial: ", createdUserBySocial)
         const { accessToken, refreshToken } = await generateTokens(createdUserBySocial.id);
         return done(null, { accessToken, refreshToken, nickname }); // => 소셜유저 생성 후, 토큰 발행  
       }
@@ -54,5 +51,3 @@ const kakaoStrategy = new KakaoStrategy(
 module.exports = {
   kakaoStrategy,
 }
-
-

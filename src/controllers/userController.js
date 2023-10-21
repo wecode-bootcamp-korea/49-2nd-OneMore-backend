@@ -24,8 +24,6 @@ const socialLogin = async (req, res) => {
   })
 }
 
-
-
 const signIn = async (req, res, next) => {
   try {
     const { email, password } = req.body;
