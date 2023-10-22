@@ -24,7 +24,7 @@ class ExerciseQueryBuilder {
   }
 
   buildOrderByClause () {
-    return ``;
+    return `ORDER BY exercises.id ASC`;
   }
 
   buildOffsetLimitClause () {
