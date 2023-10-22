@@ -1,5 +1,3 @@
-const { log } = require("console");
-
 const { AppDataSource } = require("../../src/models/dataSource");
 const { exerciseDao } = require("../../src/models");
 
@@ -31,7 +29,7 @@ describe("TEST routineController", () => {
         ('testExercise9', 'testVideoUrl', 'testThumbnailUrl', 1, 1, 60, 9)
       ;
     `);
-    log("database initialized for test");
+    console.log("database initialized for test");
   });
 
   afterEach(() => {

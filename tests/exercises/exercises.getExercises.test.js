@@ -1,6 +1,5 @@
 const request = require("supertest");
 const bcrypt = require("bcrypt");
-const { log } = require("console");
 
 const { app } = require("../../app");
 const { AppDataSource } = require("../../src/models/dataSource");

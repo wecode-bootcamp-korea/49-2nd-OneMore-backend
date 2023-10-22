@@ -1,5 +1,4 @@
 const request = require("supertest");
-const { log } = require("console");
 const bcrypt = require("bcrypt");
 
 const { app } = require("../../app");
@@ -128,7 +127,6 @@ describe("TEST routines.createRoutine", () => {
         exercises: [1, 2, 3],
         isCustom: 0,
       });
-    log(response.body);
     expect(response.body).toEqual({
       message: "SUCCESS",
       routineId: 11,

@@ -1,7 +1,3 @@
-const request = require("supertest");
-
-const { log } = require("console");
-
 const { routineDao } = require("../../src/models");
 const { AppDataSource } = require("../../src/models/dataSource");
 
@@ -42,7 +38,7 @@ describe("TEST: routineDao createRoutine", () => {
         ('testExercise9', 'testVideoUrl', 'testThumbnailUrl', 1, 1, 60, 9)
       ;
     `);
-    log("database initialized for test");
+    console.log("database initialized for test");
   });
 
   afterAll(async () => {

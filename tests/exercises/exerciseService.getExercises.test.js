@@ -74,9 +74,7 @@ describe("TEST exerciseDao.getExercises", () => {
         (8, 6, 2, 1, '2023-09-20 09:00:00'),
         (9, 6, 3, 1, '2023-09-20 09:00:00')
     `)
-
-
-    log("database initialized for test");
+    console.log("database initialized for test");
   });
 
   afterEach(() => {

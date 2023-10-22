@@ -19,6 +19,7 @@ const getRecommendedExercises = async (userId) => {
   let routineCompleted = false;
 
   const todayDatetime = new Date();
+  todayDatetime.setDate(todayDatetime.getHours() + 4);
   const tomorrowDatetime = new Date();
   tomorrowDatetime.setDate(todayDatetime.getDate() + 1);
   const today = utils.formatDate(todayDatetime);
