@@ -1,3 +1,5 @@
+//  2차 MVP 완료 후, 완성....
+// 진짜.... 이해가 안됩니다ㅜㅜㅜㅜㅜ
 const request = require("supertest");
 const nock = require("nock");
 const jwt = require("jsonwebtoken");
