@@ -54,7 +54,7 @@ const createRoutine = async (userId, body) => {
 
 const routinesByUser = async (userId) => {
   const findUserRoutines = await routineDao.routinesByUser(userId);
-
+console.log(findUserRoutines)
   if (!findUserRoutines) {
     const error = new Error("NO_CUSTOM_ROUTINES");
     error.status = 400;
@@ -64,8 +64,13 @@ const routinesByUser = async (userId) => {
   return findUserRoutines;
 };
 
+const savetoCustom = async (userId, routineId) => {
+  const saveToCustom = await routineDao.toCustom(userId, routineId);
+}
+
 module.exports = {
   getExerciseByRoutineId,
   createRoutine,
   routinesByUser,
+  savetoCustom
 };

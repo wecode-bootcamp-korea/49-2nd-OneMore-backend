@@ -128,6 +128,12 @@ const routinesByUser = async (userId) => {
   return result;
 };
 
+const toCustom = async (userId, routineId) => {
+  const recommendedToCustom = await AppDataSource.query(
+
+  )
+}
+
 module.exports = {
   getExerciseByRoutineId,
   findRoutineByRoutineId,

@@ -34,7 +34,7 @@ const myRoutines = async (req, res, next) => {
     const { userId } = req;
 
     const myRoutines = await routineService.routinesByUser(userId);
-
+    console.log(myRoutines)
     return res.status(200).json({
       message: "MY_ROUTINES_SUCCESS",
       data: myRoutines,
@@ -44,8 +44,24 @@ const myRoutines = async (req, res, next) => {
   }
 };
 
+const recommendedToCustom = async (req, res, next) => {
+  try {
+    const { userId } = req;
+    const { routineId } = req.params;
+
+    const toCustom = await routineService.saveToCustom(userId, routineId);
+
+    return res.status(200).json({
+      message: "SAVE_TO_CUSTOM_SUCCESS"
+    });
+  } catch(error) {
+    next(error);
+  }
+}
+
 module.exports = {
   getExerciseByRoutineId,
   createRoutine,
   myRoutines,
+  recommendedToCustom
 };
