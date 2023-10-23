@@ -15,6 +15,7 @@ const getExerciseByRoutineId = async (id) => {
     }
 
     const result = await routineDao.getExerciseByRoutineId(id);
+    console.log(result)
     return result;
   } catch (err) {
     console.log(err);
@@ -52,7 +53,22 @@ const createRoutine = async (userId, body) => {
   return result.insertId;
 };
 
+const routinesByUser = async (userId) => {
+
+  const findUserRoutines = await routineDao.routinesByUser(userId)
+console.log(findUserRoutines)
+
+  if (!findUserRoutines) {
+      const error = new Error("NO_CUSTOM_ROUTINES")
+      error.status = 400
+      throw error
+  }
+
+  return findUserRoutines
+}
+
 module.exports = {
   getExerciseByRoutineId,
   createRoutine,
+  routinesByUser
 };

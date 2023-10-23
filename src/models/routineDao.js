@@ -29,7 +29,6 @@ const getExerciseByRoutineId = async (id) => {
     GROUP BY routine_exercises.routine_id`,
       [id]
     );
-
     return result;
   } catch (err) {
     console.log(err);
@@ -81,7 +80,8 @@ const createRoutineInTransaction = async (userId, isCustom, exerciseIds) => {
 };
 
 const getRoutineHistoryByDate = async (userId, startDate, endDate) => {
-  const [routine] = await AppDataSource.query(`
+  const [routine] = await AppDataSource.query(
+    `
     SELECT
       routines.id AS routineId,
       JSON_ARRAYAGG(
@@ -98,14 +98,41 @@ const getRoutineHistoryByDate = async (userId, startDate, endDate) => {
       routines.created_at < ?
     GROUP BY routines.id
     ;
-  `, [userId, startDate, endDate]);
+  `,
+    [userId, startDate, endDate]
+  );
   return routine;
-}
+};
+
+const routinesByUser = async (userId) => {
+  const result = await AppDataSource.query(
+    `SELECT 
+    routines.id AS routine_id, 
+    routines.name AS routine_name,
+    JSON_ARRAYAGG(exercises.name) AS exercise_names, 
+    
+    SUM(exercises.duration_in_seconds_per_set * exercises.set_counts) AS total_duration,
+    IF(ISNULL(routines.updated_at), routines.created_at, routines.updated_at) AS createDate
+    FROM routines
+    JOIN routine_exercises ON routines.id = routine_exercises.routine_id
+    JOIN exercises ON routine_exercises.exercise_id = exercises.id
+    WHERE routines.user_id = ? AND routines.is_custom = 1
+    GROUP BY routine_exercises.routine_id
+    ORDER BY createDate DESC`,
+    [userId]
+  );
+
+  // JSON_ARRAYAGG(
+  //   JSON_OBJECT(
+  //   'name', exercises.name
+  // )) AS exercise_name,
+  return result;
+};
 
 module.exports = {
   getExerciseByRoutineId,
   findRoutineByRoutineId,
   createRoutineInTransaction,
   getRoutineHistoryByDate,
+  routinesByUser,
 };
-

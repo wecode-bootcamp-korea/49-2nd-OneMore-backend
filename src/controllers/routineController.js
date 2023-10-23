@@ -29,7 +29,23 @@ const createRoutine = async (req, res, next) => {
   }
 };
 
+const myRoutines = async (req, res, next) => {
+  try {
+    const { userId } = req;
+
+    const myRoutines = await routineService.routinesByUser(userId);
+
+    return res.status(200).json({
+      message: "MY_ROUTINES_SUCCESS",
+      data: myRoutines,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   getExerciseByRoutineId,
   createRoutine,
+  myRoutines,
 };
