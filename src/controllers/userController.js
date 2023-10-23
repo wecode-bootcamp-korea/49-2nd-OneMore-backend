@@ -14,6 +14,15 @@ const signUp = async (req, res, next) => {
   }
 };
 
+const socialLogin = async (req, res) => {
+  const user = req.user
+  res.status(201).json({
+    message: "SOCIAL_LOGIN_SUCCESS",
+    accessToken: user.accessToken,
+    refreshToken: user.refreshToken,
+    nickname: user.nickname
+  })
+}
 const signIn = async (req, res, next) => {
   try {
     const { email, password } = req.body;
@@ -30,4 +39,4 @@ const signIn = async (req, res, next) => {
   }
 };
 
-module.exports = { signUp, signIn };
+module.exports = { signUp, signIn, socialLogin };
