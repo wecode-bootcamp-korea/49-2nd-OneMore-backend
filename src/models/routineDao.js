@@ -107,11 +107,19 @@ const getRoutineHistoryByDate = async (userId, startDate, endDate) => {
 const routinesByUser = async (userId) => {
   const result = await AppDataSource.query(
     `SELECT 
-      routines.id AS routine_id, 
-      routines.name AS routine_name,
-      JSON_ARRAYAGG(exercises.name) AS exercise_names,
-      SUM(exercises.duration_in_seconds_per_set * exercises.set_counts) AS total_duration,
-      IF(ISNULL(routines.updated_at), routines.created_at, routines.updated_at) AS createDate
+      routines.id AS routineId, 
+      routines.name AS routineName,
+      JSON_ARRAYAGG(exercises.name) AS exerciseNames,
+      TIME_FORMAT(
+        SEC_TO_TIME(
+          SUM(exercises.duration_in_seconds_per_set * exercises.set_counts)
+          ), 
+          "%i:%s") 
+        AS totalDuration,
+      DATE_FORMAT(
+        IF(ISNULL(routines.updated_at), routines.created_at, routines.updated_at),
+        "%Y-%c-%d" ) 
+        AS createDate
     FROM 
       routines
     JOIN routine_exercises ON routines.id = routine_exercises.routine_id
