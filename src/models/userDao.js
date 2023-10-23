@@ -53,7 +53,7 @@ const createUserBySocial = async (email, nickname, socialUid, socialProvider) =>
     [email, nickname, socialUid, socialProvider])
 };
 
-const updateUserBySocial = async (userId,socialUid, socialProvider) => {
+const updateUserBySocial = async (userId, socialUid, socialProvider) => {
   return await AppDataSource.query(
     ` UPDATE users
       SET social_account_uid = ?,

@@ -24,14 +24,12 @@ const kakaoStrategy = new KakaoStrategy(
     try {
       // 소셜 로그인 계정 유/무 확인
       const exisitingUserBySocial = await userDao.findUserBySocial(socialUid, socialProvider);
-      console.log("exisitingUserBySocial: ", exisitingUserBySocial)
       if (exisitingUserBySocial) {
         const { accessToken, refreshToken } = await generateTokens(exisitingUserBySocial.id);
         return done(null, { accessToken, refreshToken, nickname });  // => 소셜 계정이 있는 경우 토큰 발행
       }
       // 기존 email 유/무 확인
       const [exisitingUserByEmail] = await userDao.existingUser(email);
-      console.log("exisitingUserByEmail: ", exisitingUserByEmail)
       if (exisitingUserByEmail) {
         await userDao.updateUserBySocial(userId, socialUid, socialProvider)
         const { accessToken, refreshToken } = await generateTokens(exisitingUserByEmail.id);
