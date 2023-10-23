@@ -109,8 +109,7 @@ const routinesByUser = async (userId) => {
     `SELECT 
     routines.id AS routine_id, 
     routines.name AS routine_name,
-    JSON_ARRAYAGG(exercises.name) AS exercise_names, 
-    
+    JSON_ARRAYAGG(exercises.name) AS exercise_names,
     SUM(exercises.duration_in_seconds_per_set * exercises.set_counts) AS total_duration,
     IF(ISNULL(routines.updated_at), routines.created_at, routines.updated_at) AS createDate
     FROM routines
@@ -122,10 +121,6 @@ const routinesByUser = async (userId) => {
     [userId]
   );
 
-  // JSON_ARRAYAGG(
-  //   JSON_OBJECT(
-  //   'name', exercises.name
-  // )) AS exercise_name,
   return result;
 };
 
