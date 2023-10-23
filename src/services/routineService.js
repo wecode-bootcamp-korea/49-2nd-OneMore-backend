@@ -15,7 +15,6 @@ const getExerciseByRoutineId = async (id) => {
     }
 
     const result = await routineDao.getExerciseByRoutineId(id);
-    console.log(result);
     return result;
   } catch (err) {
     console.log(err);
