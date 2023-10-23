@@ -9,6 +9,11 @@ const createSubscription = async (userId, amount, provider, status) => {
     } return await subscriptionDao.createSubscription(userId, amount, provider, status)
 }
 
+const getSubscriptionByUser = async (userId) => {
+    console.log("S:", subscriptionDao.getSubscriptionByUser)
+    return await subscriptionDao.getSubscriptionByUser(userId)
+}
 module.exports = {
     createSubscription,
+    getSubscriptionByUser,
 };

@@ -1,5 +1,6 @@
 const { AppDataSource } = require("./dataSource");
 
+//구독신청(주문)
 const createSubscription = async (userId, amount, provider, status) => {
     const queryRunner = AppDataSource.createQueryRunner();
     await queryRunner.connect();
@@ -43,9 +44,22 @@ const subscribeUser = async (userId) => {
     return subscribingUser
 }
 
+//유저정보 불러오기
+const getSubscriptionByUser = async (userId) => {
+    const subscriptionState = 0
+    const [user] = await AppDataSource.query(
+        `SELECT id, nickname
+        FROM users
+        WHERE id = ? AND  subscription_state = ?`,
+        [userId, subscriptionState])
+    console.log("D:", user)
+    return user
+}
+
 module.exports = {
     createSubscription,
     subscribeUser,
+    getSubscriptionByUser,
 };
 
 
