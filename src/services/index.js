@@ -4,5 +4,5 @@ const routineService = require("./routineService");
 module.exports = {
   exerciseService,
   userService,
-  routineService,
+  routineService
 };
