@@ -3,7 +3,7 @@ const { app } = require("../../app");
 const { AppDataSource } = require("../../src/models/dataSource");
 const jwt = require("jsonwebtoken");
 
-describe("TEST: subscriptionDao createSubscription", () => {
+describe("TEST: createSubscription", () => {
   beforeAll(async () => {
     await AppDataSource.initialize();
 
@@ -40,28 +40,29 @@ describe("TEST: subscriptionDao createSubscription", () => {
         userId: 2,
         amount: 3900,
         provider: "신용카드",
-        status: 1
+        // status: 1
       })
       .set("Authorization", token)
       .expect(201)
+      .expect({ message: 'SUCCESS_SUBSCRIPTION_AND_PAYMENT' });
   });
 });
 
-test("FAIL: ", async () => {
+test("FAIL: KEY_ERROR_UID", async () => {
   const token = jwt.sign({
     userId: 2,
   }, process.env.JWT_SECRET_KEY);
-  await request(app)
+  const response = await request(app)
     .post("/subscription_orders")
     .send({
-      userId: 2,
       amount: 3900,
       provider: "신용카드",
-      status: 1
     })
     .set("Authorization", token)
     .expect(400)
+    .expect({"error": "400 KEY_ERROR_UID"})
 });
+
 
 
 

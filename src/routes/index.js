@@ -12,7 +12,7 @@ router.use("/exercises", exerciseRouter);
 router.use("/routines", routineRouter);
 router.use("/users", userRouter);
 router.use("/subscription_orders", subscriptionRouter)
-router.use("/payments",paymentRouter)
+// router.use("/payments",paymentRouter)
 
 module.exports = {
   router,
