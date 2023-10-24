@@ -1,4 +1,6 @@
 const request = require("supertest");
+const jwt = require("jsonwebtoken");
+
 const { app } = require("../../app");
 const { AppDataSource } = require("../../src/models/dataSource");
 
@@ -105,9 +107,14 @@ describe("updateCompletedExerciseStatus", () => {
   });
 
   test("SUCCESS: update completed exercise status", async () => {
+    const token = jwt.sign({
+      userId: 1,
+    }, process.env.JWT_SECRET_KEY);
+
     await request(app)
       .patch("/routines/6")
       .send({ routineId: 6, exercisesId: [2, 9] })
+      .set("Authorization", token)
       .expect(200)
       .expect({ message: "EXERCISE UPDATE SUCCESS" });
   });

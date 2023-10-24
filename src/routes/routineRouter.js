@@ -5,7 +5,9 @@ const { routineController } = require("../controllers");
 
 const routineRouter = express.Router();
 
-routineRouter.get("/my", tokenValidation, routineController.myRoutines);
+routineRouter.use(tokenValidation);
+
+routineRouter.get("/my", routineController.myRoutines);
 routineRouter.get("/:id", routineController.getExerciseByRoutineId);
 routineRouter.post("/", routineController.createRoutine);
 routineRouter.patch("/:id", routineController.updateCompletedExerciseStatus);

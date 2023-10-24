@@ -17,9 +17,11 @@ const getExerciseByRoutineId = async (id) => {
 };
 
 const createRoutine = async (userId, body) => {
+  console.log("userId", userId);
   const exerciseIds = body.exercises;
   const isCustom = body.isCustom;
   const user = await userDao.findById(userId);
+  console.log(user);
   const subscriptionState = user.subscriptionState;
 
   if (utils.getIsInputEmpty(exerciseIds)) utils.throwError(400, "KEY_ERROR");
@@ -59,6 +61,7 @@ const updateCompletedExerciseStatus = async (id, exercisesId) => {
     utils.throwError(400, "INVALID_INPUT");
 
   await routineDao.updateCompletedExerciseStatusbyRoutineId(id, exercisesId);
+};
 
 const routinesByUser = async (userId) => {
   const findUserRoutines = await routineDao.routinesByUser(userId);
