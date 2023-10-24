@@ -101,13 +101,14 @@ describe("updateCompletedExerciseStatus", () => {
     await AppDataSource.query(`TRUNCATE TABLE exercise_categories`);
     await AppDataSource.query(`TRUNCATE TABLE routines`);
     await AppDataSource.query(`TRUNCATE TABLE users`);
+    await AppDataSource.query(`SET foreign_key_checks = 1`);
     await AppDataSource.destroy();
   });
 
   test("SUCCESS: update completed exercise status", async () => {
     await request(app)
       .patch("/routines/6")
-      .send({ routineId: 6, exercisesId: [2, 9] })
+      .send({ routineId: 6, exerciseIds: [2, 9] })
       .expect(200)
       .expect({ message: "EXERCISE UPDATE SUCCESS" });
   });

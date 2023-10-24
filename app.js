@@ -8,8 +8,7 @@ const {
   routerNotFoundHandler,
   errorHandler,
 } = require("./src/middleware/errorHandler");
-const { router } = require("./src/routes")
-
+const { router } = require("./src/routes");
 
 const app = express();
 
