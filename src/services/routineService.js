@@ -47,19 +47,18 @@ const createRoutine = async (userId, body) => {
   return result.insertId;
 };
 
-const updateCompletedExerciseStatus = async (id, exercisesId) => {
-  if (utils.getIsInputEmpty(exercisesId)) utils.throwError(400, "KEY_ERROR");
+const updateCompletedExerciseStatus = async (id, exerciseIds) => {
+  if (utils.getIsInputEmpty(exerciseIds)) utils.throwError(400, "KEY_ERROR");
 
   const checkIncludedExercise = await routineDao.checkExerciseIdsInRoutine(
     id,
-    exercisesId
+    exerciseIds
   );
 
-  if (checkIncludedExercise.length !== exercisesId.length)
+  if (checkIncludedExercise.length !== exerciseIds.length)
     utils.throwError(400, "INVALID_INPUT");
 
-  await routineDao.updateCompletedExerciseStatusbyRoutineId(id, exercisesId);
-};
+  await routineDao.updateCompletedExerciseStatusbyRoutineId(id, exerciseIds);
 
 const routinesByUser = async (userId) => {
   const findUserRoutines = await routineDao.routinesByUser(userId);

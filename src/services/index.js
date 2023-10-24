@@ -6,5 +6,5 @@ const userService = require("./userService");
 module.exports = {
   exerciseService,
   userService,
-  routineService
+  routineService,
 };

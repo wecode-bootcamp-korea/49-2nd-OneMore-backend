@@ -100,6 +100,7 @@ describe("updateCompletedExerciseStatus", () => {
     await AppDataSource.query(`TRUNCATE TABLE exercise_categories`);
     await AppDataSource.query(`TRUNCATE TABLE routines`);
     await AppDataSource.query(`TRUNCATE TABLE users`);
+    await AppDataSource.query(`SET foreign_key_checks = 1`);
     await AppDataSource.destroy();
   });
 

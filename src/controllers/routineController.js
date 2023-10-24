@@ -32,9 +32,9 @@ const createRoutine = async (req, res, next) => {
 const updateCompletedExerciseStatus = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { exercisesId } = req.body;
+    const { exerciseIds } = req.body;
 
-    await routineService.updateCompletedExerciseStatus(id, exercisesId);
+    await routineService.updateCompletedExerciseStatus(id, exerciseIds);
 
     return res.status(200).json({
       message: "EXERCISE UPDATE SUCCESS",

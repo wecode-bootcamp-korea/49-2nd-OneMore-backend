@@ -29,7 +29,7 @@ const getExerciseByRoutineId = async (id) => {
     GROUP BY routine_exercises.routine_id`,
     [id]
   );
-  
+
   return result;
 };
 
@@ -102,13 +102,12 @@ const getRoutineHistoryByDate = async (userId, startDate, endDate) => {
   return routine;
 };
 
-
-const checkExerciseIdsInRoutine = async (id, exercisesId) => {
+const checkExerciseIdsInRoutine = async (id, exerciseIds) => {
   const result = await AppDataSource.query(
     `SELECT id, routine_id, exercise_id
     FROM routine_exercises
     WHERE routine_id = ? AND exercise_id IN (?)`,
-    [id, exercisesId]
+    [id, exerciseIds]
   );
 
   return result;
@@ -174,7 +173,7 @@ const updateCompletedExerciseStatusbyRoutineId = async (id, exercisesId) => {
     `UPDATE routine_exercises
       SET completed = IF(exercise_id IN (?), ${exerciseStatus.COMPLETED}, ${exerciseStatus.NOT_COMPLETED})
     WHERE routine_id = ?`,
-    [exercisesId, id]
+    [exerciseIds, id]
   );
 };
 
