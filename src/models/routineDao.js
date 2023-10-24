@@ -137,6 +137,9 @@ const toCustom = async (userId, routineId) => {
     WHERE user_id = ? AND id = ?`,
     [userId, routineId]
   );
+};
+
+const customCheck = async (userId, routineId) => {
   const [customRoutineCheck] = await AppDataSource.query(
     `SELECT is_custom
     FROM routines
@@ -144,7 +147,8 @@ const toCustom = async (userId, routineId) => {
     [userId, routineId]
   );
   return customRoutineCheck;
-};
+}
+
 
 module.exports = {
   getExerciseByRoutineId,
@@ -153,4 +157,5 @@ module.exports = {
   getRoutineHistoryByDate,
   routinesByUser,
   toCustom,
+  customCheck
 };
