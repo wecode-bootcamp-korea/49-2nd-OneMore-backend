@@ -59,6 +59,7 @@ const updateCompletedExerciseStatus = async (id, exerciseIds) => {
     utils.throwError(400, "INVALID_INPUT");
 
   await routineDao.updateCompletedExerciseStatusbyRoutineId(id, exerciseIds);
+};
 
 const routinesByUser = async (userId) => {
   const findUserRoutines = await routineDao.routinesByUser(userId);

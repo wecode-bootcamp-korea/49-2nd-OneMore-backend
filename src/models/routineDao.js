@@ -163,7 +163,7 @@ const customCheck = async (userId, routineId) => {
   return customRoutineCheck;
 }
 
-const updateCompletedExerciseStatusbyRoutineId = async (id, exercisesId) => {
+const updateCompletedExerciseStatusbyRoutineId = async (id, exerciseIds) => {
   const exerciseStatus = {
     COMPLETED: 1,
     NOT_COMPLETED: 0,

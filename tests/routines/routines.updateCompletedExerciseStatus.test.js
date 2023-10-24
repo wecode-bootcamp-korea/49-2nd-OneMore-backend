@@ -114,7 +114,7 @@ describe("updateCompletedExerciseStatus", () => {
 
     await request(app)
       .patch("/routines/6")
-      .send({ routineId: 6, exercisesId: [2, 9] })
+      .send({ routineId: 6, exerciseIds: [2, 9] })
       .set("Authorization", token)
       .expect(200)
       .expect({ message: "EXERCISE UPDATE SUCCESS" });
