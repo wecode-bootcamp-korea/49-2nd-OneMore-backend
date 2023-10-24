@@ -4,10 +4,8 @@ const { subscriptionController } = require("../controllers");
 
 const subscriptionRouter = express.Router();
 
-// subscriptionRouter.post("/", tokenValidation, subscriptionController.createSubscription);
-// subscriptionRouter.get("/", tokenValidation, subscriptionController.createSubscription);
-subscriptionRouter.post("/", subscriptionController.createSubscription);
-subscriptionRouter.get("/:userId", subscriptionController.getSubscriptionByUser);
+subscriptionRouter.post("/", tokenValidation, subscriptionController.createSubscription);
+
 module.exports = {
     subscriptionRouter,
 };

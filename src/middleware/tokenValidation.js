@@ -3,7 +3,7 @@ const { userDao } = require("../models");
 
 const tokenValidation = async (req, res, next) => {
   try {
-    const token = req.headers.authorization.slice(7);
+    const token = req.headers.authorization;
     if (!token) {
       const err = new Error("NO_TOKEN");
       err.status = 401;

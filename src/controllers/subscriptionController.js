@@ -1,34 +1,17 @@
 const { subscriptionService } = require("../services");
+const utils = require("../utils");
 
 const createSubscription = async (req, res, next) => {
     try {
-        const { userId, amount, provider, status } = req.body;
-        console.log("userId: ", userId)
-        if (!userId) throwError(400, 'KEY_ERROR_UID');
-        if (!amount) throwError(400, 'KEY_ERROR_AMOUNT');
-        if (!provider) throwError(400, 'KEY_ERROR_PROVIDER');
-        if (!status) throwError(400, 'KEY_ERROR_STATUS');
-        console.log("C->createSubscription: ", createSubscription)
-        const createdSubscription = await subscriptionService.createSubscription(userId, amount, provider, status)
+        const { userId, amount, provider } = req.body;
+        if (!userId) utils.throwError(400, 'KEY_ERROR_UID');
+        if (!amount) utils.throwError(400, 'KEY_ERROR_AMOUNT');
+        if (!provider) utils.throwError(400, 'KEY_ERROR_PROVIDER');
+        const createdSubscription = await subscriptionService.createSubscription(userId, amount, provider)
+        console.log("createdSubscription: ", createdSubscription)
         return res.status(201).json({
-            message: 'SUCCESS_SUBSCRIPTION',
+            message: 'SUCCESS_SUBSCRIPTION_AND_PAYMENT',
             data: createdSubscription,
-        });
-    } catch (error) {
-        console.log(error)
-        next(error);
-    }
-};
-
-const getSubscriptionByUser = async (req, res, next) => {
-    try {
-        const { userId } = req.params;
-        if (!userId) throwError(400, 'KEY_ERROR_UID');
-        const user = await subscriptionService.getSubscriptionByUser(userId)
-        console.log("C:", user)
-        return res.status(200).json({
-            message: 'USER_INFO',
-            data: user
         });
     } catch (error) {
         console.log(error)
@@ -38,5 +21,4 @@ const getSubscriptionByUser = async (req, res, next) => {
 
 module.exports = {
     createSubscription,
-    getSubscriptionByUser,
 };
