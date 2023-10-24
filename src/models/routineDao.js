@@ -29,7 +29,7 @@ const getExerciseByRoutineId = async (id) => {
     GROUP BY routine_exercises.routine_id`,
     [id]
   );
-
+  
   return result;
 };
 
@@ -102,12 +102,37 @@ const getRoutineHistoryByDate = async (userId, startDate, endDate) => {
   return routine;
 };
 
+
 const checkExerciseIdsInRoutine = async (id, exercisesId) => {
   const result = await AppDataSource.query(
     `SELECT id, routine_id, exercise_id
     FROM routine_exercises
     WHERE routine_id = ? AND exercise_id IN (?)`,
     [id, exercisesId]
+  );
+
+  return result;
+};
+
+const routinesByUser = async (userId) => {
+  const result = await AppDataSource.query(
+    `SELECT 
+      routines.id AS routine_id, 
+      routines.name AS routine_name,
+      JSON_ARRAYAGG(exercises.name) AS exercise_names,
+      SUM(exercises.duration_in_seconds_per_set * exercises.set_counts) AS total_duration,
+      IF(ISNULL(routines.updated_at), routines.created_at, routines.updated_at) AS createDate
+    FROM 
+      routines
+    JOIN routine_exercises ON routines.id = routine_exercises.routine_id
+    JOIN exercises ON routine_exercises.exercise_id = exercises.id
+    WHERE 
+      routines.user_id = ? AND routines.is_custom = 1
+    GROUP BY 
+      routine_exercises.routine_id
+    ORDER BY 
+      createDate DESC`,
+    [userId]
   );
 
   return result;
@@ -134,4 +159,5 @@ module.exports = {
   getRoutineHistoryByDate,
   checkExerciseIdsInRoutine,
   updateCompletedExerciseStatusbyRoutineId,
+  routinesByUser,
 };

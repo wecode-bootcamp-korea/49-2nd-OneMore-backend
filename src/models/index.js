@@ -5,5 +5,5 @@ const routineDao = require("./routineDao");
 module.exports = {
   userDao,
   exerciseDao,
-  routineDao,
+  routineDao
 };

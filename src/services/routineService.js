@@ -59,10 +59,22 @@ const updateCompletedExerciseStatus = async (id, exercisesId) => {
     utils.throwError(400, "INVALID_INPUT");
 
   await routineDao.updateCompletedExerciseStatusbyRoutineId(id, exercisesId);
+
+const routinesByUser = async (userId) => {
+  const findUserRoutines = await routineDao.routinesByUser(userId);
+
+  if (!findUserRoutines) {
+    const error = new Error("NO_CUSTOM_ROUTINES");
+    error.status = 400;
+    throw error;
+  }
+
+  return findUserRoutines;
 };
 
 module.exports = {
   getExerciseByRoutineId,
   createRoutine,
   updateCompletedExerciseStatus,
+  routinesByUser,
 };

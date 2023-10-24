@@ -5,5 +5,5 @@ const routineController = require("./routineController");
 module.exports = {
   exerciseController,
   userController,
-  routineController,
+  routineController
 };
