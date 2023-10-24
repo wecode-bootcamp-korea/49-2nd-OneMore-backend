@@ -76,36 +76,29 @@ const googleStrategy = new GoogleStrategy(
     const socialProvider = 2;
     const email = profile._json.email;
     const nickname = profile._json.name;
-
     try {
       const exisitingUserBySocial = await userDao.findUserBySocial(
         socialUid,
         socialProvider
       );
-
-      //============== 소셜 로그인을 이미 했으면 토큰 발급
       if (exisitingUserBySocial) {
+        //============== 소셜 로그인을 이미 했으면 토큰 발급
         const { accessToken, refreshToken } = await generateTokens(
           exisitingUserBySocial.id
         );
-        // console.log("generateTokens: ", accessToken, refreshToken);
         return cb(null, { accessToken, refreshToken, nickname }); // => 소셜 계정이 있는 경우 토큰 발행
       }
-
-      //============== 소셜 로그인을 안 했으면 이메일 등록 확인
       const [exisitingUserByEmail] = await userDao.existingUser(email);
-
-      //============== 이메일이 있으면 소셜 정보 저장
       if (exisitingUserByEmail) {
+        //============== 등록된 이메일이 있으면 소셜 정보 저장
         const userId = exisitingUserByEmail.id;
         await userDao.updateUserBySocial(userId, socialUid, socialProvider);
         const { accessToken, refreshToken } = await generateTokens(
           exisitingUserByEmail.id
         );
         return cb(null, { accessToken, refreshToken, nickname });
-
-        //============== 이메일이 없으면 소셜 로그인으로 회원가입 및 토큰 발급
       } else {
+        //============== 이메일이 없으면 소셜 로그인으로 회원가입 및 토큰 발급
         const createdUserBySocial = await userDao.createUserBySocial(
           email,
           nickname,
