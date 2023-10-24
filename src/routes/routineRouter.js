@@ -8,6 +8,7 @@ const routineRouter = express.Router();
 routineRouter.get("/my", tokenValidation, routineController.myRoutines);
 routineRouter.get("/:id", routineController.getExerciseByRoutineId);
 routineRouter.post("/", routineController.createRoutine);
+routineRouter.patch("/:id", routineController.updateCompletedExerciseStatus);
 
 module.exports = {
   routineRouter,

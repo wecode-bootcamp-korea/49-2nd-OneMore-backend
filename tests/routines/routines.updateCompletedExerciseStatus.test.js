@@ -2,7 +2,7 @@ const request = require("supertest");
 const { app } = require("../../app");
 const { AppDataSource } = require("../../src/models/dataSource");
 
-describe("getExerciseByRoutineId", () => {
+describe("updateCompletedExerciseStatus", () => {
   beforeAll(async () => {
     await AppDataSource.initialize();
     await AppDataSource.query(`SET foreign_key_checks = 0`);
@@ -104,33 +104,11 @@ describe("getExerciseByRoutineId", () => {
     await AppDataSource.destroy();
   });
 
-  test("SUCCESS: get exercise by routine id", async () => {
-    const response = await request(app).get("/routines/3");
-    expect(response.body).toEqual({
-      message: "Routine Success",
-      data: {
-        routineId: 3,
-        totalDuration: "840",
-        totalCaloriesUsed: "300",
-        exerciseIds: [5],
-        exercises: [
-          {
-            id: 5,
-            name: "달리기",
-            videoURL: "https://www.youtube.com/embed/9CPrrmusOuQ",
-            isPremium: 0,
-            setCounts: 1,
-            description: "봄, 가을에 하기 좋아요",
-            isCompleted: 1,
-            caloriesUsed: 300,
-            countsPerSet: 1,
-            thumbnailURL:
-              "https://one-more.s3.ap-northeast-2.amazonaws.com/icons8-running-ios-16-filled/icons8-running-100.png",
-            exerciseCategory: 4,
-            durationInSecondsPerSet: 840,
-          },
-        ],
-      },
-    });
+  test("SUCCESS: update completed exercise status", async () => {
+    await request(app)
+      .patch("/routines/6")
+      .send({ routineId: 6, exercisesId: [2, 9] })
+      .expect(200)
+      .expect({ message: "EXERCISE UPDATE SUCCESS" });
   });
 });

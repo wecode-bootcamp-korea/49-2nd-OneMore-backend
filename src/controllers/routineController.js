@@ -1,6 +1,6 @@
 const { routineService } = require("../services");
 
-const getExerciseByRoutineId = async (req, res) => {
+const getExerciseByRoutineId = async (req, res, next) => {
   try {
     const { id } = req.params;
 
@@ -8,10 +8,10 @@ const getExerciseByRoutineId = async (req, res) => {
 
     return res.status(200).json({
       message: "Routine Success",
-      data: routineStart,
+      data: routineStart[0],
     });
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
+    next(error);
   }
 };
 
@@ -23,6 +23,21 @@ const createRoutine = async (req, res, next) => {
     return res.status(201).json({
       message: "SUCCESS",
       routineId: routineId,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const updateCompletedExerciseStatus = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { exercisesId } = req.body;
+
+    await routineService.updateCompletedExerciseStatus(id, exercisesId);
+
+    return res.status(200).json({
+      message: "EXERCISE UPDATE SUCCESS",
     });
   } catch (error) {
     next(error);
@@ -47,5 +62,6 @@ const myRoutines = async (req, res, next) => {
 module.exports = {
   getExerciseByRoutineId,
   createRoutine,
+  updateCompletedExerciseStatus,
   myRoutines,
 };
