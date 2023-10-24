@@ -6,9 +6,11 @@ const { tokenValidation } = require("../middleware/tokenValidation")
 
 const routineRouter = express.Router();
 
-routineRouter.get("/my", tokenValidation, routineController.myRoutines);
+routineRouter.use(tokenValidation);
+
+routineRouter.post("/", routineController.createRoutine);
+routineRouter.get("/my", routineController.myRoutines);
 routineRouter.get("/:id", routineController.getExerciseByRoutineId);
-routineRouter.post("/", tokenValidation, routineController.createRoutine);
 
 module.exports = {
   routineRouter,

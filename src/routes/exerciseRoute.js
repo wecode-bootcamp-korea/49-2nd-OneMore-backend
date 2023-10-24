@@ -1,5 +1,5 @@
 const express = require("express");
-const { tokenValidation } = require("../middleware/tokenValidation")
+const { tokenValidation } = require("../middleware/tokenValidation");
 
 const { exerciseController } = require("../controllers");
 

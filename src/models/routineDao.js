@@ -1,13 +1,12 @@
 const { AppDataSource } = require("./dataSource");
 
 const getExerciseByRoutineId = async (id) => {
-  try {
-    const result = await AppDataSource.query(
-      `SELECT 
+  const result = await AppDataSource.query(
+    `SELECT 
       routine_exercises.routine_id AS routineId, 
       SUM(duration_in_seconds_per_set * set_counts) AS totalDuration, 
       SUM(calories_used * set_counts) AS totalCaloriesUsed, 
-      JSON_ARRAYAGG(exercises.id) AS completedExerciseIds, 
+      JSON_ARRAYAGG(exercises.id) AS exerciseIds, 
       JSON_ARRAYAGG(
         JSON_OBJECT(
           'id', exercises.id,
@@ -20,19 +19,18 @@ const getExerciseByRoutineId = async (id) => {
           'exerciseCategory', exercise_category,
           'durationInSecondsPerSet', duration_in_seconds_per_set,
           'countsPerSet', counts_per_set,
-          'setCounts', set_counts
+          'setCounts', set_counts,
+          'isCompleted', routine_exercises.completed
         )
       ) AS exercises
     FROM exercises 
     LEFT JOIN routine_exercises ON exercises.id = routine_exercises.exercise_id
     WHERE (routine_exercises.routine_id = ?)
     GROUP BY routine_exercises.routine_id`,
-      [id]
-    );
-    return result;
-  } catch (err) {
-    console.log(err);
-  }
+    [id]
+  );
+  
+  return result;
 };
 
 const findRoutineByRoutineId = async (id) => {
@@ -104,6 +102,18 @@ const getRoutineHistoryByDate = async (userId, startDate, endDate) => {
   return routine;
 };
 
+
+const checkExerciseIdsInRoutine = async (id, exercisesId) => {
+  const result = await AppDataSource.query(
+    `SELECT id, routine_id, exercise_id
+    FROM routine_exercises
+    WHERE routine_id = ? AND exercise_id IN (?)`,
+    [id, exercisesId]
+  );
+
+  return result;
+};
+
 const routinesByUser = async (userId) => {
   const result = await AppDataSource.query(
     `SELECT 
@@ -128,10 +138,26 @@ const routinesByUser = async (userId) => {
   return result;
 };
 
+const updateCompletedExerciseStatusbyRoutineId = async (id, exercisesId) => {
+  const exerciseStatus = {
+    COMPLETED: 1,
+    NOT_COMPLETED: 0,
+  };
+
+  await AppDataSource.query(
+    `UPDATE routine_exercises
+      SET completed = IF(exercise_id IN (?), ${exerciseStatus.COMPLETED}, ${exerciseStatus.NOT_COMPLETED})
+    WHERE routine_id = ?`,
+    [exercisesId, id]
+  );
+};
+
 module.exports = {
   getExerciseByRoutineId,
   findRoutineByRoutineId,
   createRoutineInTransaction,
   getRoutineHistoryByDate,
+  checkExerciseIdsInRoutine,
+  updateCompletedExerciseStatusbyRoutineId,
   routinesByUser,
 };
