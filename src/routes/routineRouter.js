@@ -7,6 +7,7 @@ const routineRouter = express.Router();
 
 routineRouter.use(tokenValidation);
 
+routineRouter.get("/:routineId/isCustom", routineController.recommendedToCustom);
 routineRouter.post("/", routineController.createRoutine);
 routineRouter.get("/my", routineController.myRoutines);
 routineRouter.get("/:id", routineController.getExerciseByRoutineId);
