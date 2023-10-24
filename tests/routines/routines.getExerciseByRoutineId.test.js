@@ -1,4 +1,6 @@
 const request = require("supertest");
+const jwt = require("jsonwebtoken");
+
 const { app } = require("../../app");
 const { AppDataSource } = require("../../src/models/dataSource");
 
@@ -105,7 +107,11 @@ describe("getExerciseByRoutineId", () => {
   });
 
   test("SUCCESS: get exercise by routine id", async () => {
-    const response = await request(app).get("/routines/3");
+    const token = jwt.sign({
+      userId: 1
+    }, process.env.JWT_SECRET_KEY);
+
+    const response = await request(app).get("/routines/3").set("Authorization", token);
     expect(response.body).toEqual({
       message: "Routine Success",
       data: {
