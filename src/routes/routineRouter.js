@@ -1,5 +1,4 @@
 const express = require("express");
-const { tokenValidation } = require("../middleware/tokenValidation")
 
 const { routineController } = require("../controllers");
 const { tokenValidation } = require("../middleware/tokenValidation")
@@ -11,6 +10,7 @@ routineRouter.use(tokenValidation);
 routineRouter.post("/", routineController.createRoutine);
 routineRouter.get("/my", routineController.myRoutines);
 routineRouter.get("/:id", routineController.getExerciseByRoutineId);
+routineRouter.patch("/:id", routineController.updateCompletedExerciseStatus);
 
 module.exports = {
   routineRouter,

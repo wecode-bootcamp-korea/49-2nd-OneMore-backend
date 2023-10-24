@@ -10,7 +10,7 @@ const getCategoryId = async (category) => {
     WHERE name = ?
     ;
   `,
-    category
+    [category]
   );
   return categoryId;
 };
