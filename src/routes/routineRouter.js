@@ -9,6 +9,7 @@ routineRouter.get("/my", tokenValidation, routineController.myRoutines);
 routineRouter.get("/:routineId/isCustom", tokenValidation, routineController.recommendedToCustom);
 routineRouter.get("/:id", routineController.getExerciseByRoutineId);
 routineRouter.post("/", routineController.createRoutine);
+routineRouter.patch("/:id", routineController.updateCompletedExerciseStatus);
 
 module.exports = {
   routineRouter,

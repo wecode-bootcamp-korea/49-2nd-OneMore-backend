@@ -1,24 +1,19 @@
 const { userDao, exerciseDao, routineDao } = require("../models");
-// const { throwError } = require("../utils");
 const utils = require("../utils");
 
 const getExerciseByRoutineId = async (id) => {
-  try {
-    if (!id) {
-      utils.throwError(400, "not input routine id(path parameter)");
-    }
-
-    const existingRoutineId = await routineDao.findRoutineByRoutineId(id);
-
-    if (!existingRoutineId[0]) {
-      utils.throwError(400, "not exist routine id in DB");
-    }
-
-    const result = await routineDao.getExerciseByRoutineId(id);
-    return result;
-  } catch (err) {
-    console.log(err);
+  if (!id) {
+    utils.throwError(400, "not input routine id(path parameter)");
   }
+
+  const existingRoutineId = await routineDao.findRoutineByRoutineId(id);
+
+  if (!existingRoutineId[0]) {
+    utils.throwError(400, "not exist routine id in DB");
+  }
+
+  const result = await routineDao.getExerciseByRoutineId(id);
+  return result;
 };
 
 const createRoutine = async (userId, body) => {
@@ -52,6 +47,19 @@ const createRoutine = async (userId, body) => {
   return result.insertId;
 };
 
+const updateCompletedExerciseStatus = async (id, exercisesId) => {
+  if (utils.getIsInputEmpty(exercisesId)) utils.throwError(400, "KEY_ERROR");
+
+  const checkIncludedExercise = await routineDao.checkExerciseIdsInRoutine(
+    id,
+    exercisesId
+  );
+
+  if (checkIncludedExercise.length !== exercisesId.length)
+    utils.throwError(400, "INVALID_INPUT");
+
+  await routineDao.updateCompletedExerciseStatusbyRoutineId(id, exercisesId);
+
 const routinesByUser = async (userId) => {
   const findUserRoutines = await routineDao.routinesByUser(userId);
   if (!findUserRoutines) {
@@ -75,6 +83,7 @@ const saveToCustom = async (userId, routineId) => {
 module.exports = {
   getExerciseByRoutineId,
   createRoutine,
+  updateCompletedExerciseStatus,
   routinesByUser,
   saveToCustom,
 };
