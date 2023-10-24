@@ -1,13 +1,12 @@
 const request = require("supertest");
+const jwt = require("jsonwebtoken");
+
 const { app } = require("../../app");
 const { AppDataSource } = require("../../src/models/dataSource");
 
 describe("updateCompletedExerciseStatus", () => {
   beforeAll(async () => {
     await AppDataSource.initialize();
-    await AppDataSource.query(`SET foreign_key_checks = 0`);
-    await AppDataSource.query(`TRUNCATE TABLE users`);
-    await AppDataSource.query(`SET foreign_key_checks = 1`);
     await AppDataSource.query(`
     INSERT INTO users(id, nickname, email, subscription_state)
     VALUES(1, "Park-KJ", "rudwos6@naver.com", 1),
@@ -106,9 +105,17 @@ describe("updateCompletedExerciseStatus", () => {
   });
 
   test("SUCCESS: update completed exercise status", async () => {
+    const token = jwt.sign(
+      {
+        userId: 1,
+      },
+      process.env.JWT_SECRET_KEY
+    );
+
     await request(app)
       .patch("/routines/6")
-      .send({ routineId: 6, exerciseIds: [2, 9] })
+      .send({ routineId: 6, exercisesId: [2, 9] })
+      .set("Authorization", token)
       .expect(200)
       .expect({ message: "EXERCISE UPDATE SUCCESS" });
   });
