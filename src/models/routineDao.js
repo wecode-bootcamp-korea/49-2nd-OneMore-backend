@@ -29,7 +29,7 @@ const getExerciseByRoutineId = async (id) => {
     GROUP BY routine_exercises.routine_id`,
     [id]
   );
-  
+
   return result;
 };
 
@@ -102,13 +102,12 @@ const getRoutineHistoryByDate = async (userId, startDate, endDate) => {
   return routine;
 };
 
-
-const checkExerciseIdsInRoutine = async (id, exercisesId) => {
+const checkExerciseIdsInRoutine = async (id, exerciseIds) => {
   const result = await AppDataSource.query(
     `SELECT id, routine_id, exercise_id
     FROM routine_exercises
     WHERE routine_id = ? AND exercise_id IN (?)`,
-    [id, exercisesId]
+    [id, exerciseIds]
   );
 
   return result;
@@ -117,11 +116,19 @@ const checkExerciseIdsInRoutine = async (id, exercisesId) => {
 const routinesByUser = async (userId) => {
   const result = await AppDataSource.query(
     `SELECT 
-      routines.id AS routine_id, 
-      routines.name AS routine_name,
-      JSON_ARRAYAGG(exercises.name) AS exercise_names,
-      SUM(exercises.duration_in_seconds_per_set * exercises.set_counts) AS total_duration,
-      IF(ISNULL(routines.updated_at), routines.created_at, routines.updated_at) AS createDate
+      routines.id AS routineId, 
+      routines.name AS routineName,
+      JSON_ARRAYAGG(exercises.name) AS exerciseNames,
+      TIME_FORMAT(
+        SEC_TO_TIME(
+          SUM(exercises.duration_in_seconds_per_set * exercises.set_counts)
+          ), 
+          "%i:%s") 
+        AS totalDuration,
+      DATE_FORMAT(
+        IF(ISNULL(routines.updated_at), routines.created_at, routines.updated_at),
+        "%Y-%c-%d" )
+        AS createDate
     FROM 
       routines
     JOIN routine_exercises ON routines.id = routine_exercises.routine_id
@@ -134,9 +141,27 @@ const routinesByUser = async (userId) => {
       createDate DESC`,
     [userId]
   );
-
   return result;
 };
+
+const toCustom = async (userId, routineId) => {
+  const recommendedToCustom = await AppDataSource.query(
+    `UPDATE routines
+    SET is_custom = 1
+    WHERE user_id = ? AND id = ?`,
+    [userId, routineId]
+  );
+};
+
+const customCheck = async (userId, routineId) => {
+  const [customRoutineCheck] = await AppDataSource.query(
+    `SELECT is_custom
+    FROM routines
+    WHERE user_id = ? AND id = ?`,
+    [userId, routineId]
+  );
+  return customRoutineCheck;
+}
 
 const updateCompletedExerciseStatusbyRoutineId = async (id, exercisesId) => {
   const exerciseStatus = {
@@ -148,7 +173,7 @@ const updateCompletedExerciseStatusbyRoutineId = async (id, exercisesId) => {
     `UPDATE routine_exercises
       SET completed = IF(exercise_id IN (?), ${exerciseStatus.COMPLETED}, ${exerciseStatus.NOT_COMPLETED})
     WHERE routine_id = ?`,
-    [exercisesId, id]
+    [exerciseIds, id]
   );
 };
 
@@ -160,4 +185,6 @@ module.exports = {
   checkExerciseIdsInRoutine,
   updateCompletedExerciseStatusbyRoutineId,
   routinesByUser,
+  toCustom,
+  customCheck
 };

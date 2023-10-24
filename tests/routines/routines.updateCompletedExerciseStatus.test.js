@@ -7,9 +7,6 @@ const { AppDataSource } = require("../../src/models/dataSource");
 describe("updateCompletedExerciseStatus", () => {
   beforeAll(async () => {
     await AppDataSource.initialize();
-    await AppDataSource.query(`SET foreign_key_checks = 0`);
-    await AppDataSource.query(`TRUNCATE TABLE users`);
-    await AppDataSource.query(`SET foreign_key_checks = 1`);
     await AppDataSource.query(`
     INSERT INTO users(id, nickname, email, subscription_state)
     VALUES(1, "Park-KJ", "rudwos6@naver.com", 1),
@@ -103,13 +100,17 @@ describe("updateCompletedExerciseStatus", () => {
     await AppDataSource.query(`TRUNCATE TABLE exercise_categories`);
     await AppDataSource.query(`TRUNCATE TABLE routines`);
     await AppDataSource.query(`TRUNCATE TABLE users`);
+    await AppDataSource.query(`SET foreign_key_checks = 1`);
     await AppDataSource.destroy();
   });
 
   test("SUCCESS: update completed exercise status", async () => {
-    const token = jwt.sign({
-      userId: 1,
-    }, process.env.JWT_SECRET_KEY);
+    const token = jwt.sign(
+      {
+        userId: 1,
+      },
+      process.env.JWT_SECRET_KEY
+    );
 
     await request(app)
       .patch("/routines/6")

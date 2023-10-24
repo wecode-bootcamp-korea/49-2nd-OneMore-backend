@@ -49,30 +49,37 @@ const createRoutine = async (userId, body) => {
   return result.insertId;
 };
 
-const updateCompletedExerciseStatus = async (id, exercisesId) => {
-  if (utils.getIsInputEmpty(exercisesId)) utils.throwError(400, "KEY_ERROR");
+const updateCompletedExerciseStatus = async (id, exerciseIds) => {
+  if (utils.getIsInputEmpty(exerciseIds)) utils.throwError(400, "KEY_ERROR");
 
   const checkIncludedExercise = await routineDao.checkExerciseIdsInRoutine(
     id,
-    exercisesId
+    exerciseIds
   );
 
-  if (checkIncludedExercise.length !== exercisesId.length)
+  if (checkIncludedExercise.length !== exerciseIds.length)
     utils.throwError(400, "INVALID_INPUT");
 
-  await routineDao.updateCompletedExerciseStatusbyRoutineId(id, exercisesId);
-};
+  await routineDao.updateCompletedExerciseStatusbyRoutineId(id, exerciseIds);
 
 const routinesByUser = async (userId) => {
   const findUserRoutines = await routineDao.routinesByUser(userId);
-
   if (!findUserRoutines) {
     const error = new Error("NO_CUSTOM_ROUTINES");
     error.status = 400;
     throw error;
   }
-
   return findUserRoutines;
+};
+
+const saveToCustom = async (userId, routineId) => {
+  await routineDao.toCustom(userId, routineId);
+  const customRoutineCheck = await routineDao.customCheck(userId, routineId);
+  if (customRoutineCheck.is_custom === 0) {
+    const error = new Error("NOT_SAVED");
+    error.status = 400;
+    throw error;
+  }
 };
 
 module.exports = {
@@ -80,4 +87,5 @@ module.exports = {
   createRoutine,
   updateCompletedExerciseStatus,
   routinesByUser,
+  saveToCustom,
 };
