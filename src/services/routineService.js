@@ -62,14 +62,22 @@ const updateCompletedExerciseStatus = async (id, exercisesId) => {
 
 const routinesByUser = async (userId) => {
   const findUserRoutines = await routineDao.routinesByUser(userId);
-
   if (!findUserRoutines) {
     const error = new Error("NO_CUSTOM_ROUTINES");
     error.status = 400;
     throw error;
   }
-
   return findUserRoutines;
+};
+
+const saveToCustom = async (userId, routineId) => {
+  await routineDao.toCustom(userId, routineId);
+  const customRoutineCheck = await routineDao.customCheck(userId, routineId);
+  if (customRoutineCheck.is_custom === 0) {
+    const error = new Error("NOT_SAVED");
+    error.status = 400;
+    throw error;
+  }
 };
 
 module.exports = {
@@ -77,4 +85,5 @@ module.exports = {
   createRoutine,
   updateCompletedExerciseStatus,
   routinesByUser,
+  saveToCustom,
 };

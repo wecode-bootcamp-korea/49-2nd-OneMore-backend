@@ -128,7 +128,7 @@ const routinesByUser = async (userId) => {
         AS totalDuration,
       DATE_FORMAT(
         IF(ISNULL(routines.updated_at), routines.created_at, routines.updated_at),
-        "%Y-%c-%d" ) 
+        "%Y-%c-%d" )
         AS createDate
     FROM 
       routines
@@ -142,9 +142,27 @@ const routinesByUser = async (userId) => {
       createDate DESC`,
     [userId]
   );
-
   return result;
 };
+
+const toCustom = async (userId, routineId) => {
+  const recommendedToCustom = await AppDataSource.query(
+    `UPDATE routines
+    SET is_custom = 1
+    WHERE user_id = ? AND id = ?`,
+    [userId, routineId]
+  );
+};
+
+const customCheck = async (userId, routineId) => {
+  const [customRoutineCheck] = await AppDataSource.query(
+    `SELECT is_custom
+    FROM routines
+    WHERE user_id = ? AND id = ?`,
+    [userId, routineId]
+  );
+  return customRoutineCheck;
+}
 
 const updateCompletedExerciseStatusbyRoutineId = async (id, exercisesId) => {
   const exerciseStatus = {
@@ -168,4 +186,6 @@ module.exports = {
   checkExerciseIdsInRoutine,
   updateCompletedExerciseStatusbyRoutineId,
   routinesByUser,
+  toCustom,
+  customCheck
 };
