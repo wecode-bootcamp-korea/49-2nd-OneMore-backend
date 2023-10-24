@@ -109,9 +109,12 @@ const routinesByUser = async (userId) => {
     `SELECT 
       routines.id AS routine_id, 
       routines.name AS routine_name,
-      JSON_ARRAYAGG(exercises.name) AS exercise_names,
-      SUM(exercises.duration_in_seconds_per_set * exercises.set_counts) AS total_duration,
-      IF(ISNULL(routines.updated_at), routines.created_at, routines.updated_at) AS createDate
+      JSON_ARRAYAGG(exercises.name) 
+        AS exercise_names,
+      SUM(exercises.duration_in_seconds_per_set * exercises.set_counts) 
+        AS total_duration,
+      IF(ISNULL(routines.updated_at), routines.created_at, routines.updated_at) 
+        AS createDate
     FROM 
       routines
     JOIN routine_exercises ON routines.id = routine_exercises.routine_id
@@ -124,15 +127,24 @@ const routinesByUser = async (userId) => {
       createDate DESC`,
     [userId]
   );
-
   return result;
 };
 
 const toCustom = async (userId, routineId) => {
   const recommendedToCustom = await AppDataSource.query(
-
-  )
-}
+    `UPDATE routines
+    SET is_custom = 1
+    WHERE user_id = ? AND id = ?`,
+    [userId, routineId]
+  );
+  const [customRoutineCheck] = await AppDataSource.query(
+    `SELECT is_custom
+    FROM routines
+    WHERE user_id = ? AND id = ?`,
+    [userId, routineId]
+  );
+  return customRoutineCheck;
+};
 
 module.exports = {
   getExerciseByRoutineId,
@@ -140,4 +152,5 @@ module.exports = {
   createRoutineInTransaction,
   getRoutineHistoryByDate,
   routinesByUser,
+  toCustom,
 };
