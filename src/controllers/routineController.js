@@ -49,7 +49,6 @@ const myRoutines = async (req, res, next) => {
     const { userId } = req;
 
     const myRoutines = await routineService.routinesByUser(userId);
-    console.log(myRoutines)
     return res.status(200).json({
       message: "MY_ROUTINES_SUCCESS",
       data: myRoutines,
