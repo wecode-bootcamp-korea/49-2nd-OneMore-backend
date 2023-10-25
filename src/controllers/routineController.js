@@ -17,7 +17,7 @@ const getExerciseByRoutineId = async (req, res, next) => {
 
 const createRoutine = async (req, res, next) => {
   try {
-    const { userId } = req;
+    const userId = req.userId;
     const body = req.body;
     const routineId = await routineService.createRoutine(userId, body);
     return res.status(201).json({

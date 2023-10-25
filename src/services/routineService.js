@@ -17,9 +17,11 @@ const getExerciseByRoutineId = async (id) => {
 };
 
 const createRoutine = async (userId, body) => {
+  console.log("userId", userId);
   const exerciseIds = body.exercises;
   const isCustom = body.isCustom;
   const user = await userDao.findById(userId);
+  console.log(user);
   const subscriptionState = user.subscriptionState;
 
   if (utils.getIsInputEmpty(exerciseIds)) utils.throwError(400, "KEY_ERROR");
