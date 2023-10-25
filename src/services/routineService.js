@@ -17,11 +17,10 @@ const getExerciseByRoutineId = async (id) => {
 };
 
 const createRoutine = async (userId, body) => {
-  console.log("userId", userId);
   const exerciseIds = body.exercises;
   const isCustom = body.isCustom;
+  let routineName = body.name;
   const user = await userDao.findById(userId);
-  console.log(user);
   const subscriptionState = user.subscriptionState;
 
   if (utils.getIsInputEmpty(exerciseIds)) utils.throwError(400, "KEY_ERROR");
@@ -43,7 +42,8 @@ const createRoutine = async (userId, body) => {
   const result = await routineDao.createRoutineInTransaction(
     userId,
     isCustom,
-    exerciseIds
+    exerciseIds,
+    routineName = `${utils.formatDate(new Date())}의 루틴`
   );
   if (!result) utils.throwError(400, "ERROR");
   return result.insertId;
