@@ -33,7 +33,7 @@ const getRecommendedExercises = async (userId) => {
 
   if (todayRoutineHistory) {
     // in case user finished today's routine
-    exercises = todayRoutineHistory.exercises;
+    exercises = await exerciseDao.getExercisesDetailsByIds(todayRoutineHistory.exercises);
     routineCompleted = true;
   } else {
     // TODO: apply customized recommendation logic
