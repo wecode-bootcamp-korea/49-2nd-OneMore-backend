@@ -9,7 +9,6 @@ const tokenValidation = async (req, res, next) => {
       err.status = 401;
       throw err;
     }
-
     const tokenInfo = jwt.verify(token, process.env.JWT_SECRET_KEY);
     const userIdToken = tokenInfo.userId;
     const foundUser = await userDao.findById(userIdToken);

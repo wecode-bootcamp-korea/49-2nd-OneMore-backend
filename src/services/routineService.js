@@ -1,30 +1,27 @@
 const { userDao, exerciseDao, routineDao } = require("../models");
-// const { throwError } = require("../utils");
 const utils = require("../utils");
 
 const getExerciseByRoutineId = async (id) => {
-  try {
-    if (!id) {
-      utils.throwError(400, "not input routine id(path parameter)");
-    }
-
-    const existingRoutineId = await routineDao.findRoutineByRoutineId(id);
-
-    if (!existingRoutineId[0]) {
-      utils.throwError(400, "not exist routine id in DB");
-    }
-
-    const result = await routineDao.getExerciseByRoutineId(id);
-    return result;
-  } catch (err) {
-    console.log(err);
+  if (!id) {
+    utils.throwError(400, "not input routine id(path parameter)");
   }
+
+  const existingRoutineId = await routineDao.findRoutineByRoutineId(id);
+
+  if (!existingRoutineId[0]) {
+    utils.throwError(400, "not exist routine id in DB");
+  }
+
+  const result = await routineDao.getExerciseByRoutineId(id);
+  return result;
 };
 
 const createRoutine = async (userId, body) => {
+  console.log("userId", userId);
   const exerciseIds = body.exercises;
   const isCustom = body.isCustom;
   const user = await userDao.findById(userId);
+  console.log(user);
   const subscriptionState = user.subscriptionState;
 
   if (utils.getIsInputEmpty(exerciseIds)) utils.throwError(400, "KEY_ERROR");
@@ -52,7 +49,39 @@ const createRoutine = async (userId, body) => {
   return result.insertId;
 };
 
+const updateCompletedExerciseStatus = async (id, exerciseIds) => {
+  if (utils.getIsInputEmpty(exerciseIds)) utils.throwError(400, "KEY_ERROR");
+
+  const checkIncludedExercise = await routineDao.checkExerciseIdsInRoutine(
+    id,
+    exerciseIds
+  );
+
+  if (checkIncludedExercise.length !== exerciseIds.length)
+    utils.throwError(400, "INVALID_INPUT");
+
+  await routineDao.updateCompletedExerciseStatusbyRoutineId(id, exerciseIds);
+};
+
+const routinesByUser = async (userId) => {
+  const findUserRoutines = await routineDao.routinesByUser(userId);
+  return findUserRoutines;
+};
+
+const saveToCustom = async (userId, routineId) => {
+  await routineDao.toCustom(userId, routineId);
+  const customRoutineCheck = await routineDao.customCheck(userId, routineId);
+  if (customRoutineCheck.is_custom === 0) {
+    const error = new Error("NOT_SAVED");
+    error.status = 400;
+    throw error;
+  }
+};
+
 module.exports = {
   getExerciseByRoutineId,
   createRoutine,
+  updateCompletedExerciseStatus,
+  routinesByUser,
+  saveToCustom,
 };

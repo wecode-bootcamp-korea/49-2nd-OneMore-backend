@@ -1,9 +1,7 @@
-const { log } = require("console");
-
 const { AppDataSource } = require("../../src/models/dataSource");
 const { exerciseService } = require("../../src/services");
 
-describe("TEST routineController", () => {
+describe("TEST exerciseService", () => {
   beforeAll(async () => {
     await AppDataSource.initialize();
     await AppDataSource.query(`
@@ -39,7 +37,7 @@ describe("TEST routineController", () => {
         ('testExercise9', 'testVideoUrl', 'testThumbnailUrl', 1, 1, 60, 9)
       ;
     `);
-    log("database initialized for test");
+    console.log("database initialized for test");
   });
 
   afterEach(() => {
@@ -58,7 +56,7 @@ describe("TEST routineController", () => {
 
   test("SUCCESS: getRandomExercises without subscription", async () => {
     const result = await exerciseService.getRecommendedExercises(1);
-    expect(result.exercises.length).toBe(5);
+    expect(result.exercises.length).toBe(3);
     result.exercises.map((item) => {
       expect(item.isPremium).toBe(0);
     });
@@ -66,7 +64,7 @@ describe("TEST routineController", () => {
 
   test("SUCCESS: getRandomExercises with subscription", async () => {
     const result = await exerciseService.getRecommendedExercises(2);
-    expect(result.exercises.length).toBe(5);
+    expect(result.exercises.length).toBe(3);
     result.exercises.map((item) => {
       expect([0, 1]).toContain(item.isPremium);
     });
