@@ -20,6 +20,7 @@
     "mysql2": "^3.6.1",
     "nock": "^13.3.6",
     "passport": "^0.6.0",
+    "passport-google-oauth20": "^2.0.0",
     "passport-kakao": "^1.0.1",
     "typeorm": "^0.3.17"
   },

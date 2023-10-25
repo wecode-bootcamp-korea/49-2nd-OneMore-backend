@@ -1,4 +1,5 @@
 const KakaoStrategy = require("passport-kakao").Strategy;
+const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const jwt = require("jsonwebtoken");
 
 const { userDao } = require("../models");
@@ -58,6 +59,59 @@ const kakaoStrategy = new KakaoStrategy(
   }
 );
 
+const googleStrategy = new GoogleStrategy(
+  {
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    callbackURL: process.env.GOOGLE_CALLBACK,
+  },
+  async (accessToken, refreshToken, profile, cb) => {
+    const socialUid = profile.id;
+    const socialProvider = 2;
+    const email = profile._json.email;
+    const nickname = profile._json.name;
+    try {
+      const exisitingUserBySocial = await userDao.findUserBySocial(
+        socialUid,
+        socialProvider
+      );
+      if (exisitingUserBySocial) {
+        //============== 소셜 로그인을 이미 했으면 토큰 발급
+        const { accessToken, refreshToken } = await generateTokens(
+          exisitingUserBySocial.id
+        );
+        return cb(null, { accessToken, refreshToken, nickname }); // => 소셜 계정이 있는 경우 토큰 발행
+      }
+      const [exisitingUserByEmail] = await userDao.existingUser(email);
+      if (exisitingUserByEmail) {
+        //============== 등록된 이메일이 있으면 소셜 정보 저장
+        const userId = exisitingUserByEmail.id;
+        await userDao.updateUserBySocial(userId, socialUid, socialProvider);
+        const { accessToken, refreshToken } = await generateTokens(
+          exisitingUserByEmail.id
+        );
+        return cb(null, { accessToken, refreshToken, nickname });
+      } else {
+        //============== 이메일이 없으면 소셜 로그인으로 회원가입 및 토큰 발급
+        const createdUserBySocial = await userDao.createUserBySocial(
+          email,
+          nickname,
+          socialUid,
+          socialProvider
+        );
+        const { accessToken, refreshToken } = await generateTokens(
+          createdUserBySocial.id
+        );
+        return cb(null, { accessToken, refreshToken, nickname }); // => 소셜유저 생성 후, 토큰 발행
+      }
+    } catch (error) {
+      console.log(error);
+      cb(error);
+    }
+  }
+);
+
 module.exports = {
   kakaoStrategy,
+  googleStrategy
 };
