@@ -32,11 +32,8 @@ const kakaoStrategy = new KakaoStrategy(
         socialProvider
       );
       if (exisitingUserBySocial) {
-        const { accessToken, refreshToken } = await generateTokens(
-          exisitingUserBySocial.id
-        );
-        console.log("generateTokens: ", accessToken, refreshToken);
-        return done(null, { accessToken, refreshToken, nickname }); // => 소셜 계정이 있는 경우 토큰 발행
+        const { accessToken, refreshToken } = await generateTokens(exisitingUserBySocial.id);
+        return done(null, { accessToken, refreshToken, nickname });  // => 소셜 계정이 있는 경우 토큰 발행
       }
       // 기존 email 유/무 확인
       const [exisitingUserByEmail] = await userDao.existingUser(email);
