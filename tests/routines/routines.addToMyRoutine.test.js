@@ -1,45 +1,34 @@
+const { AppDataSource } = require("../../src/models/dataSource");
+const { app } = require("../../app");
 const request = require("supertest");
 const jwt = require("jsonwebtoken");
-
-const { app } = require("../../app");
-const { AppDataSource } = require("../../src/models/dataSource");
 
 describe("getExerciseByRoutineId", () => {
   beforeAll(async () => {
     await AppDataSource.initialize();
     await AppDataSource.query(`SET foreign_key_checks = 0`);
+    await AppDataSource.query(`TRUNCATE TABLE routine_exercises`);
+    await AppDataSource.query(`TRUNCATE TABLE exercise_categories`);
+    await AppDataSource.query(`TRUNCATE TABLE routines`);
+    await AppDataSource.query(`TRUNCATE TABLE exercises`);
     await AppDataSource.query(`TRUNCATE TABLE users`);
     await AppDataSource.query(`SET foreign_key_checks = 1`);
     await AppDataSource.query(`
-    INSERT INTO users
-      (id, nickname, email, subscription_state)
-    VALUES
-      (1, "Park-KJ", "rudwos6@naver.com", 1),
-      (2, "Hong-JS", "jisu@naver.com", 1),
-      (3, "Sim-AY", "AY@gmail.com", 0),
-      (4, "PMJ", "soccer@yahoo.com", 1),
-      (5, "K-SW", "software@samsung.com", 1),
-      (6, "PIK", "pick@apple.com", 0),
-      (7, "DANA", "DN@naver.com", 1),
-      (8, "SHJ", "SHJ@daum.net", 1),
-      (9, "LSH", "mentor@wecode.co.kr", 0),
-      (10, "wecoder", "omg@naver.com", 1)
-    `);
-
+        INSERT INTO users
+          (id, nickname, email, subscription_state)
+        VALUES
+          (1, "Park-KJ", "rudwos6@naver.com", 1),
+          (2, "Hong-JS", "jisu@naver.com", 1),
+          (3, "Sim-AY", "AY@gmail.com", 0)
+        `);
     await AppDataSource.query(`
     INSERT INTO routines
-      (id, user_id, is_custom)
+      (id, user_id, is_custom, name)
     VALUES
-      (1, 1, 1),
-      (2, 2, 0),
-      (3, 3, 1),
-      (4, 4, 0),
-      (5, 5, 1),
-      (6, 6, 0),
-      (7, 7, 0),
-      (8, 8, 1),
-      (9, 9, 1),
-      (10, 10, 1)
+      (1, 1, 1, "my"),
+      (2, 2, 0, "routine"),
+      (3, 3, 1, "three"),
+      (4, 1, 0, "custom")
     `);
 
     await AppDataSource.query(`
@@ -74,81 +63,34 @@ describe("getExerciseByRoutineId", () => {
     VALUES
       (1,1,1,1),
       (2,2,3,1),
-      (3,4,5,0),
-      (4,4,4,1),
-      (5,5,7,1),
-      (6,6,9,0),
-      (7,7,2,1),
-      (8,8,6,0),
-      (9,9,10,1),
-      (10,10,8,0),
-      (11,1,2,0),
-      (12,1,3,1),
-      (13,3,5,1),
-      (14,4,8,1),
-      (15,4,7,0),
-      (16,4,9,1),
-      (17,6,2,0),
-      (18,6,4,1),
-      (19,6,6,1),
-      (20,6,10,1),
-      (21,5,1,0),
-      (22,2,8,1),
-      (23,7,6,1),
-      (24,7,7,0),
-      (25,8,2,1),
-      (26,8,7,1),
-      (27,9,5,1),
-      (28,9,1,1),
-      (29,10,2,0),
-      (30,10,6,0),
-      (31,10,3,1)
+      (3,1,2,0),
+      (4,1,3,1),
+      (5,3,5,1),
+      (6,2,8,1),
+      (7,4,2,0)
     `);
   });
 
   afterAll(async () => {
-    await AppDataSource.query(`SET foreign_key_checks = 0;`);
+    await AppDataSource.query(`SET foreign_key_checks = 0`);
     await AppDataSource.query(`TRUNCATE TABLE routine_exercises`);
-    await AppDataSource.query(`TRUNCATE TABLE exercises`);
     await AppDataSource.query(`TRUNCATE TABLE exercise_categories`);
+    await AppDataSource.query(`TRUNCATE TABLE exercises`);
     await AppDataSource.query(`TRUNCATE TABLE routines`);
     await AppDataSource.query(`TRUNCATE TABLE users`);
     await AppDataSource.query(`SET foreign_key_checks = 1`);
     await AppDataSource.destroy();
   });
 
-  test("SUCCESS: get exercise by routine id", async () => {
-    const token = jwt.sign({
-      userId: 1,
-    }, process.env.JWT_SECRET_KEY);
+  const token = jwt.sign({ userId: "1" }, process.env.JWT_SECRET_KEY);
 
-    const response = await request(app).get("/routines/3").set("Authorization", token);
-    expect(response.body).toEqual({
-      message: "Routine Success",
-      data: {
-        routineId: 3,
-        isCustom: 1,
-        totalDuration: "840",
-        totalCaloriesUsed: "300",
-        exerciseIds: [5],
-        exercises: [
-          {
-            id: 5,
-            name: "달리기",
-            videoURL: "https://www.youtube.com/embed/9CPrrmusOuQ",
-            isPremium: 0,
-            setCounts: 1,
-            description: "봄, 가을에 하기 좋아요",
-            isCompleted: 1,
-            caloriesUsed: 300,
-            countsPerSet: 1,
-            thumbnailURL:
-              "https://one-more.s3.ap-northeast-2.amazonaws.com/icons8-running-ios-16-filled/icons8-running-100.png",
-            exerciseCategory: 4,
-            durationInSecondsPerSet: 840,
-          },
-        ],
-      },
-    });
+  test("SUCCESS: add a custom routine to my routines", async () => {
+    await request(app)
+      .get("/routines/4/isCustom")
+      .send()
+      .set("Authorization", token)
+      .expect({
+        message: "SAVE_TO_CUSTOM_SUCCESS",
+      });
   });
 });
