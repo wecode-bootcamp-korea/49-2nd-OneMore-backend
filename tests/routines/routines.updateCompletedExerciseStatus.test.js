@@ -22,17 +22,20 @@ describe("updateCompletedExerciseStatus", () => {
     `);
 
     await AppDataSource.query(`
-    INSERT INTO routines(id, user_id, is_custom)
-    VALUES(1, 1, 1),
-    (2, 2, 0),
-    (3, 3, 1),
-    (4, 4, 0),
-    (5, 5, 1),
-    (6, 6, 0),
-    (7, 7, 0),
-    (8, 8, 1),
-    (9, 9, 1),
-    (10, 10, 1)
+      INSERT INTO routines
+        (id, user_id, is_custom, name)
+      VALUES
+        (1, 1, 1, "루틴1"),
+        (2, 2, 0, "루틴2"),
+        (3, 3, 1, "루틴3"),
+        (4, 4, 0, "루틴4"),
+        (5, 5, 1, "루틴5"),
+        (6, 6, 0, "루틴6"),
+        (7, 7, 0, "루틴7"),
+        (8, 8, 1, "루틴8"),
+        (9, 9, 1, "루틴9"),
+        (10, 10, 1, "루틴10")
+      ;
     `);
 
     await AppDataSource.query(`

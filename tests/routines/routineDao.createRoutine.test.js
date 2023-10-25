@@ -56,7 +56,8 @@ describe("TEST: routineDao createRoutine", () => {
     const result = await routineDao.createRoutineInTransaction(
       1,
       false,
-      [1, 2, 3, 4, 5]
+      [1, 2, 3, 4, 5],
+      "new routine"
     );
     expect(result.insertId).toBe(1);
   });

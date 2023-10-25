@@ -1,5 +1,5 @@
 const request = require("supertest");
-const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 const { app } = require("../../app");
 const { AppDataSource } = require("../../src/models/dataSource");
@@ -14,30 +14,33 @@ describe("TEST routines.createRoutine", () => {
     INSERT INTO users
       (id, nickname, email, subscription_state, password)
     VALUES
-      (1, "Park-KJ", "rudwos6@naver.com", 1, '${bcrypt.hashSync("password001.", 10)}'),
-      (2, "Hong-JS", "jisu@naver.com", 1, '${bcrypt.hashSync("password001.", 10)}'),
-      (3, "Sim-AY", "AY@gmail.com", 0, '${bcrypt.hashSync("password001.", 10)}'),
-      (4, "PMJ", "soccer@yahoo.com", 1, '${bcrypt.hashSync("password001.", 10)}'),
-      (5, "K-SW", "software@samsung.com", 1, '${bcrypt.hashSync("password001.", 10)}'),
-      (6, "PIK", "pick@apple.com", 0, '${bcrypt.hashSync("password001.", 10)}'),
-      (7, "DANA", "DN@naver.com", 1, '${bcrypt.hashSync("password001.", 10)}'),
-      (8, "SHJ", "SHJ@daum.net", 1, '${bcrypt.hashSync("password001.", 10)}'),
-      (9, "LSH", "mentor@wecode.co.kr", 0, '${bcrypt.hashSync("password001.", 10)}'),
-      (10, "wecoder", "omg@naver.com", 1, '${bcrypt.hashSync("password001.", 10)}')
+      (1, "Park-KJ", "rudwos6@naver.com", 1, "password001."),
+      (2, "Hong-JS", "jisu@naver.com", 1, "password001."),
+      (3, "Sim-AY", "AY@gmail.com", 0, "password001."),
+      (4, "PMJ", "soccer@yahoo.com", 1, "password001."),
+      (5, "K-SW", "software@samsung.com", 1, "password001."),
+      (6, "PIK", "pick@apple.com", 0, "password001."),
+      (7, "DANA", "DN@naver.com", 1, "password001."),
+      (8, "SHJ", "SHJ@daum.net", 1, "password001."),
+      (9, "LSH", "mentor@wecode.co.kr", 0, "password001."),
+      (10, "wecoder", "omg@naver.com", 1, "password001.")
     `);
 
     await AppDataSource.query(`
-    INSERT INTO routines(id, user_id, is_custom)
-    VALUES(1, 1, 1),
-    (2, 2, 0),
-    (3, 3, 1),
-    (4, 4, 0),
-    (5, 5, 1),
-    (6, 6, 0),
-    (7, 7, 0),
-    (8, 8, 1),
-    (9, 9, 1),
-    (10, 10, 1)
+      INSERT INTO routines
+        (id, user_id, is_custom, name)
+      VALUES
+        (1, 1, 1, "루틴1"),
+        (2, 2, 0, "루틴2"),
+        (3, 3, 1, "루틴3"),
+        (4, 4, 0, "루틴4"),
+        (5, 5, 1, "루틴5"),
+        (6, 6, 0, "루틴6"),
+        (7, 7, 0, "루틴7"),
+        (8, 8, 1, "루틴8"),
+        (9, 9, 1, "루틴9"),
+        (10, 10, 1, "루틴10")
+      ;
     `);
 
     await AppDataSource.query(`
@@ -109,14 +112,11 @@ describe("TEST routines.createRoutine", () => {
     await AppDataSource.destroy();
   });
 
-  test("SUCCESS: get exercise by routine id", async () => {
-    const loginResponse = await request(app)
-      .post("/users/login")
-      .send({
-        email: "rudwos6@naver.com",
-        password: "password001.",
-      });
-    const token = loginResponse.body.token;
+  test("SUCCESS: create new routine success", async () => {
+    const token = jwt.sign({
+      userId: 1,
+    }, process.env.JWT_SECRET_KEY);
+
     const response = await request(app)
       .post("/routines")
       .set(

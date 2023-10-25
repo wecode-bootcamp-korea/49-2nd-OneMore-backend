@@ -42,11 +42,11 @@ describe("TEST: routineDao getRoutineHistoryByDate", () => {
     `);
     await AppDataSource.query(`
       INSERT INTO routines
-        (id, user_id, is_custom, created_at)
+        (id, user_id, is_custom, name, created_at)
       VALUES
-        (1, 1, 0, '2023-09-18 09:00:00'),
-        (2, 1, 0, '2023-09-19 23:00:00'),
-        (3, 1, 0, '2023-09-20 09:00:00')
+        (1, 1, 0, '루틴', '2023-09-18 09:00:00'),
+        (2, 1, 0, '루틴', '2023-09-19 23:00:00'),
+        (3, 1, 0, '루틴', '2023-09-20 09:00:00')
       ;
     `);
     await AppDataSource.query(`

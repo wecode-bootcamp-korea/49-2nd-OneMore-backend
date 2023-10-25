@@ -44,24 +44,36 @@ describe("TEST: createSubscription", () => {
       })
       .set("Authorization", token)
       .expect(201)
-      .expect({ message: 'SUCCESS_SUBSCRIPTION_AND_PAYMENT' });
+      .expect({
+        message: 'SUCCESS_SUBSCRIPTION_AND_PAYMENT',
+        createdSubscription: {
+          fieldCount: 0,
+          affectedRows: 1,
+          insertId: 0,
+          info: 'Rows matched: 1  Changed: 1  Warnings: 0',
+          serverStatus: 3,
+          warningStatus: 0,
+          changedRows: 1
+        }
+      });
+  });
+
+  test("FAIL: KEY_ERROR_UID", async () => {
+    const token = jwt.sign({
+      userId: 2,
+    }, process.env.JWT_SECRET_KEY);
+    const response = await request(app)
+      .post("/subscription_orders")
+      .send({
+        amount: 3900,
+        provider: "신용카드",
+      })
+      .set("Authorization", token)
+      .expect(400)
+      .expect({"error": "400 KEY_ERROR_UID"})
   });
 });
 
-test("FAIL: KEY_ERROR_UID", async () => {
-  const token = jwt.sign({
-    userId: 2,
-  }, process.env.JWT_SECRET_KEY);
-  const response = await request(app)
-    .post("/subscription_orders")
-    .send({
-      amount: 3900,
-      provider: "신용카드",
-    })
-    .set("Authorization", token)
-    .expect(400)
-    .expect({"error": "400 KEY_ERROR_UID"})
-});
 
 
 

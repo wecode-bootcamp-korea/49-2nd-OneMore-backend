@@ -10,7 +10,7 @@ const getExerciseByRoutineId = async (id) => {
       JSON_ARRAYAGG(
         JSON_OBJECT(
           'id', exercises.id,
-          'name', name,
+          'name', exercises.name,
           'videoURL', video_url,
           'thumbnailURL', thumbnail_url,
           'caloriesUsed', calories_used,
@@ -46,19 +46,19 @@ const findRoutineByRoutineId = async (id) => {
   return result;
 };
 
-const createRoutineInTransaction = async (userId, isCustom, exerciseIds) => {
+const createRoutineInTransaction = async (userId, isCustom, exerciseIds, routineName) => {
   let result;
   try {
     await AppDataSource.query(`START TRANSACTION;`);
     result = await AppDataSource.query(
       `
       INSERT INTO routines
-        (user_id, is_custom)
+        (user_id, is_custom, name)
       VALUES
-        (?,?)
+        (?, ?, ?)
       ;
     `,
-      [userId, isCustom]
+      [userId, isCustom, routineName]
     );
     const values = exerciseIds.map(
       (exerciseId) => `${result.insertId},${exerciseId}`
