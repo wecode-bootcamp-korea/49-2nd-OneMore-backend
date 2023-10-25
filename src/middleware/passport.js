@@ -5,14 +5,10 @@ const { userDao } = require("../models");
 
 //token 발행 함수
 const generateTokens = async (userId) => {
-  const accessToken = jwt.sign({ id: userId }, process.env.JWT_SECRET_KEY, {
-    expiresIn: "2h",
-  });
-  const refreshToken = jwt.sign({ id: userId }, process.env.JWT_SECRET_KEY, {
-    expiresIn: "3d",
-  });
-  return { accessToken, refreshToken };
-};
+  const accessToken = jwt.sign({ userId: userId }, process.env.JWT_SECRET_KEY, { expiresIn: "2h" })
+  const refreshToken = jwt.sign({ userId: userId }, process.env.JWT_SECRET_KEY, { expiresIn: "3d" })
+  return { accessToken, refreshToken }
+}
 
 //kakaoStrategy
 const kakaoStrategy = new KakaoStrategy(
