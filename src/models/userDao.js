@@ -60,7 +60,7 @@ const updateUserBySocial = async (userId, socialUid, socialProvider) => {
       SET social_account_uid = ?,
       social_account_provider= ?
       WHERE id = ?`,
-    [userId, socialUid, socialProvider])
+    [socialUid, socialProvider, userId])
 };
 
 module.exports = {
