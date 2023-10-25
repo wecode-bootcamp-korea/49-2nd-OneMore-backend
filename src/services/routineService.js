@@ -17,7 +17,6 @@ const getExerciseByRoutineId = async (id) => {
 };
 
 const createRoutine = async (userId, body) => {
-  console.log("userId", userId);
   const exerciseIds = body.exercises;
   const isCustom = body.isCustom;
   let routineName = body.name;
@@ -47,7 +46,6 @@ const createRoutine = async (userId, body) => {
     routineName = `${utils.formatDate(new Date())}의 루틴`
   );
   if (!result) utils.throwError(400, "ERROR");
-  console.log(result);
   return result.insertId;
 };
 
