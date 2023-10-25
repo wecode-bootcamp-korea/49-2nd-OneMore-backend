@@ -23,6 +23,7 @@ const socialLogin = async (req, res) => {
     nickname: user.nickname
   })
 }
+
 const signIn = async (req, res, next) => {
   try {
     const { email, password } = req.body;

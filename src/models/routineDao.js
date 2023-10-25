@@ -121,6 +121,7 @@ const routinesByUser = async (userId) => {
       routines.id AS routineId, 
       routines.name AS routineName,
       JSON_ARRAYAGG(exercises.name) AS exerciseNames,
+      JSON_ARRAYAGG(exercises.set_counts) AS setCounts, 
       TIME_FORMAT(
         SEC_TO_TIME(
           SUM(exercises.duration_in_seconds_per_set * exercises.set_counts)

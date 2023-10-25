@@ -17,9 +17,11 @@ const getExerciseByRoutineId = async (id) => {
 };
 
 const createRoutine = async (userId, body) => {
+  console.log("userId", userId);
   const exerciseIds = body.exercises;
   const isCustom = body.isCustom;
   const user = await userDao.findById(userId);
+  console.log(user);
   const subscriptionState = user.subscriptionState;
 
   if (utils.getIsInputEmpty(exerciseIds)) utils.throwError(400, "KEY_ERROR");
@@ -63,11 +65,6 @@ const updateCompletedExerciseStatus = async (id, exerciseIds) => {
 
 const routinesByUser = async (userId) => {
   const findUserRoutines = await routineDao.routinesByUser(userId);
-  if (!findUserRoutines) {
-    const error = new Error("NO_CUSTOM_ROUTINES");
-    error.status = 400;
-    throw error;
-  }
   return findUserRoutines;
 };
 
