@@ -8,10 +8,10 @@ const createSubscription = async (req, res, next) => {
         if (!amount) utils.throwError(400, 'KEY_ERROR_AMOUNT');
         if (!provider) utils.throwError(400, 'KEY_ERROR_PROVIDER');
         const createdSubscription = await subscriptionService.createSubscription(userId, amount, provider)
-        return createdSubscription,
-            res.status(201).json({
-                message: 'SUCCESS_SUBSCRIPTION_AND_PAYMENT'
-            });
+        return res.status(201).json({
+            message: 'SUCCESS_SUBSCRIPTION_AND_PAYMENT',
+            createdSubscription: createdSubscription
+        });
     } catch (error) {
         console.log(error)
         next(error);
