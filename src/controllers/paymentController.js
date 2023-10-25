@@ -48,4 +48,5 @@ const subscribePayment = async (req, res, next) => {
         next(error);
     };
 };
+
 module.exports = { subscribePayment };
