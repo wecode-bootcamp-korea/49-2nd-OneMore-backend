@@ -127,6 +127,7 @@ describe("getExerciseByRoutineId", () => {
       message: "Routine Success",
       data: {
         routineId: 3,
+        isCustom: 1,
         totalDuration: "840",
         totalCaloriesUsed: "300",
         exerciseIds: [5],

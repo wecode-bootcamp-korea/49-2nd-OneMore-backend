@@ -22,9 +22,11 @@ const getExerciseByRoutineId = async (id) => {
           'setCounts', set_counts,
           'isCompleted', routine_exercises.completed
         )
-      ) AS exercises
+      ) AS exercises,
+      routines.is_custom AS isCustom
     FROM exercises 
     LEFT JOIN routine_exercises ON exercises.id = routine_exercises.exercise_id
+    LEFT JOIN routines ON routine_exercises.routine_id = routines.id
     WHERE (routine_exercises.routine_id = ?)
     GROUP BY routine_exercises.routine_id`,
     [id]
