@@ -29,7 +29,8 @@ const findById = async (userId) => {
       subscription_state AS subscriptionState
     FROM users 
     WHERE id = ?`,
-    [userId])
+    [userId]
+  );
   return user;
 };
 

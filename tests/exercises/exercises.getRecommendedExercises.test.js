@@ -1,16 +1,23 @@
-const { routineDao } = require("../../src/models");
+const request = require("supertest");
+const { log } = require("console");
+
+const { app } = require("../../app");
 const { AppDataSource } = require("../../src/models/dataSource");
 
-describe("TEST: routineDao createRoutine", () => {
+jest.mock("../../src/middleware/tokenValidation");
+
+const tokenMiddleware = require("../../src/middleware/tokenValidation");
+const middlewareSpy = jest.spyOn(tokenMiddleware, "tokenValidation");
+
+describe("TEST: /exercises/recommended GET method", () => {
   beforeAll(async () => {
     await AppDataSource.initialize();
-
     await AppDataSource.query(`
       INSERT INTO users
-        (nickname, email, subscription_state)
+        (id, nickname, email, subscription_state, password)
       VALUES
-        ('testUserWithoutSubscription', 'testUser1@email.com', 0),
-        ('testUserWithSubscription', 'testUser2@email.com', 1)
+        (1, 'Park-KJ', 'rudwos6@naver.com', 1, 'password001.'),
+        (2, 'Hong-JS', 'jisu@naver.com', 0, 'password001.')
       ;
     `);
     await AppDataSource.query(`
@@ -38,46 +45,48 @@ describe("TEST: routineDao createRoutine", () => {
         ('testExercise9', 'testVideoUrl', 'testThumbnailUrl', 1, 1, 60, 9)
       ;
     `);
-    console.log("database initialized for test");
+    log("database initialized for test");
+  });
+
+  afterEach(() => {
+    // restore the spy created with spyOn
+    jest.restoreAllMocks();
   });
 
   afterAll(async () => {
     await AppDataSource.query(`SET foreign_key_checks = 0`);
     await AppDataSource.query(`TRUNCATE users`);
     await AppDataSource.query(`TRUNCATE exercises`);
-    await AppDataSource.query(`TRUNCATE routines`);
-    await AppDataSource.query(`TRUNCATE routine_exercises`);
     await AppDataSource.query(`TRUNCATE exercise_categories`);
     await AppDataSource.query(`SET foreign_key_checks = 1`);
     await AppDataSource.destroy();
   });
 
-  test("SUCCESS: routineDao", async () => {
-    const result = await routineDao.createRoutineInTransaction(
-      1,
-      false,
-      [1, 2, 3, 4, 5]
-    );
-    expect(result.insertId).toBe(1);
+  test("SUCCESS: success without subscription", async () => {
+    middlewareSpy.mockImplementation((req, res, next) => {
+      req.userId = 2;
+      next();
+    });
+
+    const result = await request(app).get("/exercises/recommended");
+    
+    expect(result.status).toBe(200);
+    result.body.data.exercises.forEach((item) => {
+      expect(item.isPremium).toBe(0);
+    });
   });
 
-  test("FAILURE: routineDao with invalid data", async () => {
-    const result = await routineDao.createRoutineInTransaction(1, false, [
-      1,
-      2,
-      3,
-      4,
-      "string",
-    ]);
-    expect(result).toBe(false);
-  });
+  test("SUCCESS: success with subscription", async () => {
+    middlewareSpy.mockImplementation((req, res, next) => {
+      req.userId = 1;
+      next();
+    });
 
-  test("FAILURE: routineDao with non-existing user", async () => {
-    const result = await routineDao.createRoutineInTransaction(
-      3,
-      false,
-      [1, 2, 3, 4, 5]
-    );
-    expect(result).toBe(false);
+    const result = await request(app).get("/exercises/recommended");
+
+    expect(result.status).toBe(200);
+    result.body.data.exercises.forEach((item) => {
+      expect([0, 1]).toContain(item.isPremium);
+    });
   });
 });

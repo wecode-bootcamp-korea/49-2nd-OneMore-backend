@@ -15,7 +15,7 @@ const generateTokens = async (userId) => {
   return { accessToken, refreshToken };
 };
 
-//kakaoStrayegy
+//kakaoStrategy
 const kakaoStrategy = new KakaoStrategy(
   {
     clientID: process.env.KAKAO_CLIENT_ID,

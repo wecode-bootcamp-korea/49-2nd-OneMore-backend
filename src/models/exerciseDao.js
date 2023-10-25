@@ -1,10 +1,11 @@
 const { AppDataSource } = require("./dataSource");
 
-const getRandomExercises = async (subscriptionState, limit = 5) => {
+const getRandomExercises = async (subscriptionState, limit = 3) => {
   const limitedContentsQuery = !subscriptionState
     ? `WHERE exercises.is_premium = false`
     : ``;
-  const exercises = await AppDataSource.query(`
+  const exercises = await AppDataSource.query(
+    `
     SELECT
       exercises.id AS exerciseId,
       exercises.thumbnail_url AS thumbnailURL,
@@ -21,7 +22,9 @@ const getRandomExercises = async (subscriptionState, limit = 5) => {
     ORDER BY RAND()
     LIMIT ?
     ;
-  `, [limit]);
+  `,
+    [limit]
+  );
   return exercises;
 };
 
@@ -32,7 +35,8 @@ const getRecommended = () => {
 
 const getExercisesListByIds = async (exerciseIds) => {
   const values = exerciseIds.join(",");
-  const exercises = await AppDataSource.query(`
+  const exercises = await AppDataSource.query(
+    `
     SELECT 
       id,
       is_premium AS isPremium
@@ -40,7 +44,45 @@ const getExercisesListByIds = async (exerciseIds) => {
       exercises
     WHERE id IN (?)
     ;
-  `, [values]);
+  `,
+    [values]
+  );
+  return exercises;
+};
+
+const getExercisesListByRoutineId = async (routineId) => {
+  const exercises = await AppDataSource.query(
+    `
+    SELECT DISTINCT
+      exercise_id AS exerciseId
+    FROM
+      routine_exercises
+    WHERE routine_id = ?
+    ;
+  `,
+    [routineId]
+  );
+  return exercises;
+};
+
+const getExercises = async (exerciseQueryString = ``) => {
+  const exercises = await AppDataSource.query(`
+    SELECT
+      id AS exerciseId,
+      name,
+      description,
+      exercise_category AS category,
+      equip_required AS equipRequired,
+      thumbnail_url AS thumbnailURL,
+      duration_in_seconds_per_set AS durationInSecondsPerSet,
+      is_premium AS isPremium,
+      calories_used AS caloriesUsed,
+      set_counts AS setCounts
+    FROM
+      exercises
+    ${exerciseQueryString}
+    ;
+  `);
   return exercises;
 }
 
@@ -48,4 +90,6 @@ module.exports = {
   getRecommended,
   getRandomExercises,
   getExercisesListByIds,
+  getExercisesListByRoutineId,
+  getExercises,
 };
