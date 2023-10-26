@@ -23,11 +23,11 @@ describe("getExerciseByRoutineId", () => {
         `);
     await AppDataSource.query(`
     INSERT INTO routines
-      (id, user_id, is_custom, name)
+      (id, user_id, is_custom, name, created_at)
     VALUES
-      (1, 1, 1, "my"),
-      (2, 2, 0, "routine"),
-      (3, 3, 1, "three")
+      (1, 1, 1, "my", "2023-10-23 01:00:00"),
+      (2, 2, 0, "routine", "2023-10-24 01:00:00"),
+      (3, 3, 1, "three", "2023-10-25 01:00:00")
     `);
 
     await AppDataSource.query(`
@@ -96,7 +96,7 @@ describe("getExerciseByRoutineId", () => {
             exerciseNames: ["레그 레이즈", "스쿼트", "바이시클 크런치"],
             setCounts: [3, 3, 3],
             totalDuration: "58:09",
-            createDate: "2023-10-25",
+            createDate: "2023-10-23",
           },
         ],
       });

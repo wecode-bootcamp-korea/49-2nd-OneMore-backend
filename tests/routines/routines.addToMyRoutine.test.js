@@ -86,7 +86,7 @@ describe("getExerciseByRoutineId", () => {
 
   test("SUCCESS: add a custom routine to my routines", async () => {
     await request(app)
-      .get("/routines/4/isCustom")
+      .patch("/routines/4/isCustom")
       .send()
       .set("Authorization", token)
       .expect({
