@@ -34,12 +34,13 @@ const createRoutine = async (userId, body) => {
     utils.throwError(403, "UNAUTHORIZED");
   }
 
+  routineName = routineName ? routineName : `${utils.formatDate(new Date())}의 루틴`;
   // create new routine
   const result = await routineDao.createRoutineInTransaction(
     userId,
     isCustom,
     exerciseIds,
-    routineName = `${utils.formatDate(new Date())}의 루틴`
+    routineName
   );
   if (!result) utils.throwError(400, "ERROR");
   return result.insertId;

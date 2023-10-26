@@ -128,9 +128,7 @@ const routinesByUser = async (userId) => {
           ), 
           "%i:%s") 
         AS totalDuration,
-      DATE_FORMAT(
-        IF(ISNULL(routines.updated_at), routines.created_at, routines.updated_at),
-        "%Y-%c-%d" )
+      IF(ISNULL(routines.updated_at), routines.created_at, routines.updated_at)
         AS createDate
     FROM 
       routines
