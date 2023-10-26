@@ -109,7 +109,7 @@ describe("TEST exerciseDao.getExercises", () => {
 
   test("SUCCESS: getExercises with category", async () => {
     const queryParams = {
-      category: 'testCategory1',
+      category: 1,
       equipRequired: undefined,
       sort: undefined,
       offset: 0,

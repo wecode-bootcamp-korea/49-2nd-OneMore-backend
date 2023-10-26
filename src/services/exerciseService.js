@@ -65,12 +65,8 @@ const getExercises = async (queryParams) => {
     routineId,
   } = queryParams;
 
-  const categoryId = category
-    ? await exerciseCategoryDao.getCategoryId(category)
-    : {id: null};
-
   const exerciseQueryString = new ExerciseQueryBuilder(
-    categoryId.id,
+    category,
     equipRequired,
     sort,
     offset,

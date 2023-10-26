@@ -309,8 +309,7 @@ describe("TEST exercises.getExercises", () => {
   });
 
   test("SUCCESS: get exercises with category", async () => {
-    const encoded = encodeURIComponent("상체");
-    const response = await request(app).get(`/exercises?category=${encoded}`);
+    const response = await request(app).get(`/exercises?category=2`);
     expect(response.body).toEqual({
       message: "SUCCESS",
       data: {
