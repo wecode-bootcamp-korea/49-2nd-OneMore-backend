@@ -115,7 +115,8 @@ const checkExerciseIdsInRoutine = async (id, exerciseIds) => {
   return result;
 };
 
-const routinesByUser = async (userId) => {
+const routinesByUser = async (userId, limit, offset) => {
+  console.log(limit, offset)
   const result = await AppDataSource.query(
     `SELECT 
       routines.id AS routineId, 
@@ -139,8 +140,9 @@ const routinesByUser = async (userId) => {
     GROUP BY 
       routine_exercises.routine_id
     ORDER BY 
-      createDate DESC`,
-    [userId]
+      createDate DESC
+    LIMIT ? OFFSET ?`,
+    [userId, limit, offset]
   );
   return result;
 };

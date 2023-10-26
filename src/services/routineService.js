@@ -60,8 +60,9 @@ const updateCompletedExerciseStatus = async (id, exerciseIds) => {
   await routineDao.updateCompletedExerciseStatusbyRoutineId(id, exerciseIds);
 };
 
-const routinesByUser = async (userId) => {
-  const findUserRoutines = await routineDao.routinesByUser(userId);
+const routinesByUser = async (userId, limit, offset) => {
+  console.log(limit, offset)
+  const findUserRoutines = await routineDao.routinesByUser(userId, limit, offset);
   return findUserRoutines;
 };
 

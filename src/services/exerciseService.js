@@ -55,7 +55,7 @@ const getRecommendedExercises = async (userId) => {
   };
 };
 
-const getExercises = async (queryParams) => {
+const getExercises = async (queryParams, userId) => {
   let {
     category,
     equipRequired,
@@ -74,6 +74,8 @@ const getExercises = async (queryParams) => {
   ).build();
 
   const exercises = await exerciseDao.getExercises(exerciseQueryString);
+  const userState = await userDao.findById(userId)
+  const subscriptionState = userState.subscriptionState
   const exercisesInRoutine = await exerciseDao.getExercisesListByRoutineId(
     routineId
   );
@@ -85,6 +87,7 @@ const getExercises = async (queryParams) => {
   return {
     exercises: exercises,
     selected: exercisesInRoutine.map(item => item.exerciseId),
+    subscriptionState: subscriptionState
   };
 };
 

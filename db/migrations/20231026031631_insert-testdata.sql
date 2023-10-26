@@ -48,7 +48,7 @@ VALUES ('레그 레이즈','https://www.youtube.com/embed/tObWHCnLkKg','https://
 ('헬스 볼','https://www.youtube.com/embed/WhZ1Qzfp9So','https://one-more.s3.ap-northeast-2.amazonaws.com/icons8-%E1%84%83%E1%85%B1%E1%84%85%E1%85%A9-51.png',150,'공놀이',1,1,60,1,3,1),
 ('풀업 바','https://www.youtube.com/embed/weOd8r9JHdU','https://one-more.s3.ap-northeast-2.amazonaws.com/icons8-cycling-ios-16-filled/icons8-cycling-100.png',365,'다양한 상체 운동',0,2,1320,1,1,1),
 ('스트레칭','https://www.youtube.com/embed/HiryqMG-qlU','https://one-more.s3.ap-northeast-2.amazonaws.com/icons8-stretching-ios-16-filled/icons8-stretching-100.png',50,'근육이 시원하게 풀립니다',0,1,56,12,3,0),
-('물구나무 서서 푸시 업','https://www.youtube.com/embed/Uly8jUuscOw','https://one-more.s3.ap-northeast-2.amazonaws.com/icons8-jumping-ios-16-glyph/icons8-jumping-90.png',7500,'죽어봐라 part.2',1,1,714,100,1,0)
+('물구나무 서서 푸시 업','https://www.youtube.com/embed/Uly8jUuscOw','https://one-more.s3.ap-northeast-2.amazonaws.com/icons8-jumping-ios-16-glyph/icons8-jumping-90.png',7500,'죽어봐라 part.2',1,1,714,100,1,0);
 
 INSERT INTO `routine_exercises`(`routine_id`, `exercise_id`, `completed`)
 VALUES (1,1,1),
