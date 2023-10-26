@@ -1,6 +1,6 @@
 function getIsPremiumContent (items) {
   for (let i = 0; i < items.length; i++) {
-    if (items[i].isPremium === true) {
+    if (items[i].isPremium) {
       return true;
     }
   }
