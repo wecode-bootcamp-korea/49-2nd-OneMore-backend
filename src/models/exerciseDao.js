@@ -57,7 +57,6 @@ const getRecommended = () => {
 };
 
 const getExercisesListByIds = async (exerciseIds) => {
-  const values = exerciseIds.join(",");
   const exercises = await AppDataSource.query(
     `
     SELECT 
@@ -68,7 +67,7 @@ const getExercisesListByIds = async (exerciseIds) => {
     WHERE id IN (?)
     ;
   `,
-    [values]
+    [exerciseIds]
   );
   return exercises;
 };
