@@ -2,14 +2,10 @@ const { userDao, exerciseDao, routineDao } = require("../models");
 const utils = require("../utils");
 
 const getExerciseByRoutineId = async (id) => {
-  if (!id) {
-    utils.throwError(400, "not input routine id(path parameter)");
-  }
-
   const existingRoutineId = await routineDao.findRoutineByRoutineId(id);
 
   if (!existingRoutineId[0]) {
-    utils.throwError(400, "not exist routine id in DB");
+    utils.throwError(400, "ROUTINE_NOT_FOUND");
   }
 
   const result = await routineDao.getExerciseByRoutineId(id);
