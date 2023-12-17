@@ -4,11 +4,11 @@ const getExerciseByRoutineId = async (req, res, next) => {
   try {
     const { id } = req.params;
 
-    const routineStart = await routineService.getExerciseByRoutineId(id);
+    const routine = await routineService.getExerciseByRoutineId(id);
 
     return res.status(200).json({
       message: "Routine Success",
-      data: routineStart[0],
+      data: routine,
     });
   } catch (error) {
     next(error);

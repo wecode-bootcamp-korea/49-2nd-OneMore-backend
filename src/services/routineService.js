@@ -2,13 +2,24 @@ const { userDao, exerciseDao, routineDao } = require("../models");
 const utils = require("../utils");
 
 const getExerciseByRoutineId = async (id) => {
-  const existingRoutineId = await routineDao.findRoutineByRoutineId(id);
+  const existingRoutine = await routineDao.findRoutineByRoutineId(id);
 
-  if (!existingRoutineId[0]) {
+  if (!existingRoutine) {
     utils.throwError(400, "ROUTINE_NOT_FOUND");
   }
 
-  const result = await routineDao.getExerciseByRoutineId(id);
+  const routineExercises = await routineDao.findRoutineExercisesByRoutineId(id);
+  const exerciseIds = routineExercises.map((item) => item.exercise.id);
+  const exercises = await exerciseDao.getExercisesDetailsByIds(exerciseIds);
+
+  const result = {
+    routineId: existingRoutine.id,
+    exercises: exercises,
+    isCustom: existingRoutine.is_custom,
+    // TODO: add completesExerciseIds
+    // TODO: add totalDuration (in seconds)
+    // TODO: add totalCaloriesUsed
+  };
   return result;
 };
 
