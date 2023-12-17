@@ -36,14 +36,14 @@ const createRoutine = async (userId, body) => {
 
   routineName = routineName ? routineName : `${utils.formatDate(new Date())}의 루틴`;
   // create new routine
-  const result = await routineDao.createRoutineInTransaction(
+  const result = await routineDao.createRoutine(
     userId,
     isCustom,
     exerciseIds,
     routineName
   );
   if (!result) utils.throwError(400, "ERROR");
-  return result.insertId;
+  return result.id;
 };
 
 const updateCompletedExerciseStatus = async (id, exerciseIds) => {

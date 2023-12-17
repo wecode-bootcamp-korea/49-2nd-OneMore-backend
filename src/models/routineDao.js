@@ -1,4 +1,9 @@
+const { In } = require("typeorm");
+const { Routine } = require("../entity/routineEntity");
+const { User } = require("../entity/userEntity");
 const { AppDataSource } = require("./dataSource");
+const { Exercise } = require("../entity/exerciseEntity");
+const { RoutineExercise } = require("../entity/routineExerciseEntity");
 
 const getExerciseByRoutineId = async (id) => {
   const result = await AppDataSource.query(
@@ -46,37 +51,37 @@ const findRoutineByRoutineId = async (id) => {
   return result;
 };
 
-const createRoutineInTransaction = async (userId, isCustom, exerciseIds, routineName) => {
-  let result;
-  try {
-    await AppDataSource.query(`START TRANSACTION;`);
-    result = await AppDataSource.query(
-      `
-      INSERT INTO routines
-        (user_id, is_custom, name)
-      VALUES
-        (?, ?, ?)
-      ;
-    `,
-      [userId, isCustom, routineName]
+const createRoutine = async (userId, isCustom, exerciseIds, routineName) => {
+  const user = await AppDataSource.manager.findOneBy(User, { id: userId });
+  const routine = {
+    name: routineName,
+    user: user,
+    is_custom: isCustom,
+  };
+
+  const createdRoutine = await AppDataSource.transaction(async (transactionalEntityManager) => {
+    const createdRoutine = await transactionalEntityManager.save(
+      Routine,
+      routine
     );
-    const values = exerciseIds.map(
-      (exerciseId) => `${result.insertId},${exerciseId}`
+    const exercises = await transactionalEntityManager.find(Exercise, {
+      where: {
+        id: In(exerciseIds),
+      },
+    });
+    const routineExercises = exercises.map((exercise, idx) => ({
+      routine: createdRoutine,
+      exercise: exercise,
+      completed: false,
+    }));
+    await transactionalEntityManager.save(
+      RoutineExercise,
+      routineExercises
     );
-    await AppDataSource.query(`
-      INSERT INTO routine_exercises
-        (routine_id, exercise_id)
-      VALUES
-        (${values.join("),(")})
-      ;
-    `);
-    await AppDataSource.query(`COMMIT;`);
-  } catch (error) {
-    console.log(error);
-    await AppDataSource.query(`ROLLBACK;`);
-    result = false;
-  }
-  return result;
+    return createdRoutine;
+  });
+
+  return createdRoutine;
 };
 
 const getRoutineHistoryByDate = async (userId, startDate, endDate) => {
@@ -116,7 +121,7 @@ const checkExerciseIdsInRoutine = async (id, exerciseIds) => {
 };
 
 const routinesByUser = async (userId, limit, offset) => {
-  console.log(limit, offset)
+  console.log(limit, offset);
   const result = await AppDataSource.query(
     `SELECT 
       routines.id AS routineId, 
@@ -164,7 +169,7 @@ const customCheck = async (userId, routineId) => {
     [userId, routineId]
   );
   return customRoutineCheck;
-}
+};
 
 const updateCompletedExerciseStatusbyRoutineId = async (id, exerciseIds) => {
   const exerciseStatus = {
@@ -183,11 +188,11 @@ const updateCompletedExerciseStatusbyRoutineId = async (id, exerciseIds) => {
 module.exports = {
   getExerciseByRoutineId,
   findRoutineByRoutineId,
-  createRoutineInTransaction,
+  createRoutine,
   getRoutineHistoryByDate,
   checkExerciseIdsInRoutine,
   updateCompletedExerciseStatusbyRoutineId,
   routinesByUser,
   toCustom,
-  customCheck
+  customCheck,
 };

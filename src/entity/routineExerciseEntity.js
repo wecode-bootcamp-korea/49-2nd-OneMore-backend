@@ -2,21 +2,21 @@ const { EntitySchema } = require("typeorm");
 
 const RoutineExercise = new EntitySchema({
   name: "RoutineExercise",
-  tableName: "routine_exercise",
+  tableName: "routine_exercises",
   columns: {
     id: {
       primary: true,
       type: "int",
       generated: true,
     },
-    createdAt: {
+    created_at: {
       createDate: true,
     },
-    updatedAt: {
+    updated_at: {
       updateDate: true,
       nullable: true,
     },
-    isCompleted: {
+    completed: {
       type: "boolean",
       default: false,
     },

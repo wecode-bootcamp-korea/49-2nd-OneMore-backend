@@ -2,17 +2,40 @@ const { EntitySchema } = require("typeorm");
 
 const User = new EntitySchema({
   name: "User",
-  tableName: "user",
+  tableName: "users",
   columns: {
     id: {
       primary: true,
       type: "int",
       generated: true,
     },
-    createdAt: {
+    email: {
+      type: "varchar",
+      length: 255,
+      unique: true,
+    },
+    password: {
+      type: "varchar",
+      length: 255,
+      default: true,
+    },
+    nickname: {
+      type: "varchar",
+      length: 255,
+    },
+    subscription_state: {
+      type: "boolean",
+      default: false,
+    },
+    phone_number: {
+      type: "varchar",
+      length: 255,
+      nullable: true,
+    },
+    created_at: {
       createDate: true,
     },
-    updatedAt: {
+    updated_at: {
       updateDate: true,
       nullable: true,
     }

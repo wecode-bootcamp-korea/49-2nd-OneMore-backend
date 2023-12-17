@@ -2,7 +2,7 @@ const { EntitySchema } = require("typeorm");
 
 const Routine = new EntitySchema({
   name: "Routine", // relations에서 target 의 이름으로 사용됨
-  tableName: "routine", // 실제 데이터베이스에 생성되는 테이블 이름
+  tableName: "routines", // 실제 데이터베이스에 생성되는 테이블 이름
   columns: {
     id: {
       primary: true,
@@ -12,14 +12,14 @@ const Routine = new EntitySchema({
     name: {
       type: "text",
     },
-    isCustom: {
+    is_custom: {
       type: "boolean",
       default: false,
     },
-    createdAt: {
+    created_at: {
       createDate: true,
     },
-    updatedAt: {
+    updated_at: {
       updateDate: true,
       nullable: true,
     },
