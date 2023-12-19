@@ -29,7 +29,6 @@ const Routine = new EntitySchema({
       target: "User",
       type: "many-to-one",
       joinTable: true,
-      cascade: true,
     },
   },
 });

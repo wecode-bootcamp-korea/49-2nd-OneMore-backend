@@ -47,7 +47,7 @@ const updateCompletedExerciseStatus = async (req, res, next) => {
 const myRoutines = async (req, res, next) => {
   try {
     const { userId } = req;
-    const { limit, offset } = req.query
+    const { limit = 10, offset = 0} = req.query
 
     const myRoutines = await routineService.routinesByUser(userId, parseInt(limit), parseInt(offset));
     return res.status(200).json({

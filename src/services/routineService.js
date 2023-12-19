@@ -72,9 +72,27 @@ const updateCompletedExerciseStatus = async (id, exerciseIds) => {
 };
 
 const routinesByUser = async (userId, limit, offset) => {
-  console.log(limit, offset)
-  const findUserRoutines = await routineDao.routinesByUser(userId, limit, offset);
-  return findUserRoutines;
+  const userRoutines = await routineDao.routinesByUser(userId, limit, offset);
+  const routineIds = userRoutines.map(routine => routine.id);
+  const routineExercises = await routineDao.getRoutineExercisesListByRoutineIds(routineIds);
+  const result = {};
+  routineExercises.forEach(item => {
+    const routine = item.routine;
+    const routineId = routine.id;
+    if (result[routineId]) {
+      result[routineId].exercises.push(item.exercise);
+      // TODO: count total duration and add to result
+
+    } else {
+      result[routineId] = {
+        routineId: routineId,
+        routineName: routine.name,
+        exercises: []
+      }
+    }
+
+  })
+  return result;
 };
 
 const saveToCustom = async (userId, routineId) => {
