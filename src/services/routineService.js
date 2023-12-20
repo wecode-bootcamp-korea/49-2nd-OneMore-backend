@@ -19,14 +19,14 @@ const getExerciseByRoutineId = async (id) => {
   const result = {
     routineId: existingRoutine.id,
     exercises: exercises,
-    isCustom: existingRoutine.is_custom,
+    isCustom: existingRoutine.isCustom,
     completedExerciseIds: completedExerciseIds,
     totalDutation: 0,
     totalCaloriesUsed: 0,
   };
   exercises.forEach(exercise => {
-    result.totalDutation += exercise.duration_in_seconds_per_set * exercise.set_counts;
-    result.totalCaloriesUsed += exercise.calories_used;
+    result.totalDutation += exercise.durationInSecondsPerSet * exercise.setCounts;
+    result.totalCaloriesUsed += exercise.caloriesUsed;
   });
   return result;
 };
@@ -94,9 +94,9 @@ const routinesByUser = async (userId, limit, offset) => {
     const routineId = routine.id;
     if (result[routineId]) {
       result[routineId].exerciseNames.push(exercise.name);
-      result[routineId].setCounts.push(exercise.set_counts);
+      result[routineId].setCounts.push(exercise.setCounts);
       result[routineId].totalDutation +=
-        exercise.set_counts * exercise.duration_in_seconds_per_set;
+        exercise.setCounts * exercise.durationInSecondsPerSet;
     } else {
       result[routineId] = {
         routineId: routineId,
@@ -104,17 +104,17 @@ const routinesByUser = async (userId, limit, offset) => {
         totalDutation: 0,
         exerciseNames: [],
         setCounts: [],
-        createDate: routine.created_at,
+        createDate: routine.createdAt,
       };
     }
   });
-  return result;
+  return Object.values(result);
 };
 
 const saveToCustom = async (userId, routineId) => {
   await routineDao.toCustom(userId, routineId);
   const customRoutineCheck = await routineDao.customCheck(routineId);
-  if (customRoutineCheck.is_custom === 0) {
+  if (customRoutineCheck.isCustom === 0) {
     const error = new Error("NOT_SAVED");
     error.status = 400;
     throw error;

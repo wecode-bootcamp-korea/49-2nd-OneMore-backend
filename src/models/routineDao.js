@@ -51,7 +51,7 @@ const createRoutine = async (userId, isCustom, exerciseIds, routineName) => {
   const routine = {
     name: routineName,
     user: user,
-    is_custom: isCustom,
+    isCustom: isCustom,
   };
 
   const createdRoutine = await AppDataSource.transaction(
@@ -85,9 +85,9 @@ const getRoutineHistoryByDate = async (userId, startDate, endDate) => {
     .leftJoin("routine.routineExercises", "routineExercise")
     .addSelect(["routineExercise.id"])
     .leftJoinAndSelect("routineExercise.exercise", "exercise")
-    .where("user.id = :userId", {userId: userId})
-    .andWhere("routine.createdAt >= :startDate", {startDate: startDate})
-    .andWhere("routine.createdAt < :endDate", {endDate: endDate})
+    .where("user.id = :userId", { userId: userId })
+    .andWhere("routine.createdAt >= :startDate", { startDate: startDate })
+    .andWhere("routine.createdAt < :endDate", { endDate: endDate })
     .getOne();
   return routine;
 };
@@ -127,7 +127,7 @@ const routinesByUser = async (userId, limit, offset) => {
       },
     },
     order: {
-      created_at: "DESC",
+      createdAt: "DESC",
     },
     skip: offset,
     take: limit,
@@ -142,7 +142,7 @@ const getRoutineExercisesListByRoutineIds = async (routineIds) => {
     );
   const routineExercises = await queryBuilder
     .leftJoin("routineExercise.routine", "routine")
-    .addSelect(["routine.id", "routine.name", "routine.created_at"])
+    .addSelect(["routine.id", "routine.name", "routine.createdAt"])
     .leftJoin("routineExercise.exercise", "exercise")
     .addSelect([
       "exercise.id",
@@ -150,7 +150,7 @@ const getRoutineExercisesListByRoutineIds = async (routineIds) => {
       "exercise.setCounts",
       "exercise.durationInSecondsPerSet",
     ])
-    .where(`routine.id IN ?`, [routineIds])
+    .where(`routine.id IN (:routineIds)`, { routineIds: routineIds })
     .getMany();
   return routineExercises;
 };
@@ -165,7 +165,7 @@ const toCustom = async (userId, routineId) => {
       },
     },
     {
-      is_custom: 1,
+      isCustom: 1,
     }
   );
 };
@@ -176,7 +176,7 @@ const customCheck = async (routineId) => {
       id: routineId,
     },
     select: {
-      is_custom: true,
+      isCustom: true,
     },
   });
   return customRoutineCheck;
