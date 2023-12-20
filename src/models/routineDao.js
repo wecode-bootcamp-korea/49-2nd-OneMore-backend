@@ -32,7 +32,7 @@ const findRoutineExercisesByRoutineId = async (id) => {
     relations: {
       exercise: true,
     },
-    select: { id: true, exercise: { id: true } },
+    select: { id: true, exercise: { id: true }, completed: true },
   });
   return result;
 };

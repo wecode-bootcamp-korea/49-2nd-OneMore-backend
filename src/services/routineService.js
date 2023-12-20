@@ -9,17 +9,25 @@ const getExerciseByRoutineId = async (id) => {
   }
 
   const routineExercises = await routineDao.findRoutineExercisesByRoutineId(id);
-  const exerciseIds = routineExercises.map((item) => item.exercise.id);
+  const completedExerciseIds = [];
+  const exerciseIds = routineExercises.map((item) => {
+    if (item.completed) completedExerciseIds.push(item.exercise.id)
+    return item.exercise.id;
+  });
   const exercises = await exerciseDao.getExercisesDetailsByIds(exerciseIds);
 
   const result = {
     routineId: existingRoutine.id,
     exercises: exercises,
     isCustom: existingRoutine.is_custom,
-    // TODO: add completesExerciseIds
-    // TODO: add totalDuration (in seconds)
-    // TODO: add totalCaloriesUsed
+    completedExerciseIds: completedExerciseIds,
+    totalDutation: 0,
+    totalCaloriesUsed: 0,
   };
+  exercises.forEach(exercise => {
+    result.totalDutation += exercise.duration_in_seconds_per_set * exercise.set_counts;
+    result.totalCaloriesUsed += exercise.calories_used;
+  });
   return result;
 };
 

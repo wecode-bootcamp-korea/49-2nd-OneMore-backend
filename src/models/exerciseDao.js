@@ -36,6 +36,10 @@ const getExercisesDetailsByIds = async (exerciseIds) => {
     where: {
       id: In(exerciseIds),
     },
+    relations: {
+      exercise_category: true,
+    },
+    select: true
     // TODO: add exercise_category relation
   });
   return exercises;
