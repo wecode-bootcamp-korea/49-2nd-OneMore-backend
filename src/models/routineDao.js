@@ -127,13 +127,6 @@ const checkExerciseIdsInRoutine = async (id, exerciseIds) => {
       exercise: true,
     },
   });
-  // const result = await AppDataSource.query(
-  //   `SELECT id, routine_id, exercise_id
-  //   FROM routine_exercises
-  //   WHERE routine_id = ? AND exercise_id IN (?)`,
-  //   [id, exerciseIds]
-  // );
-
   return result;
 };
 
@@ -150,33 +143,6 @@ const routinesByUser = async (userId, limit, offset) => {
     skip: offset,
     take: limit,
   });
-  // const result = await AppDataSource.query(
-  //   `SELECT
-  //     routines.id AS routineId,
-  //     routines.name AS routineName,
-  //     JSON_ARRAYAGG(exercises.name) AS exerciseNames,
-  //     JSON_ARRAYAGG(exercises.set_counts) AS setCounts,
-  //     TIME_FORMAT(
-  //       SEC_TO_TIME(
-  //         SUM(exercises.duration_in_seconds_per_set * exercises.set_counts)
-  //         ),
-  //         "%i:%s")
-  //       AS totalDuration,
-  //     IF(ISNULL(routines.updated_at), routines.created_at, routines.updated_at)
-  //       AS createDate
-  //   FROM
-  //     routines
-  //   JOIN routine_exercises ON routines.id = routine_exercises.routine_id
-  //   JOIN exercises ON routine_exercises.exercise_id = exercises.id
-  //   WHERE
-  //     routines.user_id = ? AND routines.is_custom = 1
-  //   GROUP BY
-  //     routine_exercises.routine_id
-  //   ORDER BY
-  //     createDate DESC
-  //   LIMIT ? OFFSET ?`,
-  //   [userId, limit, offset]
-  // );
   return result;
 };
 
@@ -195,26 +161,35 @@ const getRoutineExercisesListByRoutineIds = async (routineIds) => {
       "exercise.set_counts",
       "exercise.duration_in_seconds_per_set",
     ])
+    .where(`routine.id IN ?`, [routineIds])
     .getMany();
   return routineExercises;
 };
 
 const toCustom = async (userId, routineId) => {
-  const recommendedToCustom = await AppDataSource.query(
-    `UPDATE routines
-    SET is_custom = 1
-    WHERE user_id = ? AND id = ?`,
-    [userId, routineId]
+  await AppDataSource.manager.update(
+    Routine,
+    {
+      id: routineId,
+      user: {
+        id: userId,
+      },
+    },
+    {
+      is_custom: 1,
+    }
   );
 };
 
-const customCheck = async (userId, routineId) => {
-  const [customRoutineCheck] = await AppDataSource.query(
-    `SELECT is_custom
-    FROM routines
-    WHERE user_id = ? AND id = ?`,
-    [userId, routineId]
-  );
+const customCheck = async (routineId) => {
+  const customRoutineCheck = await AppDataSource.manager.findOne(Routine, {
+    where: {
+      id: routineId,
+    },
+    select: {
+      is_custom: true,
+    },
+  });
   return customRoutineCheck;
 };
 

@@ -105,7 +105,7 @@ const routinesByUser = async (userId, limit, offset) => {
 
 const saveToCustom = async (userId, routineId) => {
   await routineDao.toCustom(userId, routineId);
-  const customRoutineCheck = await routineDao.customCheck(userId, routineId);
+  const customRoutineCheck = await routineDao.customCheck(routineId);
   if (customRoutineCheck.is_custom === 0) {
     const error = new Error("NOT_SAVED");
     error.status = 400;
