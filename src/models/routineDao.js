@@ -187,9 +187,14 @@ const getRoutineExercisesListByRoutineIds = async (routineIds) => {
     );
   const routineExercises = await queryBuilder
     .leftJoin("routineExercise.routine", "routine")
-    .addSelect(["routine.id", "routine.name"])
+    .addSelect(["routine.id", "routine.name", "routine.created_at"])
     .leftJoin("routineExercise.exercise", "exercise")
-    .addSelect(["exercise.id", "exercise.name", "exercise.set_counts"])
+    .addSelect([
+      "exercise.id",
+      "exercise.name",
+      "exercise.set_counts",
+      "exercise.duration_in_seconds_per_set",
+    ])
     .getMany();
   return routineExercises;
 };

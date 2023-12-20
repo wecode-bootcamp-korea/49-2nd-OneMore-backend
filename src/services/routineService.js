@@ -45,7 +45,9 @@ const createRoutine = async (userId, body) => {
     utils.throwError(403, "UNAUTHORIZED");
   }
 
-  routineName = routineName ? routineName : `${utils.formatDate(new Date())}의 루틴`;
+  routineName = routineName
+    ? routineName
+    : `${utils.formatDate(new Date())}의 루틴`;
   // create new routine
   const result = await routineDao.createRoutine(
     userId,
@@ -73,25 +75,31 @@ const updateCompletedExerciseStatus = async (id, exerciseIds) => {
 
 const routinesByUser = async (userId, limit, offset) => {
   const userRoutines = await routineDao.routinesByUser(userId, limit, offset);
-  const routineIds = userRoutines.map(routine => routine.id);
-  const routineExercises = await routineDao.getRoutineExercisesListByRoutineIds(routineIds);
+  const routineIds = userRoutines.map((routine) => routine.id);
+  const routineExercises = await routineDao.getRoutineExercisesListByRoutineIds(
+    routineIds
+  );
   const result = {};
-  routineExercises.forEach(item => {
+  routineExercises.forEach((item) => {
     const routine = item.routine;
+    const exercise = item.exercise;
     const routineId = routine.id;
     if (result[routineId]) {
-      result[routineId].exercises.push(item.exercise);
-      // TODO: count total duration and add to result
-
+      result[routineId].exerciseNames.push(exercise.name);
+      result[routineId].setCounts.push(exercise.set_counts);
+      result[routineId].totalDutation +=
+        exercise.set_counts * exercise.duration_in_seconds_per_set;
     } else {
       result[routineId] = {
         routineId: routineId,
         routineName: routine.name,
-        exercises: []
-      }
+        totalDutation: 0,
+        exerciseNames: [],
+        setCounts: [],
+        createDate: routine.created_at,
+      };
     }
-
-  })
+  });
   return result;
 };
 
