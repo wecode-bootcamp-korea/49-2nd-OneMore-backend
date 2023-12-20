@@ -19,7 +19,7 @@ const getRecommendedExercises = async (userId) => {
   let routineCompleted = false;
 
   const todayDatetime = new Date();
-  todayDatetime.setDate(todayDatetime.getHours() + 4);
+  // todayDatetime.setHours(todayDatetime.getHours() + 4);
   const tomorrowDatetime = new Date();
   tomorrowDatetime.setDate(todayDatetime.getDate() + 1);
   const today = utils.formatDate(todayDatetime);
@@ -33,7 +33,8 @@ const getRecommendedExercises = async (userId) => {
 
   if (todayRoutineHistory) {
     // in case user finished today's routine
-    exercises = await exerciseDao.getExercisesDetailsByIds(todayRoutineHistory.exercises);
+    exercises = todayRoutineHistory.routineExercises.map(routineExercise => routineExercise.exercise);
+    // exercises = await exerciseDao.getExercisesDetailsByIds(todayRoutineHistory.exercises);
     routineCompleted = true;
   } else {
     // TODO: apply customized recommendation logic

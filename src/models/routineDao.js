@@ -79,27 +79,16 @@ const createRoutine = async (userId, isCustom, exerciseIds, routineName) => {
 };
 
 const getRoutineHistoryByDate = async (userId, startDate, endDate) => {
-  const [routine] = await AppDataSource.query(
-    `
-    SELECT
-      routines.id AS routineId,
-      JSON_ARRAYAGG(
-        routine_exercises.exercise_id
-      ) AS exercises
-    FROM
-      routines
-    LEFT JOIN routine_exercises ON routine_exercises.routine_id = routines.id
-    WHERE
-      routines.user_id = ?
-      AND
-      routines.created_at >= ?
-      AND
-      routines.created_at < ?
-    GROUP BY routines.id
-    ;
-  `,
-    [userId, startDate, endDate]
-  );
+  const routine = await AppDataSource.getRepository(Routine)
+    .createQueryBuilder("routine")
+    .leftJoin("routine.user", "user")
+    .leftJoin("routine.routineExercises", "routineExercise")
+    .addSelect(["routineExercise.id"])
+    .leftJoinAndSelect("routineExercise.exercise", "exercise")
+    .where("user.id = :userId", {userId: userId})
+    .andWhere("routine.created_at >= :startDate", {startDate: startDate})
+    .andWhere("routine.created_at < :endDate", {endDate: endDate})
+    .getOne();
   return routine;
 };
 

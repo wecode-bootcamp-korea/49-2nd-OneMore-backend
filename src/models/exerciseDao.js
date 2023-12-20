@@ -16,11 +16,11 @@ const getRandomExercises = async (subscriptionState, limit = 3) => {
       exercises.is_premium AS isPremium,
       exercises.calories_used AS calories,
       exercises.duration_in_seconds_per_set AS durationInSecondsPerSet,
-      exercises.exercise_category AS categoryId,
+      exercises.exerciseCategoryId AS categoryId,
       exercise_categories.name AS categoryName
     From
       exercises
-    LEFT JOIN exercise_categories ON exercise_categories.id = exercises.exercise_category
+    LEFT JOIN exercise_categories ON exercise_categories.id = exercises.exerciseCategoryId
     ${limitedContentsQuery}
     ORDER BY RAND()
     LIMIT ?

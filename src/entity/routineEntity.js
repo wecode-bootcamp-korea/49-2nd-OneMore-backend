@@ -20,6 +20,11 @@ const Routine = new EntitySchema({
       type: "many-to-one",
       joinTable: true,
     },
+    routineExercises: {
+      target: "RoutineExercise",
+      type: "one-to-many",
+      inverseSide: "routine",
+    }
   },
 });
 
