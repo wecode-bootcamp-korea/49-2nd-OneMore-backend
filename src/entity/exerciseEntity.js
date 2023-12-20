@@ -1,14 +1,11 @@
 const { EntitySchema } = require("typeorm");
+const { BaseColumnSchemaPart } = require("./BaseColumnSchemaPart");
 
 const Exercise = new EntitySchema({
   name: "Exercise",
   tableName: "exercises",
   columns: {
-    id: {
-      primary: true,
-      type: "int",
-      generated: true,
-    },
+    ...BaseColumnSchemaPart,
     name: {
       type: "varchar",
       length: 300,
@@ -31,7 +28,8 @@ const Exercise = new EntitySchema({
       nullable: true,
     },
     is_premium: {
-      type: "tinyint",
+      type: "boolean",
+      default: false,
     },
     duration_in_seconds_per_set: {
       type: "int",
@@ -46,16 +44,9 @@ const Exercise = new EntitySchema({
       default: 1,
     },
     equip_required: {
-      type: "tinyint",
-      default: 0,
+      type: "boolean",
+      default: false,
     },
-    created_at: {
-      createDate: true,
-    },
-    updated_at: {
-      updateDate: true,
-      nullable: true,
-    }
   },
   relations: {
     exercise_category: {

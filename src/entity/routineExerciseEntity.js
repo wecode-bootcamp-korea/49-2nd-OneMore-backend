@@ -1,21 +1,11 @@
 const { EntitySchema } = require("typeorm");
+const { BaseColumnSchemaPart } = require("./BaseColumnSchemaPart");
 
 const RoutineExercise = new EntitySchema({
   name: "RoutineExercise",
   tableName: "routine_exercises",
   columns: {
-    id: {
-      primary: true,
-      type: "int",
-      generated: true,
-    },
-    created_at: {
-      createDate: true,
-    },
-    updated_at: {
-      updateDate: true,
-      nullable: true,
-    },
+    ...BaseColumnSchemaPart,
     completed: {
       type: "boolean",
       default: false,

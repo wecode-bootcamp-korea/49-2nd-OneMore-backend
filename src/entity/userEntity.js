@@ -1,14 +1,11 @@
 const { EntitySchema } = require("typeorm");
+const { BaseColumnSchemaPart } = require("./BaseColumnSchemaPart");
 
 const User = new EntitySchema({
   name: "User",
   tableName: "users",
   columns: {
-    id: {
-      primary: true,
-      type: "int",
-      generated: true,
-    },
+    ...BaseColumnSchemaPart,
     email: {
       type: "varchar",
       length: 255,
@@ -17,28 +14,35 @@ const User = new EntitySchema({
     password: {
       type: "varchar",
       length: 255,
-      default: true,
+      nullable: true,
     },
     nickname: {
       type: "varchar",
       length: 255,
     },
     subscription_state: {
-      type: "boolean",
-      default: false,
+      type: "tinyint",
+      default: 0,
     },
     phone_number: {
       type: "varchar",
       length: 255,
       nullable: true,
     },
-    created_at: {
-      createDate: true,
-    },
-    updated_at: {
-      updateDate: true,
+    social_account_provider: {
+      type: "int",
       nullable: true,
-    }
+    },
+    social_account_uid: {
+      type: "varchar",
+      length: 500,
+      nullable: true,
+    },
+    profile_image: {
+      type: "varchar",
+      length: 2000,
+      nullable: true,
+    },
   },
 });
 
