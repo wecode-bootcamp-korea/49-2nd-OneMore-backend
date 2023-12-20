@@ -6,7 +6,7 @@ const signUp = async (email, password, nickname, phoneNumber) => {
         email, 
         password, 
         nickname, 
-        phone_number
+        phoneNumber
         ) VALUES (?, ?, ?, ?)`,
     [email, password, nickname, phoneNumber]
   );
@@ -26,7 +26,7 @@ const findById = async (userId) => {
   const [user] = await AppDataSource.query(
     `SELECT 
       id, 
-      subscription_state AS subscriptionState
+      subscriptionState AS subscriptionState
     FROM users 
     WHERE id = ?`,
     [userId]
@@ -38,7 +38,7 @@ const findUserBySocial = async (socialUid, socialProvider) => {
   const [foundUserBySocial] = await AppDataSource.query(
     `SELECT id
      FROM users
-     WHERE social_account_uid = ? AND social_account_provider = ?`,
+     WHERE socialAccountUid = ? AND socialAccountProvider = ?`,
     [socialUid, socialProvider])
   return foundUserBySocial;
 };
@@ -48,8 +48,8 @@ const createUserBySocial = async (email, nickname, socialUid, socialProvider) =>
     `INSERT INTO users (
         email, 
         nickname, 
-        social_account_uid, 
-        social_account_provider
+        socialAccountUid, 
+        socialAccountProvider
         ) VALUES (?, ?, ?, ?)`,
     [email, nickname, socialUid, socialProvider])
 };
@@ -57,8 +57,8 @@ const createUserBySocial = async (email, nickname, socialUid, socialProvider) =>
 const updateUserBySocial = async (userId, socialUid, socialProvider) => {
   return await AppDataSource.query(
     ` UPDATE users
-      SET social_account_uid = ?,
-      social_account_provider= ?
+      SET socialAccountUid = ?,
+      socialAccountProvider= ?
       WHERE id = ?`,
     [socialUid, socialProvider, userId])
 };

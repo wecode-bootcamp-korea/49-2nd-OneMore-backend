@@ -20,8 +20,8 @@ const createSubscription = async (userId, amount, provider) => {
         const updateSubscriptionState = await queryRunner.query(
             `
             UPDATE users
-            SET subscription_state = 1
-            WHERE id = ? AND subscription_state = 0;
+            SET subscriptionState = 1
+            WHERE id = ? AND subscriptionState = 0;
             `,
             [userId]
         );
@@ -39,7 +39,7 @@ const subscribeUser = async (userId) => {
     const [subscribingUser] = await AppDataSource.query(
         `SELECT id
          FROM users
-         WHERE id = ? AND subscription_state = 1;`,
+         WHERE id = ? AND subscriptionState = 1;`,
         [userId])
     return subscribingUser
 }

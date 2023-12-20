@@ -86,8 +86,8 @@ const getRoutineHistoryByDate = async (userId, startDate, endDate) => {
     .addSelect(["routineExercise.id"])
     .leftJoinAndSelect("routineExercise.exercise", "exercise")
     .where("user.id = :userId", {userId: userId})
-    .andWhere("routine.created_at >= :startDate", {startDate: startDate})
-    .andWhere("routine.created_at < :endDate", {endDate: endDate})
+    .andWhere("routine.createdAt >= :startDate", {startDate: startDate})
+    .andWhere("routine.createdAt < :endDate", {endDate: endDate})
     .getOne();
   return routine;
 };
@@ -147,8 +147,8 @@ const getRoutineExercisesListByRoutineIds = async (routineIds) => {
     .addSelect([
       "exercise.id",
       "exercise.name",
-      "exercise.set_counts",
-      "exercise.duration_in_seconds_per_set",
+      "exercise.setCounts",
+      "exercise.durationInSecondsPerSet",
     ])
     .where(`routine.id IN ?`, [routineIds])
     .getMany();

@@ -10,15 +10,15 @@ const Exercise = new EntitySchema({
       type: "varchar",
       length: 300,
     },
-    video_url: {
+    videoUrl: {
       type: "varchar",
       length: 2000,
     },
-    thumbnail_url: {
+    thumbnailUrl: {
       type: "varchar",
       length: 2000,
     },
-    calories_used: {
+    caloriesUsed: {
       type: "int",
       nullable: true,
     },
@@ -27,29 +27,29 @@ const Exercise = new EntitySchema({
       length: 1000,
       nullable: true,
     },
-    is_premium: {
+    isPremium: {
       type: "boolean",
       default: false,
     },
-    duration_in_seconds_per_set: {
+    durationInSecondsPerSet: {
       type: "int",
     },
-    counts_per_set: {
+    countsPerSet: {
       type: "int",
       default: 1,
       nullable: true,
     },
-    set_counts: {
+    setCounts: {
       type: "int",
       default: 1,
     },
-    equip_required: {
+    equipRequired: {
       type: "boolean",
       default: false,
     },
   },
   relations: {
-    exercise_category: {
+    exerciseCategory: {
       target: "ExerciseCategory",
       type: "many-to-one",
       jointable: true,

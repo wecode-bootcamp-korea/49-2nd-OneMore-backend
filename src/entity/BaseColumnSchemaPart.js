@@ -4,10 +4,10 @@ const BaseColumnSchemaPart = {
     type: "int",
     generated: true,
   },
-created_at: {
+  createdAt: {
     createDate: true,
   },
-  updated_at: {
+  updatedAt: {
     updateDate: true,
     nullable: true,
   }

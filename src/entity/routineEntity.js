@@ -9,7 +9,7 @@ const Routine = new EntitySchema({
     name: {
       type: "text",
     },
-    is_custom: {
+    isCustom: {
       type: "boolean",
       default: false,
     },
