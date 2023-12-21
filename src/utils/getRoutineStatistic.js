@@ -4,7 +4,7 @@ function getRoutineStatistic(exercises) {
   let mostFrequent = { count: 0 };
   let categoryCounts = {};
   exercises.map((item) => {
-    totalCalories += item.calories;
+    totalCalories += item.caloriesUsed;
     totalDurationInSeconds += item.durationInSecondsPerSet;
     let itemCategoryCount = categoryCounts[item.categoryName];
     categoryCounts[item.categoryName] =

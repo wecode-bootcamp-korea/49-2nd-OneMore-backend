@@ -2,13 +2,13 @@ const { routineService } = require("../services");
 
 const getExerciseByRoutineId = async (req, res, next) => {
   try {
-    const { id } = req.params;
+    const { routineId } = req.params;
 
-    const routineStart = await routineService.getExerciseByRoutineId(id);
+    const routine = await routineService.getExerciseByRoutineId(routineId);
 
     return res.status(200).json({
       message: "Routine Success",
-      data: routineStart[0],
+      data: routine,
     });
   } catch (error) {
     next(error);
@@ -31,10 +31,10 @@ const createRoutine = async (req, res, next) => {
 
 const updateCompletedExerciseStatus = async (req, res, next) => {
   try {
-    const { id } = req.params;
+    const { routineId } = req.params;
     const { exerciseIds } = req.body;
 
-    await routineService.updateCompletedExerciseStatus(id, exerciseIds);
+    await routineService.updateCompletedExerciseStatus(routineId, exerciseIds);
 
     return res.status(200).json({
       message: "EXERCISE UPDATE SUCCESS",
@@ -47,7 +47,7 @@ const updateCompletedExerciseStatus = async (req, res, next) => {
 const myRoutines = async (req, res, next) => {
   try {
     const { userId } = req;
-    const { limit, offset } = req.query
+    const { limit = 10, offset = 0} = req.query
 
     const myRoutines = await routineService.routinesByUser(userId, parseInt(limit), parseInt(offset));
     return res.status(200).json({
@@ -64,7 +64,7 @@ const recommendedToCustom = async (req, res, next) => {
     const { userId } = req;
     const { routineId } = req.params;
 
-    const toCustom = await routineService.saveToCustom(userId, routineId);
+    await routineService.saveToCustom(userId, routineId);
 
     return res.status(200).json({
       message: "SAVE_TO_CUSTOM_SUCCESS"

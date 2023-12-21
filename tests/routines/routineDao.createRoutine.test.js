@@ -53,7 +53,7 @@ describe("TEST: routineDao createRoutine", () => {
   });
 
   test("SUCCESS: routineDao", async () => {
-    const result = await routineDao.createRoutineInTransaction(
+    const result = await routineDao.createRoutine(
       1,
       false,
       [1, 2, 3, 4, 5],
@@ -63,7 +63,7 @@ describe("TEST: routineDao createRoutine", () => {
   });
 
   test("FAILURE: routineDao with invalid data", async () => {
-    const result = await routineDao.createRoutineInTransaction(1, false, [
+    const result = await routineDao.createRoutine(1, false, [
       1,
       2,
       3,
@@ -74,7 +74,7 @@ describe("TEST: routineDao createRoutine", () => {
   });
 
   test("FAILURE: routineDao with non-existing user", async () => {
-    const result = await routineDao.createRoutineInTransaction(
+    const result = await routineDao.createRoutine(
       3,
       false,
       [1, 2, 3, 4, 5]

@@ -32,7 +32,7 @@ describe("TEST routineService", () => {
     const userDaoFindByIdSpy = jest.spyOn(userDao, "findById");
     userDaoFindByIdSpy.mockReturnValue({id: 1, subscriptionState: 0});
 
-    const routineDaoCreateRoutineSpy = jest.spyOn(routineDao, "createRoutineInTransaction");
+    const routineDaoCreateRoutineSpy = jest.spyOn(routineDao, "createRoutine");
     routineDaoCreateRoutineSpy.mockReturnValue({ insertId: 3 });
 
     const getIsIntegersSpy = jest.spyOn(utils, "getIsIntegers");
@@ -42,7 +42,7 @@ describe("TEST routineService", () => {
       userId,
       body
     );
-
+    console.log(result)
     expect(result).toBe(3);
     expect(userDaoFindByIdSpy).toHaveBeenCalled();
     expect(routineDaoCreateRoutineSpy).toHaveBeenCalled();
@@ -61,7 +61,7 @@ describe("TEST routineService", () => {
     const userDaoFindByIdSpy = jest.spyOn(userDao, "findById");
     userDaoFindByIdSpy.mockReturnValue({id: 1, subscriptionState: 0});
 
-    const routineDaoCreateRoutineSpy = jest.spyOn(routineDao, "createRoutineInTransaction");
+    const routineDaoCreateRoutineSpy = jest.spyOn(routineDao, "createRoutine");
     routineDaoCreateRoutineSpy.mockReturnValue(false);
 
     const throwErrorSpy = jest.spyOn(utils, "throwError");
