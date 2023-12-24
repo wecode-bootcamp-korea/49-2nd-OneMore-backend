@@ -10,7 +10,7 @@ describe("userSignUp", () => {
         email,
         password,
         nickname,
-        phone_number
+        phoneNumber
         ) VALUES (
         "abcd@mail.com",
         "jdjA!12",

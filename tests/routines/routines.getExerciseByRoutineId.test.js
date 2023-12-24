@@ -12,7 +12,7 @@ describe("getExerciseByRoutineId", () => {
     await AppDataSource.query(`SET foreign_key_checks = 1`);
     await AppDataSource.query(`
     INSERT INTO users
-      (id, nickname, email, subscription_state)
+      (id, nickname, email, subscriptionState)
     VALUES
       (1, "Park-KJ", "rudwos6@naver.com", 1),
       (2, "Hong-JS", "jisu@naver.com", 1),
@@ -28,7 +28,7 @@ describe("getExerciseByRoutineId", () => {
 
     await AppDataSource.query(`
       INSERT INTO routines
-        (id, user_id, is_custom, name)
+        (id, userId, isCustom, name)
       VALUES
         (1, 1, 1, "루틴1"),
         (2, 2, 0, "루틴2"),
@@ -42,7 +42,7 @@ describe("getExerciseByRoutineId", () => {
         (10, 10, 1, "루틴10")
       ;
     `);
-    
+
     await AppDataSource.query(`
     INSERT INTO exercise_categories
       (id, name)
@@ -55,7 +55,7 @@ describe("getExerciseByRoutineId", () => {
 
     await AppDataSource.query(`
     INSERT INTO exercises
-      (id, name, video_url, thumbnail_url, calories_used, description, is_premium, exercise_category, duration_in_seconds_per_set, counts_per_set, set_counts)
+      (id, name, videoUrl, thumbnailUrl, caloriesUsed, description, isPremium, exerciseCategoryId, durationInSecondsPerSet, countsPerSet, setCounts)
     VALUES
       (1, '레그 레이즈','https://www.youtube.com/embed/tObWHCnLkKg','https://one-more.s3.ap-northeast-2.amazonaws.com/icons8-%E1%84%86%E1%85%AE%E1%86%AF%E1%84%85%E1%85%B5-%E1%84%8E%E1%85%B5%E1%84%85%E1%85%AD-ios-16-glyph/icons8-%E1%84%86%E1%85%AE%E1%86%AF%E1%84%85%E1%85%B5-%E1%84%8E%E1%85%B5%E1%84%85%E1%85%AD-90.png',100,'당신도 복근 슈퍼스타',0,3,352,15,3),
       (2, '스쿼트','https://www.youtube.com/embed/q6hBSSfokzY','https://one-more.s3.ap-northeast-2.amazonaws.com/icons8-squats-ios-16-filled/icons8-squats-100.png',150,'Shut Up And Squat!!!!',0,3,700,20,3),
@@ -71,7 +71,7 @@ describe("getExerciseByRoutineId", () => {
 
     await AppDataSource.query(`
     INSERT INTO routine_exercises
-      (id, routine_id, exercise_id, completed)
+      (id, routineId, exerciseId, completed)
     VALUES
       (1,1,1,1),
       (2,2,3,1),
@@ -119,11 +119,16 @@ describe("getExerciseByRoutineId", () => {
   });
 
   test("SUCCESS: get exercise by routine id", async () => {
-    const token = jwt.sign({
-      userId: 1,
-    }, process.env.JWT_SECRET_KEY);
+    const token = jwt.sign(
+      {
+        userId: 1,
+      },
+      process.env.JWT_SECRET_KEY
+    );
 
-    const response = await request(app).get("/routines/3").set("Authorization", token);
+    const response = await request(app)
+      .get("/routines/3")
+      .set("Authorization", token);
     expect(response.body).toEqual({
       message: "Routine Success",
       data: {

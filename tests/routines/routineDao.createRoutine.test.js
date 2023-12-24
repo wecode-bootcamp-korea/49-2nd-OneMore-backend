@@ -7,7 +7,7 @@ describe("TEST: routineDao createRoutine", () => {
 
     await AppDataSource.query(`
       INSERT INTO users
-        (nickname, email, subscription_state)
+        (nickname, email, subscriptionState)
       VALUES
         ('testUserWithoutSubscription', 'testUser1@email.com', 0),
         ('testUserWithSubscription', 'testUser2@email.com', 1)
@@ -25,7 +25,7 @@ describe("TEST: routineDao createRoutine", () => {
     `);
     await AppDataSource.query(`
       INSERT INTO exercises
-        (name, video_url, thumbnail_url, is_premium, exercise_category, duration_in_seconds_per_set, set_counts)
+        (name, videoUrl, thumbnailUrl, isPremium, exerciseCategoryId, durationInSecondsPerSet, setCounts)
       VALUES
         ('testExercise1', 'testVideoUrl', 'testThumbnailUrl', 0, 1, 60, 1),
         ('testExercise2', 'testVideoUrl', 'testThumbnailUrl', 0, 1, 60, 2),
@@ -53,7 +53,7 @@ describe("TEST: routineDao createRoutine", () => {
   });
 
   test("SUCCESS: routineDao", async () => {
-    const result = await routineDao.createRoutineInTransaction(
+    const result = await routineDao.createRoutine(
       1,
       false,
       [1, 2, 3, 4, 5],
@@ -63,7 +63,7 @@ describe("TEST: routineDao createRoutine", () => {
   });
 
   test("FAILURE: routineDao with invalid data", async () => {
-    const result = await routineDao.createRoutineInTransaction(1, false, [
+    const result = await routineDao.createRoutine(1, false, [
       1,
       2,
       3,
@@ -74,11 +74,7 @@ describe("TEST: routineDao createRoutine", () => {
   });
 
   test("FAILURE: routineDao with non-existing user", async () => {
-    const result = await routineDao.createRoutineInTransaction(
-      3,
-      false,
-      [1, 2, 3, 4, 5]
-    );
+    const result = await routineDao.createRoutine(3, false, [1, 2, 3, 4, 5]);
     expect(result).toBe(false);
   });
 });

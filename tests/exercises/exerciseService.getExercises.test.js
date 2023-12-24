@@ -8,7 +8,7 @@ describe("TEST exerciseDao.getExercises", () => {
     await AppDataSource.initialize();
     await AppDataSource.query(`
       INSERT INTO users
-        (id, nickname, email, subscription_state)
+        (id, nickname, email, subscriptionState)
       VALUES
         (1, 'testUserWithoutSubscription', 'testUser1@email.com', 0),
         (2, 'testUserWithSubscription', 'testUser2@email.com', 1)
@@ -26,7 +26,7 @@ describe("TEST exerciseDao.getExercises", () => {
     `);
     await AppDataSource.query(`
       INSERT INTO exercises
-        (name, video_url, thumbnail_url, is_premium, exercise_category, duration_in_seconds_per_set, set_counts, equip_required)
+        (name, videoUrl, thumbnailUrl, isPremium, exerciseCategoryId, durationInSecondsPerSet, setCounts, equipRequired)
       VALUES
         ('testExercise1', 'testVideoUrl', 'testThumbnailUrl', 1, 1, 60, 1, 0),
         ('testExercise2', 'testVideoUrl', 'testThumbnailUrl', 0, 1, 60, 2, 0),
@@ -53,7 +53,7 @@ describe("TEST exerciseDao.getExercises", () => {
 
     await AppDataSource.query(`
       INSERT INTO routines
-        (id, user_id, is_custom, name, created_at)
+        (id, userId, isCustom, name, createdAt)
       VALUES
         (4, 1, 0, '루틴', '2023-09-18 09:00:00'),
         (5, 1, 0, '루틴', '2023-09-19 23:00:00'),
@@ -63,7 +63,7 @@ describe("TEST exerciseDao.getExercises", () => {
 
     await AppDataSource.query(`
       INSERT INTO routine_exercises
-        (id, routine_id, exercise_id, completed, created_at)
+        (id, routineId, exerciseId, completed, createdAt)
       VALUES
         (1, 4, 1, 1, '2023-09-18 09:00:00'),
         (2, 4, 2, 1, '2023-09-18 09:00:00'),
@@ -74,7 +74,7 @@ describe("TEST exerciseDao.getExercises", () => {
         (7, 6, 1, 1, '2023-09-20 09:00:00'),
         (8, 6, 2, 1, '2023-09-20 09:00:00'),
         (9, 6, 3, 1, '2023-09-20 09:00:00')
-    `)
+    `);
     console.log("database initialized for test");
   });
 
@@ -118,9 +118,9 @@ describe("TEST exerciseDao.getExercises", () => {
     };
     const result = await exerciseService.getExercises(queryParams);
     expect(result.exercises.length).toBe(5);
-    result.exercises.map(item => {
+    result.exercises.map((item) => {
       expect(item.category).toBe(1);
-    })
+    });
   });
 
   test("SUCCESS: getExercises with equip reqired", async () => {
@@ -134,11 +134,11 @@ describe("TEST exerciseDao.getExercises", () => {
     };
     const result = await exerciseService.getExercises(queryParams);
     expect(result.exercises.length).toBe(8);
-    result.exercises.map(item => {
+    result.exercises.map((item) => {
       expect(item.equipRequired).toBe(1);
-    })
+    });
   });
-  
+
   test("SUCCESS: getExercises with routineId", async () => {
     const queryParams = {
       category: undefined,

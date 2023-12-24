@@ -15,8 +15,10 @@ const getRecommendedExercises = async (req, res, next) => {
 
 const getExercises = async (req, res, next) => {
   try {
+    const { userId } = req
     const queryParams = req.query;
-    const data = await exerciseService.getExercises(queryParams);
+    const data = await exerciseService.getExercises(queryParams, userId);
+    console.log("data ", data)
     res.status(200).json({
       message: "SUCCESS",
       data: data,

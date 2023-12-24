@@ -1,6 +1,5 @@
 const { EntitySchema } = require("typeorm");
 const { BaseColumnSchemaPart } = require("./BaseColumnSchemaPart");
-const { RoutineExercise } = require("./routineExerciseEntity");
 
 const Routine = new EntitySchema({
   name: "Routine", // relations에서 target 의 이름으로 사용됨

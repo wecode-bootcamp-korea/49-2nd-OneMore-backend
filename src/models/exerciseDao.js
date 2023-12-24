@@ -1,8 +1,7 @@
 const { In } = require("typeorm");
 const { Exercise } = require("../entity/exerciseEntity");
-const { RoutineExercise } = require("../entity/routineExerciseEntity");
-const { ExerciseCategory } = require("../entity/exerciseCategoryEntity");
 const { AppDataSource } = require("./dataSource");
+const { RoutineExercise } = require("../entity/routineExerciseEntity");
 
 const getRandomExercises = async (subscriptionState, limit = 3) => {
   const limitedContentsQuery = !subscriptionState
@@ -42,6 +41,7 @@ const getExercisesDetailsByIds = async (exerciseIds) => {
     },
     relations: {
       exerciseCategory: true,
+      // exercise_category: true,
     },
     where: {
       id: In(exerciseIds),
