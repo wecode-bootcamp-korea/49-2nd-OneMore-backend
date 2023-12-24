@@ -20,25 +20,25 @@ const User = new EntitySchema({
       type: "varchar",
       length: 255,
     },
-    subscription_state: {
-      type: "boolean",
-      default: false,
+    subscriptionState: {
+      type: "tinyint",
+      default: 0,
     },
-    phone_number: {
+    phoneNumber: {
       type: "varchar",
       length: 255,
       nullable: true,
     },
-    social_account_provider: {
+    socialAccountProvider: {
       type: "int",
       nullable: true,
     },
-    social_account_uid: {
+    socialAccountUid: {
       type: "varchar",
       length: 500,
       nullable: true,
     },
-    profile_image: {
+    profileImage: {
       type: "varchar",
       length: 2000,
       nullable: true,

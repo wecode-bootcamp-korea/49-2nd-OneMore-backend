@@ -15,7 +15,7 @@ const RoutineExercise = new EntitySchema({
     routine: {
       target: "Routine",
       type: "many-to-one",
-      joinTable: true,
+      inverseSide: "routineExercises",
     },
     exercise: {
       target: "Exercise",

@@ -98,9 +98,9 @@ const getRoutineHistoryByDate = async (userId, startDate, endDate) => {
     WHERE
       routines.userId = ?
       AND
-      routines.created_at >= ?
+      routines.createdAt >= ?
       AND
-      routines.created_at < ?
+      routines.createdAt < ?
     GROUP BY routines.id
     ;
   `,
@@ -134,7 +134,7 @@ const routinesByUser = async (userId) => {
           "%i:%s") 
         AS totalDuration,
       DATE_FORMAT(
-        IF(ISNULL(routines.updated_at), routines.created_at, routines.updated_at),
+        IF(ISNULL(routines.updated_at), routines.createdAt, routines.updated_at),
         "%Y-%c-%d" )
         AS createDate
     FROM 

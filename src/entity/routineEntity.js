@@ -1,5 +1,6 @@
 const { EntitySchema } = require("typeorm");
 const { BaseColumnSchemaPart } = require("./BaseColumnSchemaPart");
+const { RoutineExercise } = require("./routineExerciseEntity");
 
 const Routine = new EntitySchema({
   name: "Routine", // relations에서 target 의 이름으로 사용됨
@@ -9,7 +10,7 @@ const Routine = new EntitySchema({
     name: {
       type: "text",
     },
-    is_custom: {
+    isCustom: {
       type: "boolean",
       default: false,
     },
@@ -17,9 +18,13 @@ const Routine = new EntitySchema({
   relations: {
     user: {
       target: "User",
-      // name: "user_id", // 테스트중  :  columns의 userId로 가능
       type: "many-to-one",
       joinTable: true,
+    },
+    routineExercises: {
+      target: "RoutineExercise",
+      type: "one-to-many",
+      inverseSide: "routine",
     },
   },
 });

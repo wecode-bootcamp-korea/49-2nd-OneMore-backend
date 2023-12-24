@@ -33,7 +33,9 @@ const getRecommendedExercises = async (userId) => {
 
   if (todayRoutineHistory) {
     // in case user finished today's routine
-    exercises = await exerciseDao.getExercisesDetailsByIds(todayRoutineHistory.exercises);
+    exercises = await exerciseDao.getExercisesDetailsByIds(
+      todayRoutineHistory.exercises
+    );
     routineCompleted = true;
   } else {
     // TODO: apply customized recommendation logic
@@ -65,15 +67,24 @@ const getExercises = async (queryParams) => {
     routineId,
   } = queryParams;
 
-  const exerciseQueryString = new ExerciseQueryBuilder(
+  // const exerciseQueryString = new ExerciseQueryBuilder(
+  //   category,
+  //   equipRequired,
+  //   sort,
+  //   offset,
+  //   limit
+  // ).build();
+
+  // const exercises = await exerciseDao.getExercises(exerciseQueryString);
+
+  const exercises = await exerciseDao.getExercises(
     category,
     equipRequired,
     sort,
     offset,
     limit
-  ).build();
+  );
 
-  const exercises = await exerciseDao.getExercises(exerciseQueryString);
   const exercisesInRoutine = await exerciseDao.getExercisesListByRoutineId(
     routineId
   );
@@ -84,7 +95,8 @@ const getExercises = async (queryParams) => {
 
   return {
     exercises: exercises,
-    selected: exercisesInRoutine.map(item => item.exerciseId),
+    selected: exercisesInRoutine.map((item) => item.exercise.id),
+    // selected: exercisesInRoutine.map((item) => item.exerciseId),
   };
 };
 
