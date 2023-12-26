@@ -6,14 +6,14 @@ function getRoutineStatistic(exercises) {
   exercises.map((item) => {
     totalCalories += item.caloriesUsed;
     totalDurationInSeconds += item.durationInSecondsPerSet;
-    let itemCategoryCount = categoryCounts[item.categoryName];
-    categoryCounts[item.categoryName] =
+    let itemCategoryCount = categoryCounts[item.exerciseCategory.name];
+    categoryCounts[item.exerciseCategory.name] =
       itemCategoryCount !== undefined ? itemCategoryCount + 1 : 1;
-    let updatedCategoryCount = categoryCounts[item.categoryName];
+    let updatedCategoryCount = categoryCounts[item.exerciseCategory.name];
     mostFrequent =
       mostFrequent.count > updatedCategoryCount
         ? mostFrequent
-        : { count: updatedCategoryCount, category: item.categoryName };
+        : { count: updatedCategoryCount, category: item.exerciseCategory.name };
   });
   return { totalDurationInSeconds, totalCalories, mostFrequent };
 }
