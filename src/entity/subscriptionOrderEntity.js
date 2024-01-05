@@ -17,12 +17,18 @@ const SubscriptionOrder = new EntitySchema({
             type: "tinyint",
             default: 1,
         },
+        userId: {
+            type: "int",
+            nullable: false,
+        },
+
     },
     relations: {
         user: {
             target: "User",
             type: "many-to-one",
             joinTable: true,
+            joinColumn: { name: 'userId', referencedColumnName: 'id' }
         },
     }
 });

@@ -40,7 +40,7 @@ const subscribePayment = async (req, res, next) => {
         //함수 호출
         const getSubscription = await subscriptionService.createSubscription(userId, amount, pg_provider);
         return res.status(201).json({
-            message: 'SUCESS_SUBSCRIPTION_AND_PAYMENT',
+            message: 'SUCCESS_SUBSCRIPTION_AND_PAYMENT',
             getSubscription: getSubscription
         });
     } catch (error) {
