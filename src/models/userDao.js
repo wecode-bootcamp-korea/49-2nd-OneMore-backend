@@ -39,11 +39,17 @@ const findUserBySocial = async (socialUid, socialProvider) => {
     `SELECT id
      FROM users
      WHERE socialAccountUid = ? AND socialAccountProvider = ?`,
-    [socialUid, socialProvider])
+    [socialUid, socialProvider]
+  );
   return foundUserBySocial;
 };
 
-const createUserBySocial = async (email, nickname, socialUid, socialProvider) => {
+const createUserBySocial = async (
+  email,
+  nickname,
+  socialUid,
+  socialProvider
+) => {
   return await AppDataSource.query(
     `INSERT INTO users (
         email, 
@@ -51,7 +57,8 @@ const createUserBySocial = async (email, nickname, socialUid, socialProvider) =>
         socialAccountUid, 
         socialAccountProvider
         ) VALUES (?, ?, ?, ?)`,
-    [email, nickname, socialUid, socialProvider])
+    [email, nickname, socialUid, socialProvider]
+  );
 };
 
 const updateUserBySocial = async (userId, socialUid, socialProvider) => {
@@ -60,7 +67,8 @@ const updateUserBySocial = async (userId, socialUid, socialProvider) => {
       SET socialAccountUid = ?,
       socialAccountProvider= ?
       WHERE id = ?`,
-    [socialUid, socialProvider, userId])
+    [socialUid, socialProvider, userId]
+  );
 };
 
 module.exports = {

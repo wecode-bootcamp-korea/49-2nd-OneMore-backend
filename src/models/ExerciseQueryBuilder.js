@@ -1,11 +1,11 @@
 class ExerciseQueryBuilder {
   /**
-   * 
+   *
    * @param {number} category
-   * @param {number} equipRequired  
-   * @param {string} sort 
-   * @param {number} offset 
-   * @param {number} limit 
+   * @param {number} equipRequired
+   * @param {string} sort
+   * @param {number} offset
+   * @param {number} limit
    */
   constructor(category, equipRequired, sort, offset, limit) {
     this.category = category;
@@ -15,23 +15,25 @@ class ExerciseQueryBuilder {
     this.limit = limit;
   }
 
-  buildWhereClause () {
+  buildWhereClause() {
     const whereStrings = [];
-    if (this.category) whereStrings.push(`exercises.exercise_category = ${this.category}`);
-    if (this.equipRequired) whereStrings.push(`exercises.equip_required = ${this.equipRequired}`);
+    if (this.category)
+      whereStrings.push(`exercises.exerciseCategoryId = ${this.category}`);
+    if (this.equipRequired)
+      whereStrings.push(`exercises.equipRequired = ${this.equipRequired}`);
 
-    return whereStrings.length > 0 ? `WHERE ${whereStrings.join(' AND ')}`: ``;
+    return whereStrings.length > 0 ? `WHERE ${whereStrings.join(" AND ")}` : ``;
   }
 
-  buildOrderByClause () {
+  buildOrderByClause() {
     return `ORDER BY exercises.id ASC`;
   }
 
-  buildOffsetLimitClause () {
+  buildOffsetLimitClause() {
     return `LIMIT ${this.limit} OFFSET ${this.offset}`;
   }
 
-  build () {
+  build() {
     let exerciseQueryStrings = [
       this.buildWhereClause(),
       this.buildOrderByClause(),

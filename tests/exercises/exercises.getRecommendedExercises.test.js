@@ -14,7 +14,7 @@ describe("TEST: /exercises/recommended GET method", () => {
     await AppDataSource.initialize();
     await AppDataSource.query(`
       INSERT INTO users
-        (id, nickname, email, subscription_state, password)
+        (id, nickname, email, subscriptionState, password)
       VALUES
         (1, 'Park-KJ', 'rudwos6@naver.com', 1, 'password001.'),
         (2, 'Hong-JS', 'jisu@naver.com', 0, 'password001.')
@@ -32,7 +32,7 @@ describe("TEST: /exercises/recommended GET method", () => {
     `);
     await AppDataSource.query(`
       INSERT INTO exercises
-        (name, video_url, thumbnail_url, is_premium, exercise_category, duration_in_seconds_per_set, set_counts)
+        (name, videoUrl, thumbnailUrl, isPremium, exerciseCategoryId, durationInSecondsPerSet, setCounts)
       VALUES
         ('testExercise1', 'testVideoUrl', 'testThumbnailUrl', 0, 1, 60, 1),
         ('testExercise2', 'testVideoUrl', 'testThumbnailUrl', 0, 1, 60, 2),
@@ -69,7 +69,7 @@ describe("TEST: /exercises/recommended GET method", () => {
     });
 
     const result = await request(app).get("/exercises/recommended");
-    
+
     expect(result.status).toBe(200);
     result.body.data.exercises.forEach((item) => {
       expect(item.isPremium).toBe(0);

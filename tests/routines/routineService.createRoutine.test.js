@@ -30,7 +30,7 @@ describe("TEST routineService", () => {
       isCustom: false,
     };
     const userDaoFindByIdSpy = jest.spyOn(userDao, "findById");
-    userDaoFindByIdSpy.mockReturnValue({id: 1, subscriptionState: 0});
+    userDaoFindByIdSpy.mockReturnValue({ id: 1, subscriptionState: 0 });
 
     const routineDaoCreateRoutineSpy = jest.spyOn(routineDao, "createRoutine");
     routineDaoCreateRoutineSpy.mockReturnValue({ insertId: 3 });
@@ -38,11 +38,8 @@ describe("TEST routineService", () => {
     const getIsIntegersSpy = jest.spyOn(utils, "getIsIntegers");
     const getIsPremiumContentSpy = jest.spyOn(utils, "getIsPremiumContent");
 
-    const result = await routineService.createRoutine(
-      userId,
-      body
-    );
-    console.log(result)
+    const result = await routineService.createRoutine(userId, body);
+    console.log(result);
     expect(result).toBe(3);
     expect(userDaoFindByIdSpy).toHaveBeenCalled();
     expect(routineDaoCreateRoutineSpy).toHaveBeenCalled();
@@ -59,7 +56,7 @@ describe("TEST routineService", () => {
     };
 
     const userDaoFindByIdSpy = jest.spyOn(userDao, "findById");
-    userDaoFindByIdSpy.mockReturnValue({id: 1, subscriptionState: 0});
+    userDaoFindByIdSpy.mockReturnValue({ id: 1, subscriptionState: 0 });
 
     const routineDaoCreateRoutineSpy = jest.spyOn(routineDao, "createRoutine");
     routineDaoCreateRoutineSpy.mockReturnValue(false);
@@ -70,11 +67,7 @@ describe("TEST routineService", () => {
     const getIsIntegersSpy = jest.spyOn(utils, "getIsIntegers");
     const getIsPremiumContentSpy = jest.spyOn(utils, "getIsPremiumContent");
 
-    await routineService.createRoutine(
-      userId,
-      body,
-      subscriptionState
-    );
+    await routineService.createRoutine(userId, body, subscriptionState);
 
     expect(userDaoFindByIdSpy).toHaveBeenCalled();
     expect(getIsIntegersSpy).toHaveBeenCalled();

@@ -10,7 +10,7 @@ const BaseColumnSchemaPart = {
   updatedAt: {
     updateDate: true,
     nullable: true,
-  }
+  },
 };
 
 module.exports = { BaseColumnSchemaPart };

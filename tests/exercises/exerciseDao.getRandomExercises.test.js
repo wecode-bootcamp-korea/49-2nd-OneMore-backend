@@ -16,7 +16,7 @@ describe("TEST routineController", () => {
     `);
     await AppDataSource.query(`
       INSERT INTO exercises
-        (name, video_url, thumbnail_url, is_premium, exercise_category, duration_in_seconds_per_set, set_counts)
+        (name, videoUrl, thumbnailUrl, isPremium, exerciseCategoryId, durationInSecondsPerSet, setCounts)
       VALUES
         ('testExercise1', 'testVideoUrl', 'testThumbnailUrl', 0, 1, 60, 1),
         ('testExercise2', 'testVideoUrl', 'testThumbnailUrl', 0, 1, 60, 2),

@@ -9,7 +9,7 @@ describe("TEST: POST at /routines creates new routine", () => {
     await AppDataSource.initialize();
     await AppDataSource.query(`
     INSERT INTO users
-      (id, nickname, email, subscription_state)
+      (id, nickname, email, subscriptionState)
     VALUES
       (1, "Park-KJ", "rudwos6@naver.com", 0),
       (2, "Hong-JS", "jisu@naver.com", 1)
@@ -27,7 +27,7 @@ describe("TEST: POST at /routines creates new routine", () => {
 
     await AppDataSource.query(`
     INSERT INTO exercises
-      (id, name, video_url, thumbnail_url, calories_used, description, is_premium, exercise_category, duration_in_seconds_per_set, counts_per_set, set_counts)
+      (id, name, videoUrl, thumbnailUrl, caloriesUsed, description, isPremium, exerciseCategoryId, durationInSecondsPerSet, countsPerSet, setCounts)
     VALUES 
       (1, '레그 레이즈','https://www.youtube.com/embed/tObWHCnLkKg','https://one-more.s3.ap-northeast-2.amazonaws.com/icons8-%E1%84%86%E1%85%AE%E1%86%AF%E1%84%85%E1%85%B5-%E1%84%8E%E1%85%B5%E1%84%85%E1%85%AD-ios-16-glyph/icons8-%E1%84%86%E1%85%AE%E1%86%AF%E1%84%85%E1%85%B5-%E1%84%8E%E1%85%B5%E1%84%85%E1%85%AD-90.png',100,'당신도 복근 슈퍼스타',0,3,352,15,3),
       (2, '스쿼트','https://www.youtube.com/embed/q6hBSSfokzY','https://one-more.s3.ap-northeast-2.amazonaws.com/icons8-squats-ios-16-filled/icons8-squats-100.png',150,'Shut Up And Squat!!!!',0,3,700,20,3),
@@ -54,9 +54,12 @@ describe("TEST: POST at /routines creates new routine", () => {
   });
 
   test("SUCCESS: createRoutine with recommended", async () => {
-    const token = jwt.sign({
-      userId: 1,
-    }, process.env.JWT_SECRET_KEY);
+    const token = jwt.sign(
+      {
+        userId: 1,
+      },
+      process.env.JWT_SECRET_KEY
+    );
 
     const response = await request(app)
       .post("/routines")
@@ -64,36 +67,42 @@ describe("TEST: POST at /routines creates new routine", () => {
       .set("Authorization", token);
 
     expect(response.status).toBe(201);
-    expect(Object.keys(response.body)).toEqual(['message', 'routineId']);
+    expect(Object.keys(response.body)).toEqual(["message", "routineId"]);
   });
 
   test("SUCCESS: createRoutine with custom", async () => {
-    const token = jwt.sign({
-      userId: 1,
-    }, process.env.JWT_SECRET_KEY);
+    const token = jwt.sign(
+      {
+        userId: 1,
+      },
+      process.env.JWT_SECRET_KEY
+    );
 
     const response = await request(app)
       .post("/routines")
       .send({ exercises: [1, 2, 4], isCustom: 1 })
       .set("Authorization", token);
-      
+
     expect(response.status).toBe(201);
-    expect(Object.keys(response.body)).toEqual(['message', 'routineId']);
+    expect(Object.keys(response.body)).toEqual(["message", "routineId"]);
   });
 
   test("FAILURE: createRoutine including premium content without subscription", async () => {
-    const token = jwt.sign({
-      userId: 1,
-    }, process.env.JWT_SECRET_KEY);
+    const token = jwt.sign(
+      {
+        userId: 1,
+      },
+      process.env.JWT_SECRET_KEY
+    );
 
     const response = await request(app)
       .post("/routines")
       .send({ exercises: [1, 2, 3], isCustom: 1 })
       .set("Authorization", token);
-      
+
     expect(response.status).toBe(403);
     expect(response.body).toEqual({
-      error: "403 UNAUTHORIZED"
-    })
+      error: "403 UNAUTHORIZED",
+    });
   });
 });

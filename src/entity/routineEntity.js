@@ -24,7 +24,7 @@ const Routine = new EntitySchema({
       target: "RoutineExercise",
       type: "one-to-many",
       inverseSide: "routine",
-    }
+    },
   },
 });
 

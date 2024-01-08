@@ -9,7 +9,7 @@ describe("TEST: routineDao getRoutineHistoryByDate", () => {
     await AppDataSource.initialize();
     await AppDataSource.query(`
       INSERT INTO users
-        (nickname, email, subscription_state)
+        (nickname, email, subscriptionState)
       VALUES
         ('testUserWithoutSubscription', 'testUser1@email.com', 0),
         ('testUserWithSubscription', 'testUser2@email.com', 1)
@@ -27,7 +27,7 @@ describe("TEST: routineDao getRoutineHistoryByDate", () => {
     `);
     await AppDataSource.query(`
       INSERT INTO exercises
-        (name, video_url, thumbnail_url, is_premium, exercise_category, duration_in_seconds_per_set, set_counts)
+        (name, videoUrl, thumbnailUrl, isPremium, exerciseCategoryId, durationInSecondsPerSet, setCounts)
       VALUES
         ('testExercise1', 'testVideoUrl', 'testThumbnailUrl', 0, 1, 60, 1),
         ('testExercise2', 'testVideoUrl', 'testThumbnailUrl', 0, 1, 60, 2),
@@ -42,7 +42,7 @@ describe("TEST: routineDao getRoutineHistoryByDate", () => {
     `);
     await AppDataSource.query(`
       INSERT INTO routines
-        (id, user_id, is_custom, name, created_at)
+        (id, userId, isCustom, name, createdAt)
       VALUES
         (1, 1, 0, '루틴', '2023-09-18 09:00:00'),
         (2, 1, 0, '루틴', '2023-09-19 23:00:00'),
@@ -51,7 +51,7 @@ describe("TEST: routineDao getRoutineHistoryByDate", () => {
     `);
     await AppDataSource.query(`
       INSERT INTO routine_exercises
-        (id, routine_id, exercise_id, completed, created_at)
+        (id, routineId, exerciseId, completed, createdAt)
       VALUES
         (1, 1, 1, 1, '2023-09-18 09:00:00'),
         (2, 1, 2, 1, '2023-09-18 09:00:00'),
@@ -62,7 +62,7 @@ describe("TEST: routineDao getRoutineHistoryByDate", () => {
         (7, 3, 1, 1, '2023-09-20 09:00:00'),
         (8, 3, 2, 1, '2023-09-20 09:00:00'),
         (9, 3, 3, 1, '2023-09-20 09:00:00')
-    `)
+    `);
     log("database initialized for test");
   });
 
@@ -78,21 +78,21 @@ describe("TEST: routineDao getRoutineHistoryByDate", () => {
   });
 
   test("SUCCESS: today's routine exists", async () => {
-    const today = utils.formatDate(new Date('2023-09-20'));
-    const tomorrow = utils.formatDate(new Date('2023-09-21'));
+    const today = utils.formatDate(new Date("2023-09-20"));
+    const tomorrow = utils.formatDate(new Date("2023-09-21"));
 
     const result = await routineDao.getRoutineHistoryByDate(1, today, tomorrow);
-    
+
     expect(result.routineId).toBe(3);
-    expect(result.exercises).toEqual([1,2,3]);
+    expect(result.exercises).toEqual([1, 2, 3]);
   });
 
   test("SUCCESS: today's routine not exists", async () => {
-    const today = utils.formatDate(new Date('2023-09-20'));
-    const tomorrow = utils.formatDate(new Date('2023-09-21'));
+    const today = utils.formatDate(new Date("2023-09-20"));
+    const tomorrow = utils.formatDate(new Date("2023-09-21"));
 
     const result = await routineDao.getRoutineHistoryByDate(2, today, tomorrow);
-    
+
     expect(result).toBe(undefined);
   });
 });

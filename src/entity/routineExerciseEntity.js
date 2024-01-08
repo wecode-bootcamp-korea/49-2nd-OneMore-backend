@@ -21,7 +21,7 @@ const RoutineExercise = new EntitySchema({
       target: "Exercise",
       type: "many-to-one",
       joinTable: true,
-    }
+    },
   },
 });
 
