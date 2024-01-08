@@ -33,7 +33,7 @@ const kakaoStrategy = new KakaoStrategy(
         return done(null, { accessToken, refreshToken, nickname });  // => 소셜 계정이 있는 경우 토큰 발행
       }
       // 기존 email 유/무 확인
-      const [exisitingUserByEmail] = await userDao.existingUser(email);
+      const exisitingUserByEmail = await userDao.existingUser(email);
       if (exisitingUserByEmail) {
         await userDao.updateUserBySocial(userId, socialUid, socialProvider);
         const { accessToken, refreshToken } = await generateTokens(
@@ -82,7 +82,7 @@ const googleStrategy = new GoogleStrategy(
         );
         return cb(null, { accessToken, refreshToken, nickname }); // => 소셜 계정이 있는 경우 토큰 발행
       }
-      const [exisitingUserByEmail] = await userDao.existingUser(email);
+      const exisitingUserByEmail = await userDao.existingUser(email);
       if (exisitingUserByEmail) {
         //============== 등록된 이메일이 있으면 소셜 정보 저장
         const userId = exisitingUserByEmail.id;

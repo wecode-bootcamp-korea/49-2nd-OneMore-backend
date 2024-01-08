@@ -26,7 +26,7 @@ const signUp = async (email, password, nickname, phoneNumber) => {
     throw err;
   }
 
-  const [userByEmail] = await userDao.existingUser(email);
+  const userByEmail = await userDao.existingUser(email);
   if (userByEmail) {
     const err = new Error("ALREADY_REGISTERED");
     err.status = 400;
@@ -44,7 +44,7 @@ const signIn = async (email, password) => {
     throw err;
   }
 
-  const [existingUser] = await userDao.existingUser(email);
+  const existingUser = await userDao.existingUser(email);
   if (!existingUser) {
     const err = new Error("NOT_REGISTERED");
     err.status = 400;
