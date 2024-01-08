@@ -20,13 +20,13 @@ const kakaoStrategy = new KakaoStrategy(
   async (accessToken, refreshToken, profile, done) => {
     const email = profile._json.kakao_account.email;
     const nickname = profile._json.kakao_account.profile.nickname;
-    const socialUid = profile.id;
-    const socialProvider = 1;
+    const socialAccountUid = profile.id;
+    const socialAccountProvider = 1;
     try {
       // 소셜 로그인 계정 유/무 확인
       const exisitingUserBySocial = await userDao.findUserBySocial(
-        socialUid,
-        socialProvider
+        socialAccountUid,
+        socialAccountProvider
       );
       if (exisitingUserBySocial) {
         const { accessToken, refreshToken } = await generateTokens(exisitingUserBySocial.id);
@@ -35,17 +35,16 @@ const kakaoStrategy = new KakaoStrategy(
       // 기존 email 유/무 확인
       const exisitingUserByEmail = await userDao.existingUser(email);
       if (exisitingUserByEmail) {
-        await userDao.updateUserBySocial(userId, socialUid, socialProvider);
-        const { accessToken, refreshToken } = await generateTokens(
-          exisitingUserByEmail.id
-        );
+        const userId = exisitingUserByEmail.id;
+        await userDao.updateUserBySocial(userId, socialAccountUid, socialAccountProvider);
+        const { accessToken, refreshToken } = await generateTokens(exisitingUserByEmail.id);
         return done(null, { accessToken, refreshToken, nickname }); // => 소셜계정 업데이트 후, 토큰 발행
       } else {
         const createdUserBySocial = await userDao.createUserBySocial(
           email,
           nickname,
-          socialUid,
-          socialProvider
+          socialAccountUid,
+          socialAccountProvider
         );
         const { accessToken, refreshToken } = await generateTokens(
           createdUserBySocial.id
@@ -66,14 +65,14 @@ const googleStrategy = new GoogleStrategy(
     callbackURL: process.env.GOOGLE_CALLBACK,
   },
   async (accessToken, refreshToken, profile, cb) => {
-    const socialUid = profile.id;
-    const socialProvider = 2;
+    const socialAccountUid = profile.id;
+    const socialAccountProvider = 2;
     const email = profile._json.email;
     const nickname = profile._json.name;
     try {
       const exisitingUserBySocial = await userDao.findUserBySocial(
-        socialUid,
-        socialProvider
+        socialAccountUid,
+        socialAccountProvider
       );
       if (exisitingUserBySocial) {
         //============== 소셜 로그인을 이미 했으면 토큰 발급
@@ -86,7 +85,7 @@ const googleStrategy = new GoogleStrategy(
       if (exisitingUserByEmail) {
         //============== 등록된 이메일이 있으면 소셜 정보 저장
         const userId = exisitingUserByEmail.id;
-        await userDao.updateUserBySocial(userId, socialUid, socialProvider);
+        await userDao.updateUserBySocial(userId, socialAccountUid, socialAccountProvider);
         const { accessToken, refreshToken } = await generateTokens(
           exisitingUserByEmail.id
         );
@@ -96,8 +95,8 @@ const googleStrategy = new GoogleStrategy(
         const createdUserBySocial = await userDao.createUserBySocial(
           email,
           nickname,
-          socialUid,
-          socialProvider
+          socialAccountUid,
+          socialAccountProvider
         );
         const { accessToken, refreshToken } = await generateTokens(
           createdUserBySocial.id

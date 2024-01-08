@@ -32,11 +32,11 @@ const findById = async (userId) => {
   return user
 };
 
-const findUserBySocial = async (socialUid, socialProvider) => {
+const findUserBySocial = async (socialAccountUid, socialAccountProvider) => {
   const foundUserBySocial = await AppDataSource.manager.findOne(User, {
     where: {
-      socialUid,
-      socialProvider
+      socialAccountUid,
+      socialAccountProvider
     },
     select: {
       id: true,
@@ -46,23 +46,23 @@ const findUserBySocial = async (socialUid, socialProvider) => {
   return foundUserBySocial;
 };
 
-const createUserBySocial = async (email, nickname, socialUid, socialProvider) => {
+const createUserBySocial = async (email, nickname, socialAccountUid, socialAccountProvider) => {
   const createdUserBySocial = {
     email: email,
     nickname: nickname,
-    socialAccountUid: socialUid,
-    socialAccountProvider: socialProvider
+    socialAccountUid: socialAccountUid,
+    socialAccountProvider: socialAccountProvider
   };
   await AppDataSource.manager.save(User, createdUserBySocial);
   return createdUserBySocial
 };
 
-const updateUserBySocial = async (userId, socialUid, socialProvider) => {
-  return await AppDataSource.manager.update(User, {id: userId}, 
+const updateUserBySocial = async (userId, socialAccountUid, socialAccountProvider) => {
+  return await AppDataSource.manager.update(User, { id: userId },
     {
-      socialAccountUid: socialUid,
-      socialAccountProvider: socialProvider,
-  });
+      socialAccountUid: socialAccountUid,
+      socialAccountProvider: socialAccountProvider,
+    });
 };
 
 module.exports = {
