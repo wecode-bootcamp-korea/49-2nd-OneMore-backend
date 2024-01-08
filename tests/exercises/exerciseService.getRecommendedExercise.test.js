@@ -6,7 +6,7 @@ describe("TEST exerciseService", () => {
     await AppDataSource.initialize();
     await AppDataSource.query(`
       INSERT INTO users
-        (id, nickname, email, subscription_state)
+        (id, nickname, email, subscriptionState)
       VALUES
         (1, 'testUserWithoutSubscription', 'testUser1@email.com', 0),
         (2, 'testUserWithSubscription', 'testUser2@email.com', 1)
@@ -24,7 +24,7 @@ describe("TEST exerciseService", () => {
     `);
     await AppDataSource.query(`
       INSERT INTO exercises
-        (name, video_url, thumbnail_url, is_premium, exercise_category, duration_in_seconds_per_set, set_counts)
+        (name, videoUrl, thumbnailUrl, isPremium, exerciseCategoryId, durationInSecondsPerSet, setCounts)
       VALUES
         ('testExercise1', 'testVideoUrl', 'testThumbnailUrl', 0, 1, 60, 1),
         ('testExercise2', 'testVideoUrl', 'testThumbnailUrl', 0, 1, 60, 2),

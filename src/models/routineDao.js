@@ -1,7 +1,8 @@
 const { In } = require("typeorm");
-const { Routine } = require("../entity/routineEntity");
-const { User } = require("../entity/userEntity");
 const { AppDataSource } = require("./dataSource");
+
+const { User } = require("../entity/userEntity");
+const { Routine } = require("../entity/routineEntity");
 const { Exercise } = require("../entity/exerciseEntity");
 const { RoutineExercise } = require("../entity/routineExerciseEntity");
 

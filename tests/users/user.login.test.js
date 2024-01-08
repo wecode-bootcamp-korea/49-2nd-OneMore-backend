@@ -20,7 +20,7 @@ describe("userLogin", () => {
         email,
         password,
         nickname,
-        phone_number
+        phoneNumber
         ) VALUES (?, ?, ?, ?)`,
       ["abcdffff@mail.com", encryptedPassword, "dana", "1234"]
     );

@@ -19,7 +19,7 @@ describe("TEST exercises.getExercises", () => {
     await AppDataSource.initialize();
     await AppDataSource.query(`
       INSERT INTO users
-        (id, nickname, email, subscription_state, password)
+        (id, nickname, email, subscriptionState, password)
       VALUES
         (1, "Park-KJ", "rudwos6@naver.com", 1, '${bcrypt.hashSync(
           "password001.",
@@ -63,7 +63,7 @@ describe("TEST exercises.getExercises", () => {
 
     await AppDataSource.query(`
       INSERT INTO routines
-        (id, user_id, is_custom, name)
+        (id, userId, isCustom, name)
       VALUES
         (1, 1, 1, "루틴1"),
         (2, 2, 0, "루틴2"),
@@ -91,7 +91,7 @@ describe("TEST exercises.getExercises", () => {
 
     await AppDataSource.query(`
       INSERT INTO exercises
-        (id, name, video_url, thumbnail_url, calories_used, description, is_premium, exercise_category, duration_in_seconds_per_set, counts_per_set, set_counts)
+        (id, name, videoUrl, thumbnailUrl, caloriesUsed, description, isPremium, exerciseCategoryId, durationInSecondsPerSet, countsPerSet, setCounts)
       VALUES 
         (1, 'Leg raise','https://www.youtube.com/watch?v=tObWHCnLkKg','https://one-more.s3.ap-northeast-2.amazonaws.com/icons8-%E1%84%86%E1%85%AE%E1%86%AF%E1%84%85%E1%85%B5-%E1%84%8E%E1%85%B5%E1%84%85%E1%85%AD-ios-16-glyph/icons8-%E1%84%86%E1%85%AE%E1%86%AF%E1%84%85%E1%85%B5-%E1%84%8E%E1%85%B5%E1%84%85%E1%85%AD-90.png',100,'레그 레이즈',0,3,352,15,3),
         (2, 'Squat','https://www.youtube.com/watch?v=q6hBSSfokzY','https://one-more.s3.ap-northeast-2.amazonaws.com/icons8-squats-ios-16-filled/icons8-squats-100.png',150,'스쿼트',0,3,700,20,3),
@@ -108,7 +108,7 @@ describe("TEST exercises.getExercises", () => {
 
     await AppDataSource.query(`
       INSERT INTO routine_exercises
-        (id, routine_id, exercise_id, completed)
+        (id, routineId, exerciseId, completed)
       VALUES
         (1, 1,1,1),
         (2, 2,3,1),
@@ -168,9 +168,9 @@ describe("TEST exercises.getExercises", () => {
             description: "레그 레이즈",
             durationInMinute: 1056,
             durationInSecondsPerSet: 352,
-            equipRequired: 0,
+            equipRequired: false,
             exerciseId: 1,
-            isPremium: 0,
+            isPremium: false,
             name: "Leg raise",
             setCounts: 3,
             thumbnailURL:
@@ -182,9 +182,9 @@ describe("TEST exercises.getExercises", () => {
             description: "스쿼트",
             durationInMinute: 2100,
             durationInSecondsPerSet: 700,
-            equipRequired: 0,
+            equipRequired: false,
             exerciseId: 2,
-            isPremium: 0,
+            isPremium: false,
             name: "Squat",
             setCounts: 3,
             thumbnailURL:
@@ -196,9 +196,9 @@ describe("TEST exercises.getExercises", () => {
             description: "바이시클 크런치",
             durationInMinute: 333,
             durationInSecondsPerSet: 111,
-            equipRequired: 0,
+            equipRequired: false,
             exerciseId: 3,
-            isPremium: 1,
+            isPremium: true,
             name: "Bicycle Crunch",
             setCounts: 3,
             thumbnailURL:
@@ -210,9 +210,9 @@ describe("TEST exercises.getExercises", () => {
             description: "푸시 업",
             durationInMinute: 1542,
             durationInSecondsPerSet: 257,
-            equipRequired: 0,
+            equipRequired: false,
             exerciseId: 4,
-            isPremium: 0,
+            isPremium: false,
             name: "Push Up",
             setCounts: 6,
             thumbnailURL:
@@ -224,9 +224,9 @@ describe("TEST exercises.getExercises", () => {
             description: "달리기",
             durationInMinute: 840,
             durationInSecondsPerSet: 840,
-            equipRequired: 0,
+            equipRequired: false,
             exerciseId: 5,
-            isPremium: 0,
+            isPremium: false,
             name: "Running",
             setCounts: 1,
             thumbnailURL:
@@ -238,9 +238,9 @@ describe("TEST exercises.getExercises", () => {
             description: "플랭크",
             durationInMinute: 268,
             durationInSecondsPerSet: 268,
-            equipRequired: 0,
+            equipRequired: false,
             exerciseId: 6,
-            isPremium: 1,
+            isPremium: true,
             name: "Plank",
             setCounts: 1,
             thumbnailURL:
@@ -252,9 +252,9 @@ describe("TEST exercises.getExercises", () => {
             description: "백 인스텐션",
             durationInMinute: 180,
             durationInSecondsPerSet: 60,
-            equipRequired: 0,
+            equipRequired: false,
             exerciseId: 7,
-            isPremium: 1,
+            isPremium: true,
             name: "Back Extension",
             setCounts: 3,
             thumbnailURL:
@@ -266,9 +266,9 @@ describe("TEST exercises.getExercises", () => {
             description: "자전거 타기",
             durationInMinute: 1320,
             durationInSecondsPerSet: 1320,
-            equipRequired: 0,
+            equipRequired: false,
             exerciseId: 8,
-            isPremium: 0,
+            isPremium: false,
             name: "Cycling",
             setCounts: 1,
             thumbnailURL:
@@ -280,9 +280,9 @@ describe("TEST exercises.getExercises", () => {
             description: "리버스 런지",
             durationInMinute: 168,
             durationInSecondsPerSet: 56,
-            equipRequired: 0,
+            equipRequired: false,
             exerciseId: 9,
-            isPremium: 1,
+            isPremium: true,
             name: "Reverse Lunge",
             setCounts: 3,
             thumbnailURL:
@@ -294,9 +294,9 @@ describe("TEST exercises.getExercises", () => {
             description: "버피",
             durationInMinute: 714,
             durationInSecondsPerSet: 714,
-            equipRequired: 0,
+            equipRequired: false,
             exerciseId: 10,
-            isPremium: 1,
+            isPremium: true,
             name: "Burpee",
             setCounts: 1,
             thumbnailURL:
@@ -320,9 +320,9 @@ describe("TEST exercises.getExercises", () => {
             description: "바이시클 크런치",
             durationInMinute: 333,
             durationInSecondsPerSet: 111,
-            equipRequired: 0,
+            equipRequired: false,
             exerciseId: 3,
-            isPremium: 1,
+            isPremium: true,
             name: "Bicycle Crunch",
             setCounts: 3,
             thumbnailURL:
@@ -334,9 +334,9 @@ describe("TEST exercises.getExercises", () => {
             description: "푸시 업",
             durationInMinute: 1542,
             durationInSecondsPerSet: 257,
-            equipRequired: 0,
+            equipRequired: false,
             exerciseId: 4,
-            isPremium: 0,
+            isPremium: false,
             name: "Push Up",
             setCounts: 6,
             thumbnailURL:
@@ -348,9 +348,9 @@ describe("TEST exercises.getExercises", () => {
             description: "백 인스텐션",
             durationInMinute: 180,
             durationInSecondsPerSet: 60,
-            equipRequired: 0,
+            equipRequired: false,
             exerciseId: 7,
-            isPremium: 1,
+            isPremium: true,
             name: "Back Extension",
             setCounts: 3,
             thumbnailURL:
@@ -374,9 +374,9 @@ describe("TEST exercises.getExercises", () => {
             description: "레그 레이즈",
             durationInMinute: 1056,
             durationInSecondsPerSet: 352,
-            equipRequired: 0,
+            equipRequired: false,
             exerciseId: 1,
-            isPremium: 0,
+            isPremium: false,
             name: "Leg raise",
             setCounts: 3,
             thumbnailURL:
@@ -388,9 +388,9 @@ describe("TEST exercises.getExercises", () => {
             description: "스쿼트",
             durationInMinute: 2100,
             durationInSecondsPerSet: 700,
-            equipRequired: 0,
+            equipRequired: false,
             exerciseId: 2,
-            isPremium: 0,
+            isPremium: false,
             name: "Squat",
             setCounts: 3,
             thumbnailURL:
@@ -402,9 +402,9 @@ describe("TEST exercises.getExercises", () => {
             description: "바이시클 크런치",
             durationInMinute: 333,
             durationInSecondsPerSet: 111,
-            equipRequired: 0,
+            equipRequired: false,
             exerciseId: 3,
-            isPremium: 1,
+            isPremium: true,
             name: "Bicycle Crunch",
             setCounts: 3,
             thumbnailURL:
@@ -416,9 +416,9 @@ describe("TEST exercises.getExercises", () => {
             description: "푸시 업",
             durationInMinute: 1542,
             durationInSecondsPerSet: 257,
-            equipRequired: 0,
+            equipRequired: false,
             exerciseId: 4,
-            isPremium: 0,
+            isPremium: false,
             name: "Push Up",
             setCounts: 6,
             thumbnailURL:
@@ -430,9 +430,9 @@ describe("TEST exercises.getExercises", () => {
             description: "달리기",
             durationInMinute: 840,
             durationInSecondsPerSet: 840,
-            equipRequired: 0,
+            equipRequired: false,
             exerciseId: 5,
-            isPremium: 0,
+            isPremium: false,
             name: "Running",
             setCounts: 1,
             thumbnailURL:
@@ -444,9 +444,9 @@ describe("TEST exercises.getExercises", () => {
             description: "플랭크",
             durationInMinute: 268,
             durationInSecondsPerSet: 268,
-            equipRequired: 0,
+            equipRequired: false,
             exerciseId: 6,
-            isPremium: 1,
+            isPremium: true,
             name: "Plank",
             setCounts: 1,
             thumbnailURL:
@@ -458,9 +458,9 @@ describe("TEST exercises.getExercises", () => {
             description: "백 인스텐션",
             durationInMinute: 180,
             durationInSecondsPerSet: 60,
-            equipRequired: 0,
+            equipRequired: false,
             exerciseId: 7,
-            isPremium: 1,
+            isPremium: true,
             name: "Back Extension",
             setCounts: 3,
             thumbnailURL:
@@ -472,9 +472,9 @@ describe("TEST exercises.getExercises", () => {
             description: "자전거 타기",
             durationInMinute: 1320,
             durationInSecondsPerSet: 1320,
-            equipRequired: 0,
+            equipRequired: false,
             exerciseId: 8,
-            isPremium: 0,
+            isPremium: false,
             name: "Cycling",
             setCounts: 1,
             thumbnailURL:
@@ -486,9 +486,9 @@ describe("TEST exercises.getExercises", () => {
             description: "리버스 런지",
             durationInMinute: 168,
             durationInSecondsPerSet: 56,
-            equipRequired: 0,
+            equipRequired: false,
             exerciseId: 9,
-            isPremium: 1,
+            isPremium: true,
             name: "Reverse Lunge",
             setCounts: 3,
             thumbnailURL:
@@ -500,9 +500,9 @@ describe("TEST exercises.getExercises", () => {
             description: "버피",
             durationInMinute: 714,
             durationInSecondsPerSet: 714,
-            equipRequired: 0,
+            equipRequired: false,
             exerciseId: 10,
-            isPremium: 1,
+            isPremium: true,
             name: "Burpee",
             setCounts: 1,
             thumbnailURL:
@@ -526,9 +526,9 @@ describe("TEST exercises.getExercises", () => {
             description: "레그 레이즈",
             durationInMinute: 1056,
             durationInSecondsPerSet: 352,
-            equipRequired: 0,
+            equipRequired: false,
             exerciseId: 1,
-            isPremium: 0,
+            isPremium: false,
             name: "Leg raise",
             setCounts: 3,
             thumbnailURL:
@@ -540,9 +540,9 @@ describe("TEST exercises.getExercises", () => {
             description: "스쿼트",
             durationInMinute: 2100,
             durationInSecondsPerSet: 700,
-            equipRequired: 0,
+            equipRequired: false,
             exerciseId: 2,
-            isPremium: 0,
+            isPremium: false,
             name: "Squat",
             setCounts: 3,
             thumbnailURL:
@@ -554,9 +554,9 @@ describe("TEST exercises.getExercises", () => {
             description: "바이시클 크런치",
             durationInMinute: 333,
             durationInSecondsPerSet: 111,
-            equipRequired: 0,
+            equipRequired: false,
             exerciseId: 3,
-            isPremium: 1,
+            isPremium: true,
             name: "Bicycle Crunch",
             setCounts: 3,
             thumbnailURL:

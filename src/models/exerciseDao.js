@@ -5,42 +5,49 @@ const { RoutineExercise } = require("../entity/routineExerciseEntity");
 
 const getRandomExercises = async (subscriptionState, limit = 3) => {
   const limitedContentsQuery = !subscriptionState
-    ? `WHERE exercises.is_premium = false`
+    ? "exercise.isPremium = false"
     : ``;
-  const exercises = await AppDataSource.query(
-    `
-    SELECT
-      exercises.id AS exerciseId,
-      exercises.thumbnailUrl AS thumbnailURL,
-      exercises.name,
-      exercises.isPremium AS isPremium,
-      exercises.caloriesUsed AS calories,
-      exercises.durationInSecondsPerSet AS durationInSecondsPerSet,
-      exercises.exerciseCategoryId AS categoryId,
-      exercise_categories.name AS categoryName
-    From
-      exercises
-    LEFT JOIN exercise_categories ON exercise_categories.id = exercises.exerciseCategoryId
-    ${limitedContentsQuery}
-    ORDER BY RAND()
-    LIMIT ?
-    ;
-  `,
-    [limit]
-  );
+
+  const exercises = await AppDataSource.getRepository(Exercise)
+    .createQueryBuilder("exercise")
+    .select("exercise.id")
+    .addSelect("exercise.thumbnailUrl")
+    .addSelect("exercise.name")
+    .addSelect("exercise.isPremium")
+    .addSelect("exercise.caloriesUsed")
+    .addSelect("exercise.durationInSecondsPerSet")
+    .leftJoinAndSelect("exercise.exerciseCategory", "exerciseCategory")
+    .where(limitedContentsQuery)
+    .orderBy("RAND()")
+    .take(limit)
+    .getMany();
+
   return exercises;
 };
 
 const getExercisesDetailsByIds = async (exerciseIds) => {
   const exercises = await AppDataSource.manager.find(Exercise, {
+    select: {
+      id: true,
+      thumbnailUrl: true,
+      name: true,
+      isPremium: true,
+      caloriesUsed: true,
+      durationInSecondsPerSet: true,
+      exerciseCategoryId: true,
+      exerciseCategory: {
+        name: true,
+      },
+    },
+    relations: {
+      exerciseCategory: true,
+      // exercise_category: true,
+    },
     where: {
       id: In(exerciseIds),
     },
-    relations: {
-      exercise_category: true,
-    },
-    select: true
   });
+
   return exercises;
 };
 
@@ -50,54 +57,60 @@ const getRecommended = () => {
 };
 
 const getExercisesListByIds = async (exerciseIds) => {
-  const exercises = await AppDataSource.query(
-    `
-    SELECT 
-      id,
-      is_premium AS isPremium
-    FROM
-      exercises
-    WHERE id IN (?)
-    ;
-  `,
-    [exerciseIds]
-  );
+  const exercises = await AppDataSource.manager.find(Exercise, {
+    select: {
+      id: true,
+      isPremium: true,
+    },
+    where: {
+      id: In(exerciseIds),
+    },
+  });
   return exercises;
 };
 
 const getExercisesListByRoutineId = async (routineId) => {
-  const exercises = await AppDataSource.query(
-    `
-    SELECT DISTINCT
-      exerciseId
-    FROM
-      routine_exercises
-    WHERE routine_id = ?
-    ;
-  `,
-    [routineId]
-  );
+  const exercises = await AppDataSource.getRepository(RoutineExercise)
+    .createQueryBuilder("routineExercise")
+    .where("routineExercise.routineId = :routineId", { routineId: routineId })
+    .leftJoinAndSelect("routineExercise.routine", "routine")
+    .leftJoinAndSelect("routineExercise.exercise", "exercise")
+    .getMany();
+
   return exercises;
 };
 
-const getExercises = async (exerciseQueryString = ``) => {
-  const exercises = await AppDataSource.query(`
-    SELECT
-      id AS exerciseId,
-      name,
-      description,
-      exerciseCategory AS category,
-      equipRequired AS equipRequired,
-      thumbnailUrl AS thumbnailURL,
-      durationInSecondsPerSet AS durationInSecondsPerSet,
-      isPremium AS isPremium,
-      caloriesUsed AS caloriesUsed,
-      setCounts AS setCounts
-    FROM
-      exercises
-    ${exerciseQueryString}
-    ;
-  `);
+const getExercises = async (category, equipRequired, sort, offset, limit) => {
+  const exercises = await AppDataSource.manager.find(Exercise, {
+    select: {
+      id: true,
+      name: true,
+      description: true,
+      equipRequired: true,
+      thumbnailUrl: true,
+      durationInSecondsPerSet: true,
+      isPremium: true,
+      caloriesUsed: true,
+      setCounts: true,
+      exerciseCategory: {
+        id: true,
+        name: true,
+      },
+    },
+    where: {
+      exerciseCategory: { id: category }, // 전체(null), 전신(1), 상체(2), 하체(3)
+      equipRequired: equipRequired, // 전체(null), 맨몸(0), 기구(1)
+    },
+    relations: {
+      exerciseCategory: true,
+    },
+    skip: offset,
+    take: limit,
+    order: {
+      id: "ASC",
+    },
+  });
+
   return exercises;
 };
 

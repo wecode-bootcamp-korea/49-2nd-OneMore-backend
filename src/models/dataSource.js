@@ -7,9 +7,9 @@ const AppDataSource = new DataSource({
   password: process.env.TYPEORM_PASSWORD,
   database: process.env.TYPEORM_DATABASE,
   port: process.env.TYPEORM_PORT,
-  entities: [__dirname + '/../entity/*.js'],
+  entities: [__dirname + "/../entity/*.js"],
   synchronize: true,
-  logging: ['query'],
+  // logging: ["query"],
 });
 
 module.exports = { AppDataSource };

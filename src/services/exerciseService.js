@@ -6,6 +6,8 @@ const {
 } = require("../models");
 const utils = require("../utils");
 const ExerciseQueryBuilder = require("../models/ExerciseQueryBuilder");
+const { addAbortListener } = require("supertest/lib/test");
+const { format } = require("morgan");
 
 const getRecommendedExercises = async (userId) => {
   const user = await userDao.findById(userId);
@@ -33,7 +35,9 @@ const getRecommendedExercises = async (userId) => {
 
   if (todayRoutineHistory) {
     // in case user finished today's routine
-    exercises = todayRoutineHistory.routineExercises.map(routineExercise => routineExercise.exercise);
+    exercises = todayRoutineHistory.routineExercises.map(
+      (routineExercise) => routineExercise.exercise
+    );
     // exercises = await exerciseDao.getExercisesDetailsByIds(todayRoutineHistory.exercises);
     routineCompleted = true;
   } else {
@@ -47,8 +51,21 @@ const getRecommendedExercises = async (userId) => {
   const { totalDurationInSeconds, totalCalories, mostFrequent } =
     utils.getRoutineStatistic(exercises);
   const totalDurationInMinute = Math.floor(totalDurationInSeconds / 60);
+
+  const exerciseFormatChange = exercises.map((exercise) => ({
+    exerciseId: exercise.id,
+    thumbnailURL: exercise.thumbnailUrl,
+    name: exercise.name,
+    isPremium: exercise.isPremium,
+    calories: exercise.caloriesUsed,
+    durationInSecondsPerSet: exercise.durationInSecondsPerSet,
+    categoryId: exercise.exerciseCategory.id,
+    categoryName: exercise.exerciseCategory.name,
+  }));
+
   return {
-    exercises,
+    // exercises,
+    exercises: exerciseFormatChange,
     totalDurationInMinute,
     totalCalories,
     mostFrequent,
@@ -66,17 +83,26 @@ const getExercises = async (queryParams, userId) => {
     routineId,
   } = queryParams;
 
-  const exerciseQueryString = new ExerciseQueryBuilder(
+  // const exerciseQueryString = new ExerciseQueryBuilder(
+  //   category,
+  //   equipRequired,
+  //   sort,
+  //   offset,
+  //   limit
+  // ).build();
+
+  // const exercises = await exerciseDao.getExercises(exerciseQueryString);
+
+  const exercises = await exerciseDao.getExercises(
     category,
     equipRequired,
     sort,
     offset,
     limit
-  ).build();
+  );
 
-  const exercises = await exerciseDao.getExercises(exerciseQueryString);
-  const userState = await userDao.findById(userId)
-  const subscriptionState = userState.subscriptionState
+  const userState = await userDao.findById(userId);
+  const subscriptionState = userState.subscriptionState;
   const exercisesInRoutine = await exerciseDao.getExercisesListByRoutineId(
     routineId
   );
@@ -85,10 +111,26 @@ const getExercises = async (queryParams, userId) => {
     item["durationInMinute"] = item.durationInSecondsPerSet * item.setCounts;
   });
 
+  const exerciseFormatChange = exercises.map((exercise) => ({
+    exerciseId: exercise.id,
+    name: exercise.name,
+    description: exercise.description,
+    category: exercise.exerciseCategory.id,
+    equipRequired: exercise.equipRequired,
+    thumbnailURL: exercise.thumbnailUrl,
+    durationInSecondsPerSet: exercise.durationInSecondsPerSet,
+    isPremium: exercise.isPremium,
+    caloriesUsed: exercise.caloriesUsed,
+    setCounts: exercise.setCounts,
+    durationInMinute: exercise.durationInMinute,
+  }));
+
   return {
-    exercises: exercises,
-    selected: exercisesInRoutine.map(item => item.exerciseId),
-    subscriptionState: subscriptionState
+    // exercises: exercises,
+    exercises: exerciseFormatChange,
+    selected: exercisesInRoutine.map((item) => item.exercise.id),
+    // selected: exercisesInRoutine.map((item) => item.exerciseId),
+    subscriptionState: subscriptionState,
   };
 };
 
