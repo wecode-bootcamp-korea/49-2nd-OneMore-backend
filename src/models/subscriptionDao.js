@@ -1,3 +1,5 @@
+const { User } = require("../entity/userEntity");
+const { SubscriptionOrder } = require("../entity/subscriptionOrderEntity")
 const { AppDataSource } = require("./dataSource");
 
 //구독신청(주문)
@@ -7,24 +9,16 @@ const createSubscription = async (userId, amount, provider) => {
     await queryRunner.startTransaction();
     try {
         const status = 1
-        await queryRunner.query(
-            `INSERT INTO subscription_orders (
-                user_id, 
-                amount, 
-                provider,
-                status
-            ) VALUES (?, ?, ?, ?)`,
-            [userId, amount, provider, status]
-        );
-      
-        const updateSubscriptionState = await queryRunner.query(
-            `
-            UPDATE users
-            SET subscriptionState = 1
-            WHERE id = ? AND subscriptionState = 0;
-            `,
-            [userId]
-        );
+        const subscriptionOrder = {
+            userId: userId,
+            amount: amount,
+            provider: provider,
+            status: status
+        };
+        await queryRunner.manager.save(SubscriptionOrder, subscriptionOrder)
+        const updateSubscriptionState = await queryRunner.manager.update(User,
+            { id: userId, subscriptionState: 0 },
+            { subscriptionState: 1 })
         await queryRunner.commitTransaction();
         return updateSubscriptionState;
     } catch (err) {
@@ -36,13 +30,15 @@ const createSubscription = async (userId, amount, provider) => {
 };
 
 const subscribeUser = async (userId) => {
-    const [subscribingUser] = await AppDataSource.query(
-        `SELECT id
-         FROM users
-         WHERE id = ? AND subscriptionState = 1;`,
-        [userId])
-    return subscribingUser
-}
+    const subscribingUser = await AppDataSource.manager.findOne(User, {
+        where: {
+            id: userId,
+            subscriptionState: 1
+        },
+    })
+    return subscribingUser;
+
+};
 
 module.exports = {
     createSubscription,

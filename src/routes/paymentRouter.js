@@ -6,6 +6,7 @@ const { paymentController } = require("../controllers");
 const paymentRouter = express.Router();
 
 paymentRouter.post("/", tokenValidation ,paymentController.subscribePayment);
+// paymentRouter.post("/", paymentController.subscribePayment);
 
 module.exports = {
     paymentRouter,
